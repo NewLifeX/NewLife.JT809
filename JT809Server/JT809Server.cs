@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NewLife.JT809;
 using NewLife.Net;
 
 namespace JT809Server
 {
     internal class JT809Server : NetServer<JT809Session>
     {
+        public JT809Server()
+        {
+            Port = 809;
+            Add<JTCodec>();
+        }
     }
 
-    class JT809Session : NetSession
+    internal class JT809Session : NetSession
     {
 
     }
