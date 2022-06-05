@@ -36,6 +36,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JT809" Version="2.2.1" />
+    <PackageReference Include="JT809.Protocol.Extensions.JT1078" Version="2.2.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
