@@ -28,12 +28,269 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtServer = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numPort = new System.Windows.Forms.NumericUpDown();
+            this.txtUser = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtPass = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtCode = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtMyIP = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numMyPort = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.btnLogin = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(82, 24);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "服务端：";
+            // 
+            // txtServer
+            // 
+            this.txtServer.Location = new System.Drawing.Point(128, 33);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(150, 30);
+            this.txtServer.TabIndex = 1;
+            this.txtServer.Text = "127.0.0.1";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(316, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(64, 24);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "端口：";
+            // 
+            // numPort
+            // 
+            this.numPort.Location = new System.Drawing.Point(426, 33);
+            this.numPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numPort.Name = "numPort";
+            this.numPort.Size = new System.Drawing.Size(108, 30);
+            this.numPort.TabIndex = 3;
+            this.numPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numPort.Value = new decimal(new int[] {
+            809,
+            0,
+            0,
+            0});
+            // 
+            // txtUser
+            // 
+            this.txtUser.Location = new System.Drawing.Point(128, 87);
+            this.txtUser.Name = "txtUser";
+            this.txtUser.Size = new System.Drawing.Size(150, 30);
+            this.txtUser.TabIndex = 5;
+            this.txtUser.Text = "user";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(32, 90);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 24);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "用户：";
+            // 
+            // txtPass
+            // 
+            this.txtPass.Location = new System.Drawing.Point(426, 87);
+            this.txtPass.Name = "txtPass";
+            this.txtPass.Size = new System.Drawing.Size(150, 30);
+            this.txtPass.TabIndex = 7;
+            this.txtPass.Text = "pass";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(316, 90);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(64, 24);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "密码：";
+            // 
+            // txtCode
+            // 
+            this.txtCode.Location = new System.Drawing.Point(723, 87);
+            this.txtCode.Name = "txtCode";
+            this.txtCode.Size = new System.Drawing.Size(150, 30);
+            this.txtCode.TabIndex = 9;
+            this.txtCode.Text = "12345";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(624, 90);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(82, 24);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "接入码：";
+            // 
+            // txtMyIP
+            // 
+            this.txtMyIP.Location = new System.Drawing.Point(128, 143);
+            this.txtMyIP.Name = "txtMyIP";
+            this.txtMyIP.Size = new System.Drawing.Size(150, 30);
+            this.txtMyIP.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(32, 146);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 24);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "下级IP：";
+            // 
+            // numMyPort
+            // 
+            this.numMyPort.Location = new System.Drawing.Point(426, 143);
+            this.numMyPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numMyPort.Name = "numMyPort";
+            this.numMyPort.Size = new System.Drawing.Size(108, 30);
+            this.numMyPort.TabIndex = 13;
+            this.numMyPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numMyPort.Value = new decimal(new int[] {
+            1809,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(316, 146);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(100, 24);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "下级端口：";
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(950, 60);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(132, 58);
+            this.btnConnect.TabIndex = 14;
+            this.btnConnect.Text = "连接";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btnLogin
+            // 
+            this.btnLogin.Location = new System.Drawing.Point(950, 139);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(132, 58);
+            this.btnLogin.TabIndex = 15;
+            this.btnLogin.Text = "登录";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtCode);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.txtServer);
+            this.groupBox1.Controls.Add(this.numMyPort);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.numPort);
+            this.groupBox1.Controls.Add(this.txtMyIP);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.txtUser);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.txtPass);
+            this.groupBox1.Location = new System.Drawing.Point(12, 24);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(889, 206);
+            this.groupBox1.TabIndex = 16;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "基本信息";
+            // 
+            // rtbLog
+            // 
+            this.rtbLog.Location = new System.Drawing.Point(12, 385);
+            this.rtbLog.Name = "rtbLog";
+            this.rtbLog.Size = new System.Drawing.Size(1152, 619);
+            this.rtbLog.TabIndex = 17;
+            this.rtbLog.Text = "";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(12, 236);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(1152, 143);
+            this.groupBox2.TabIndex = 18;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "链路业务";
+            // 
+            // FrmMain
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(1176, 1016);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.rtbLog);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.btnLogin);
+            this.Controls.Add(this.btnConnect);
+            this.Name = "FrmMain";
+            this.Text = "JT/T809企业平台";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private Label label1;
+        private TextBox txtServer;
+        private Label label2;
+        private NumericUpDown numPort;
+        private TextBox txtUser;
+        private Label label3;
+        private TextBox txtPass;
+        private Label label4;
+        private TextBox txtCode;
+        private Label label5;
+        private TextBox txtMyIP;
+        private Label label6;
+        private NumericUpDown numMyPort;
+        private Label label7;
+        private Button btnConnect;
+        private Button btnLogin;
+        private GroupBox groupBox1;
+        private RichTextBox rtbLog;
+        private GroupBox groupBox2;
     }
 }
