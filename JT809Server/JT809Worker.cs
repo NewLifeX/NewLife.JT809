@@ -23,7 +23,12 @@ namespace JT809Server
                 SessionLog = XTrace.Log,
             };
 
-            if (set.Debug) { }
+            if (set.Debug)
+            {
+                server.LogSend = true;
+                server.LogReceive = true;
+                server.SocketLog = XTrace.Log;
+            }
 
             server.Start();
 

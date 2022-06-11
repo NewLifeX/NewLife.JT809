@@ -73,7 +73,7 @@ public class MessageFactory
     /// <returns></returns>
     public Object Parse(JTMessage message)
     {
-        var msg = Create((MessageKinds)message.MsgId);
+        var msg = Create((MessageKinds)message.Kind);
         if (msg == null) return null;
 
         var pk = message.Payload;

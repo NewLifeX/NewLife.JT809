@@ -19,7 +19,7 @@ public class JTCodec : Handler
     {
         if (message is JTMessage msg)
         {
-            if (msg.MsgSn == 0) msg.MsgSn = (Byte)Interlocked.Increment(ref _gid);
+            if (msg.Sequence == 0) msg.Sequence = (Byte)Interlocked.Increment(ref _gid);
 
             message = msg.ToPacket();
         }

@@ -51,7 +51,13 @@ namespace JT809Client
 
         private void btnLogin_Click(Object sender, EventArgs e)
         {
+            var user = txtUser.Text.ToInt();
+            var pass = txtPass.Text;
+            var code = txtCode.Text.ToInt();
+            var ip = txtMyIP.Text;
+            var port = (Int32)numMyPort.Value;
 
+            _client.Connect(user, pass, code, ip, port);
         }
     }
 }

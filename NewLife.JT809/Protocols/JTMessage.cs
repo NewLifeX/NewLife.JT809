@@ -11,14 +11,14 @@ namespace NewLife.JT809.Protocols;
 public class JTMessage : IMessage, IAccessor
 {
     #region 属性
-    /// <summary>数据长度。包括头标识、数据头、数据体、CRC校验码和尾标识</summary>
-    public UInt32 MsgLength { get; set; }
+    ///// <summary>数据长度。包括头标识、数据头、数据体、CRC校验码和尾标识</summary>
+    //public UInt32 MsgLength { get; set; }
 
     /// <summary>报文序列号</summary>
-    public UInt32 MsgSn { get; set; }
+    public UInt32 Sequence { get; set; }
 
     /// <summary>业务数据类型</summary>
-    public UInt16 MsgId { get; set; }
+    public MessageKinds Kind { get; set; }
 
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
     public UInt32 MsgGNSSCenterId { get; set; }
@@ -118,9 +118,10 @@ public class JTMessage : IMessage, IAccessor
 
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
 
-        MsgLength = reader.Read<UInt32>();
-        MsgSn = reader.Read<UInt32>();
-        MsgId = reader.Read<UInt16>();
+        //MsgLength = reader.Read<UInt32>();
+        var len = reader.Read<UInt32>();
+        Sequence = reader.Read<UInt32>();
+        Kind = (MessageKinds)reader.Read<UInt16>();
         MsgGNSSCenterId = reader.Read<UInt32>();
 
         var flag = reader.Read<UInt32>();
@@ -132,7 +133,7 @@ public class JTMessage : IMessage, IAccessor
         Time = reader.Read<UInt64>().ToDateTime();
 
         // 负载数据
-        var len = MsgLength - HEADER_LENGTH;
+        len -= HEADER_LENGTH;
         if (len > 0) Payload = reader.ReadBytes((Int32)len);
 
         // 异或校验。从消息头首字节开始。考虑到TCP/UDP本身有校验，这里不再判断
@@ -163,8 +164,8 @@ public class JTMessage : IMessage, IAccessor
         if (pk != null) len += pk.Total;
 
         writer.Write(len);
-        writer.Write(MsgSn);
-        writer.Write(MsgId);
+        writer.Write(Sequence);
+        writer.Write(Kind);
         writer.Write(MsgGNSSCenterId);
 
         var flag = (VersionFlag << 8) | EncryptFlag;
@@ -250,61 +251,61 @@ public class JTMessage : IMessage, IAccessor
     #endregion
 
     #region 解析负载
-    ///// <summary>从负载数据解析业务消息模型</summary>
-    ///// <param name="model"></param>
-    ///// <returns></returns>
-    //public Boolean TryReadModel(Object model)
-    //{
-    //    var pk = Payload;
-    //    return pk == null || pk.Total <= 0 || (model is IAccessor accessor
-    //        ? accessor.Read(pk.GetStream(), this)
-    //        : Helper.CreateReader(pk.GetStream()).TryRead(null, ref model));
-    //}
+    /// <summary>从负载数据解析业务消息模型</summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public Boolean TryReadModel(Object model)
+    {
+        var pk = Payload;
+        return pk == null || pk.Total <= 0 || (model is IAccessor accessor
+            ? accessor.Read(pk.GetStream(), this)
+            : Helper.CreateReader(pk.GetStream()).TryRead(null, ref model));
+    }
 
-    ///// <summary>从负载数据解析业务消息模型</summary>
-    ///// <typeparam name="T"></typeparam>
-    ///// <returns></returns>
-    ///// <exception cref="InvalidDataException"></exception>
-    //public T ReadModel<T>() where T : new()
-    //{
-    //    var msg = new T();
-    //    return !TryReadModel(msg) ? throw new InvalidDataException() : msg;
-    //}
+    /// <summary>从负载数据解析业务消息模型</summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="InvalidDataException"></exception>
+    public T ReadModel<T>() where T : new()
+    {
+        var msg = new T();
+        return !TryReadModel(msg) ? throw new InvalidDataException() : msg;
+    }
 
-    ///// <summary>写入业务消息模型到负载数据</summary>
-    ///// <param name="model"></param>
-    ///// <returns></returns>
-    //public Boolean WriteModel(Object model)
-    //{
-    //    var rs = false;
-    //    var ms = new MemoryStream();
-    //    rs = model is IAccessor accessor ? accessor.Write(ms, this) : Helper.CreateWriter(ms).Write(model);
+    /// <summary>写入业务消息模型到负载数据</summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public Boolean WriteModel(Object model)
+    {
+        var rs = false;
+        var ms = new MemoryStream();
+        rs = model is IAccessor accessor ? accessor.Write(ms, this) : Helper.CreateWriter(ms).Write(model);
 
-    //    ms.Position = 0;
-    //    Payload = new Packet(ms);
+        ms.Position = 0;
+        Payload = new Packet(ms);
 
-    //    return rs;
-    //}
+        return rs;
+    }
 
-    ///// <summary>设置结果</summary>
-    ///// <param name="result"></param>
-    //public void SetResult(Object result)
-    //{
-    //    Reply = true;
+    /// <summary>设置结果</summary>
+    /// <param name="result"></param>
+    public void SetResult(Object result)
+    {
+        Reply = true;
 
-    //    if (MessageFactory.Instance.Types.TryGetValue(result.GetType(), out var kind)) MsgId = kind;
+        if (MessageFactory.Instance.Types.TryGetValue(result.GetType(), out var kind)) Kind = kind;
 
-    //    WriteModel(result);
-    //}
+        WriteModel(result);
+    }
     #endregion
 
     #region 辅助
     /// <summary>创建响应</summary>
     /// <returns></returns>
-    public IMessage CreateReply() => new JTMessage { Reply = true, MsgSn = MsgSn, MsgId = MsgId, VersionFlag = VersionFlag };
+    public IMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag };
 
     /// <summary>已重写。返回友好文本</summary>
     /// <returns></returns>
-    public override String ToString() => $"[{MsgId}] {MsgGNSSCenterId} Seq={MsgSn} [{Payload?.Total}]";
+    public override String ToString() => $"[{Kind}] {MsgGNSSCenterId} Seq={Sequence} [{Payload?.Total}]";
     #endregion
 }

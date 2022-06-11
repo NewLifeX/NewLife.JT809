@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using System.Text;
+using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
 namespace NewLife.JT809;
@@ -26,7 +25,19 @@ public static class Helper
     /// </summary>
     /// <param name="stream"></param>
     /// <returns></returns>
-    public static Binary CreateReader(Stream stream) => new() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+    public static Binary CreateReader(Stream stream)
+    {
+        var reader = new Binary() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+
+        // 替换编码处理器，自定义序列化行为
+        for (var i = 0; i < reader.Handlers.Count; i++)
+        {
+            if (reader.Handlers[i] is BinaryGeneral)
+                reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
+        }
+
+        return reader;
+    }
 
     /// <summary>
     /// 创建写入器
