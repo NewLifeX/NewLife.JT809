@@ -40,6 +40,14 @@ namespace XUnitTest
             Assert.Equal(123456u, body.MsgGNSSCENTERID);
             Assert.Equal("127.0.0.1", body.DownLinkIP.TrimEnd('\0'));
             Assert.Equal(809, body.DownLinkPort);
+
+            // 序列化
+            var ms=new MemoryStream();
+            var writer = Helper.CreateWriter(ms);
+            writer.Write(body);
+
+            var hex = ms.ToArray().ToHex();
+            Assert.Equal(str.Replace("-", null), hex);
         }
     }
 }
