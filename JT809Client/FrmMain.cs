@@ -57,7 +57,7 @@ namespace JT809Client
             var ip = txtMyIP.Text;
             var port = (Int32)numMyPort.Value;
 
-            var rs = await _client.ConnectAsync(user, pass, code, ip, port);
+            var rs = await _client.LoginAsync(user, pass, code, ip, port);
         }
     }
 }

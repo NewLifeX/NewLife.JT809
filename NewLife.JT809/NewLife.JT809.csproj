@@ -36,23 +36,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Messages\JT809_0x9001.cs" />
-    <Compile Remove="Messages\JT809_0x9002.cs" />
-    <Compile Remove="Messages\JT809_0x9003.cs" />
-    <Compile Remove="Messages\JT809_0x9004.cs" />
-    <Compile Remove="Messages\JT809_0x9005.cs" />
-    <Compile Remove="Messages\JT809_0x9006.cs" />
-    <Compile Remove="Messages\JT809_0x9007.cs" />
-    <Compile Remove="Messages\JT809_0x9008.cs" />
-    <Compile Remove="Messages\JT809_0x9101.cs" />
-    <Compile Remove="Messages\JT809_0x9102.cs" />
-    <Compile Remove="Messages\JT809_0x9103.cs" />
-    <Compile Remove="Messages\JT809_0x9200.cs" />
-    <Compile Remove="Messages\JT809_0x9300.cs" />
-    <Compile Remove="Messages\JT809_0x9400.cs" />
-    <Compile Remove="Messages\JT809_0x9500.cs" />
-    <Compile Remove="Messages\JT809_0x9600.cs" />
-    <Compile Remove="Messages\JT809_2019_0x9101.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1201.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1202.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1203.cs" />

@@ -7,7 +7,10 @@ namespace NewLife.JT809.Messages;
 /// </summary>
 public enum JT809_0x1007_ErrorCode : Byte
 {
+    /// <summary>主链路断开</summary>
     主链路断开 = 0x00,
+
+    /// <summary>其他原因</summary>
     其他原因 = 0x01
 }
 

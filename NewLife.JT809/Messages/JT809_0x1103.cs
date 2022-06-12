@@ -13,6 +13,7 @@ namespace NewLife.JT809.Messages;
 [MessageKind(MessageKinds.上传平台间消息序列号通知消息_2019)]
 public class JT809_0x1103 : JT809ExchangeMessageBodies
 {
+    /// <summary>信息列表</summary>
     public List<JT809ManageMsgSNInform> ManageMsgSNInform { get; set; } = new List<JT809ManageMsgSNInform>();
     //public byte Count { get; set; }
 

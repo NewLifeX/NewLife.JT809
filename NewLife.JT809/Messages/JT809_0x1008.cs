@@ -7,7 +7,10 @@ namespace NewLife.JT809.Messages;
 /// </summary>
 public enum JT809_0x1008_ReasonCode : Byte
 {
+    /// <summary>网关重启</summary>
     网关重启 = 0x00,
+
+    /// <summary>其他原因</summary>
     其他原因 = 0x01
 }
 

@@ -7,13 +7,28 @@ namespace NewLife.JT809.Messages;
 /// </summary>
 public enum JT809_0x1002_Result : Byte
 {
+    /// <summary>成功</summary>
     成功 = 0x00,
+
+    /// <summary>IP地址不正确</summary>
     IP地址不正确 = 0x01,
+
+    /// <summary>接入码不正确</summary>
     接入码不正确 = 0x02,
-    用户没用注册 = 0x03,
+
+    /// <summary>用户没有注册</summary>
+    用户没有注册 = 0x03,
+
+    /// <summary>密码错误</summary>
     密码错误 = 0x04,
+
+    /// <summary>资源紧张_稍后再连接_已经占用</summary>
     资源紧张_稍后再连接_已经占用 = 0x05,
+
+    /// <summary>其他</summary>
     其他 = 0x06,
+
+    /// <summary>其他_2019</summary>
     其他_2019 = 0xFF
 }
 

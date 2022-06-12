@@ -1,5 +1,8 @@
 ﻿namespace NewLife.JT809.Models;
 
+/// <summary>
+/// 子业务消息
+/// </summary>
 public class JT809ManageMsgSNInform
 {
     /// <summary>

@@ -10,14 +10,20 @@ namespace NewLife.JT809;
 public class JTClient : DisposeBase
 {
     #region 属性
+    /// <summary>服务端地址</summary>
     public NetUri Server { get; set; }
 
+    /// <summary>配置信息</summary>
     public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
 
     private ISocketClient _client;
     #endregion
 
     #region 构造
+    /// <summary>
+    /// 销毁
+    /// </summary>
+    /// <param name="disposing"></param>
     protected override void Dispose(Boolean disposing)
     {
         base.Dispose(disposing);
@@ -27,6 +33,9 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 方法
+    /// <summary>
+    /// 打开连接
+    /// </summary>
     public void Open()
     {
         var client = Server.CreateRemote();
@@ -67,7 +76,17 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 链路管理
-    public async Task<UInt32> ConnectAsync(Int32 user, String pass, Int32 code, String downIp, Int32 downPort)
+    /// <summary>
+    /// 登录请求
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="pass"></param>
+    /// <param name="code"></param>
+    /// <param name="downIp"></param>
+    /// <param name="downPort"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<UInt32> LoginAsync(Int32 user, String pass, Int32 code, String downIp, Int32 downPort)
     {
         var model = new JT809_0x1001
         {
@@ -89,6 +108,7 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 日志
+    /// <summary>日志</summary>
     public ILog Log { get; set; }
     #endregion
 }

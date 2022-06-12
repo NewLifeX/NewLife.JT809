@@ -1,8 +1,4 @@
-﻿using JT809.Protocol.Enums;
-using JT809.Protocol.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using NewLife.JT809.Protocols;
 
 namespace NewLife.JT809.Messages
 {
@@ -14,10 +10,8 @@ namespace NewLife.JT809.Messages
     /// <para>描述:下级平台在收到上级平台发送的从链路注销请求消息后，返回从链路注销应答消息，记录相关日志，中断该从链路</para>
     /// <para>从链路注销应答消息，数据体为空</para>
     /// </summary>
-    public class JT809_0x9004:JT809Bodies
+    [MessageKind(MessageKinds.从链路注销应答消息)]
+    public class JT809_0x9004
     {
-        public override ushort MsgId => JT809BusinessType.从链路注销应答消息.ToUInt16Value();
-        public override string Description => "从链路注销应答消息";
-        public override JT809_LinkType LinkType => JT809_LinkType.subordinate;
     }
 }
