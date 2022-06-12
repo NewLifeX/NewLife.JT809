@@ -42,6 +42,11 @@ public class JTClient : DisposeBase
         client.Add<JTCodec>();
         client.Log = Log;
 
+#if DEBUG
+        client.LogSend = true;
+        client.LogReceive = true;
+#endif
+
         // 指定协议配置，包括协议版本等信息
         client["Config"] = Config;
 
@@ -71,7 +76,13 @@ public class JTClient : DisposeBase
 
         msg.WriteModel(body);
 
-        return await _client.SendMessageAsync(msg) as TResult;
+        WriteLog("=>{0}", msg);
+
+        var rs = await _client.SendMessageAsync(msg) as TResult;
+
+        WriteLog("<={0}", rs);
+
+        return rs;
     }
     #endregion
 
@@ -110,5 +121,10 @@ public class JTClient : DisposeBase
     #region 日志
     /// <summary>日志</summary>
     public ILog Log { get; set; }
+
+    /// <summary>写日志</summary>
+    /// <param name="format"></param>
+    /// <param name="args"></param>
+    public void WriteLog(String format, params Object[] args) => Log?.Info(format, args);
     #endregion
 }
