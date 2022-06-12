@@ -2,6 +2,7 @@
 using JT809Server.Controllers;
 using NewLife;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -43,10 +44,20 @@ namespace JT809Server
                 }
             }
         }
+
+        protected override void OnStart()
+        {
+            WriteLog("支持根据登录请求识别协议版本 JTT809-2011/2019");
+
+            base.OnStart();
+        }
     }
 
     internal class JT809Session : NetSession<JT809Server>
     {
+        /// <summary>配置信息。记录协议版本</summary>
+        public JTConfig Config { get; set; }
+
         private Int32 _gid;
         private MessageKinds[] _nologs = new[] { MessageKinds.主链路连接保持请求消息 };
         /// <summary>接收指令</summary>
@@ -63,8 +74,15 @@ namespace JT809Server
             if (debug && !_nologs.Contains(msg.Kind)) WriteLog("<= {0}", msg);
             if (msg != null)
             {
-                //// 当前会话IP地址，影响内部所有创建IP和更新IP字段
-                //ManageProvider.UserHost = Remote.Address + "";
+                // 根据登录请求猜测协议版本，后续指令自适应
+                if (Config == null && msg.JTT2019)
+                {
+                    Config = new JTConfig
+                    {
+                        Version = JTVersion.JTT2019
+                    };
+                    this["Config"] = Config;
+                }
 
                 var set = JT809Setting.Current;
                 ////写msg

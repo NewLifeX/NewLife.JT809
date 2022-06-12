@@ -12,6 +12,8 @@ public class JTClient : DisposeBase
     #region 属性
     public NetUri Server { get; set; }
 
+    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
+
     private ISocketClient _client;
     #endregion
 
@@ -30,6 +32,9 @@ public class JTClient : DisposeBase
         var client = Server.CreateRemote();
         client.Add<JTCodec>();
         client.Log = Log;
+
+        // 指定协议配置，包括协议版本等信息
+        client["Config"] = Config;
 
         client.Open();
 
@@ -51,7 +56,8 @@ public class JTClient : DisposeBase
 
         var msg = new JTMessage
         {
-            Kind = att.Kind
+            Kind = att.Kind,
+            Time = DateTime.Now,
         };
 
         msg.WriteModel(body);

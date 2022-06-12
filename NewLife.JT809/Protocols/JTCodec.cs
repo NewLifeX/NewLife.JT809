@@ -21,7 +21,16 @@ public class JTCodec : Handler
         {
             if (msg.Sequence == 0) msg.Sequence = (Byte)Interlocked.Increment(ref _gid);
 
-            message = msg.ToPacket();
+            //message = msg.ToPacket();
+
+            var ss = context.Owner as IExtend;
+            var config = ss["Config"] as JTConfig;
+            var ms = new MemoryStream();
+            if (msg.Write(ms, config))
+            {
+                ms.Position = 0;
+                message = new Packet(ms);
+            }
         }
 
         return base.Write(context, message);
@@ -80,7 +89,7 @@ public class JTCodec : Handler
         var list = pks.Select(e =>
         {
             var msg = new JTMessage();
-            if (!msg.Read(e)) return null;
+            if (!msg.Read(e, ss["Config"] as JTConfig)) return null;
 
             return msg;
         }).ToList();

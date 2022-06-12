@@ -17,22 +17,26 @@ public class JT809_0x1001
     /// 用户名
     /// </summary>
     public UInt32 UserId { get; set; }
+
     /// <summary>
     /// 密码
     /// 8位
     /// </summary>
     [FieldSize(8)]
     public String Password { get; set; }
+
     /// <summary>
     /// 下级平台接入码
     /// </summary>
     public UInt32 MsgGNSSCENTERID { get; set; }
+
     /// <summary>
     /// 下级平台提供对应的从链路服务端 IP 地址
     /// 32位
     /// </summary>
     [FieldSize(32)]
     public String DownLinkIP { get; set; }
+
     /// <summary>
     /// 下级平台提供对应的从链路服务器端口号
     /// </summary>

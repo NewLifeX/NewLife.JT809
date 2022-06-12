@@ -53,6 +53,9 @@ public class JTMessage : IMessage, IAccessor
     /// <summary>负载数据</summary>
     [IgnoreDataMember]
     public Packet Payload { get; set; }
+
+    /// <summary>是否2019版</summary>
+    public Boolean JTT2019 { get; set; }
     #endregion
 
     #region 构造
@@ -119,7 +122,8 @@ public class JTMessage : IMessage, IAccessor
         ms.Position = 0;
 
         var config = context as JTConfig;
-        var jt2019 = config != null && config.Version == JTVersion.JTT2019;
+        if (config != null)
+            JTT2019 = config.Version == JTVersion.JTT2019;
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
 
         //MsgLength = reader.Read<UInt32>();
@@ -133,11 +137,14 @@ public class JTMessage : IMessage, IAccessor
         EncryptFlag = (Byte)(flag & 0xFF);
         EncryptKey = reader.Read<UInt32>();
 
+        // 根据登录请求，猜测协议版本
+        if (config == null) JTT2019 = GuessVersion(Kind, len);
+
         // 2019新增
-        if (jt2019) Time = reader.Read<Int64>().ToDateTime();
+        if (JTT2019) Time = reader.Read<Int64>().ToDateTime();
 
         // 负载数据
-        len -= jt2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
+        len -= JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (len > 0) Payload = reader.ReadBytes(len);
 
         var checkSum2 = GetCheckSum(ms, 0, 0);
@@ -158,15 +165,15 @@ public class JTMessage : IMessage, IAccessor
     {
         if (stream == null && context == null) return false;
 
-        var config = context as JTConfig;
-        var jt2019 = config != null && config.Version == JTVersion.JTT2019;
+        if (context is JTConfig config)
+            JTT2019 = config.Version == JTVersion.JTT2019;
 
         // 使用内存流，后面可能需要转义
         var ms = Pool.MemoryStream.Get();
         var writer = new Binary { Stream = ms, IsLittleEndian = false };
 
         var pk = Payload;
-        var len = jt2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
+        var len = JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (pk != null) len += pk.Total;
 
         writer.Write(len);
@@ -180,7 +187,7 @@ public class JTMessage : IMessage, IAccessor
         writer.Write(EncryptKey);
 
         // 2019新增
-        if (jt2019) writer.Write(Time.ToLong());
+        if (JTT2019) writer.Write(Time.ToLong());
 
         if (pk != null) pk.CopyTo(writer.Stream);
 
@@ -216,6 +223,16 @@ public class JTMessage : IMessage, IAccessor
         ms2.CopyTo(stream);
 
         return true;
+    }
+
+    private static Boolean GuessVersion(MessageKinds kind, Int32 len)
+    {
+        return kind switch
+        {
+            MessageKinds.主链路登录请求消息 => len >= HEADER_LENGTH_2019 + (4 + 8 + 4 + 32 + 2),
+            MessageKinds.主链路连接保持请求消息 => len >= HEADER_LENGTH_2019 + (0),
+            _ => false,
+        };
     }
 
     private static UInt16 GetCheckSum(Stream stream, Int64 offset, Int32 count)
