@@ -138,7 +138,7 @@ public class JTMessage : IMessage, IAccessor
         EncryptKey = reader.Read<UInt32>();
 
         // 根据登录请求，猜测协议版本
-        if (config == null) JTT2019 = GuessVersion(Kind, len);
+        if (config == null && TryGuessVersion(Kind, len, out var jt2019)) JTT2019 = jt2019;
 
         // 2019新增
         if (JTT2019) Time = reader.Read<Int64>().ToDateTime();
@@ -225,14 +225,21 @@ public class JTMessage : IMessage, IAccessor
         return true;
     }
 
-    private static Boolean GuessVersion(MessageKinds kind, Int32 len)
+    private static Boolean TryGuessVersion(MessageKinds kind, Int32 len, out Boolean jt2019)
     {
-        return kind switch
+        switch (kind)
         {
-            MessageKinds.主链路登录请求消息 => len >= HEADER_LENGTH_2019 + (4 + 8 + 4 + 32 + 2),
-            MessageKinds.主链路连接保持请求消息 => len >= HEADER_LENGTH_2019 + (0),
-            _ => false,
-        };
+            case MessageKinds.主链路登录请求消息:
+                jt2019 = len >= HEADER_LENGTH_2019 + (4 + 8 + 4 + 32 + 2);
+                return true;
+            case MessageKinds.主链路连接保持请求消息:
+                jt2019 = len >= HEADER_LENGTH_2019 + (0);
+                return true;
+            default:
+                jt2019 = false;
+                break;
+        }
+        return false;
     }
 
     private static UInt16 GetCheckSum(Stream stream, Int64 offset, Int32 count)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NewLife;
 using NewLife.JT809;
+using NewLife.JT809.Protocols;
 using Xunit;
 
 namespace XUnitTest
@@ -32,7 +33,23 @@ namespace XUnitTest
             var codec = new JTCodec();
             var len = codec.GetLength(dt);
 
-            Assert.Equal(dt.Length - 1 - 2 - 1, len);
+            Assert.Equal(dt.Length, len);
+
+            var msg = new JTMessage { JTT2019 = true };
+            var rs = msg.Read(dt);
+
+            Assert.True(rs);
+            Assert.Equal(2u, msg.Sequence);
+            Assert.Equal(MessageKinds.主链路报警信息交互消息, msg.Kind);
+            Assert.Equal(0u, msg.MsgGNSSCenterId);
+            Assert.Equal(0x010000u, msg.VersionFlag);
+            Assert.Equal(0u, msg.EncryptFlag);
+            Assert.Equal(0u, msg.EncryptKey);
+            Assert.Equal("2022-06-12T11:31:23.6110000".ToDateTime(), msg.Time);
+
+            // 校验写入
+            var pk = msg.ToPacket();
+            Assert.Equal(dt.ToHex(), pk.ToHex(256));
         }
     }
 }

@@ -97,8 +97,8 @@ public class JTCodec : Handler
         return list;
     }
 
-    const Int32 HEADER_LENGTH = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 2 + 1;
-    const Int32 HEADER_LENGTH_2019 = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
+    private const Int32 HEADER_LENGTH = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 2 + 1;
+    private const Int32 HEADER_LENGTH_2019 = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
     /// <summary>
     /// 获取包含分割字节在内的数据长度
     /// </summary>
@@ -108,7 +108,26 @@ public class JTCodec : Handler
     {
         if (pk.Total < HEADER_LENGTH) return 0;
 
-        return (Int32)pk.ReadBytes(1, 4).ToUInt32(0, false);
+        var len = (Int32)pk.ReadBytes(1, 4).ToUInt32(0, false);
+        if (len <= 0) return 0;
+
+        // 遇到转移字符，增加长度
+        for (var i = 0; i < pk.Total - 1; i++)
+        {
+            var b = pk[i];
+            if (b == 0x5a)
+            {
+                var b2 = pk[i + 1];
+                if (b2 == 0x01 || b2 == 0x02) len++;
+            }
+            else if (b == 0x5e)
+            {
+                var b2 = pk[i + 1];
+                if (b2 == 0x01 || b2 == 0x02) len++;
+            }
+        }
+
+        return len;
     }
     #endregion
 }
