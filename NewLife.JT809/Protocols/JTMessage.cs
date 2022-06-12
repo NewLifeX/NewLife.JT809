@@ -22,7 +22,7 @@ public class JTMessage : IMessage, IAccessor
     public MessageKinds Kind { get; set; }
 
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
-    public UInt32 MsgGNSSCenterId { get; set; }
+    public UInt32 CenterId { get; set; }
 
     /// <summary>协议版本号标识。上下级平台之间采用的标准协议版本编号，长度3字节，0x01020F表示v1.2.15</summary>
     public UInt32 VersionFlag { get; set; }
@@ -130,7 +130,7 @@ public class JTMessage : IMessage, IAccessor
         var len = reader.Read<Int32>();
         Sequence = reader.Read<UInt32>();
         Kind = reader.Read<MessageKinds>();
-        MsgGNSSCenterId = reader.Read<UInt32>();
+        CenterId = reader.Read<UInt32>();
 
         var flag = reader.Read<UInt32>();
         VersionFlag = flag >> 8;
@@ -179,7 +179,7 @@ public class JTMessage : IMessage, IAccessor
         writer.Write(len);
         writer.Write(Sequence);
         writer.Write(Kind);
-        writer.Write(MsgGNSSCenterId);
+        writer.Write(CenterId);
 
         var flag = (VersionFlag << 8) | EncryptFlag;
         writer.Write(flag);
@@ -387,10 +387,10 @@ public class JTMessage : IMessage, IAccessor
     #region 辅助
     /// <summary>创建响应</summary>
     /// <returns></returns>
-    public IMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag };
+    public IMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag, CenterId = CenterId };
 
     /// <summary>已重写。返回友好文本</summary>
     /// <returns></returns>
-    public override String ToString() => $"[{Kind}] {MsgGNSSCenterId} Seq={Sequence} [{Payload?.Total}]";
+    public override String ToString() => $"[{Kind}] {CenterId} Seq={Sequence} [{Payload?.Total}]";
     #endregion
 }

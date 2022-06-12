@@ -39,7 +39,7 @@ namespace XUnitTest
             Assert.True(rs);
             Assert.Equal(2u, msg.Sequence);
             Assert.Equal(MessageKinds.主链路报警信息交互消息, msg.Kind);
-            Assert.Equal(0u, msg.MsgGNSSCenterId);
+            Assert.Equal(0u, msg.CenterId);
             Assert.Equal(0x010000u, msg.VersionFlag);
             Assert.Equal(0u, msg.EncryptFlag);
             Assert.Equal(0u, msg.EncryptKey);
@@ -85,7 +85,7 @@ namespace XUnitTest
             Assert.True(rs);
             Assert.Equal(1666u, msg.Sequence);
             Assert.Equal(MessageKinds.从链路报警信息交互消息, msg.Kind);
-            Assert.Equal(20180920u, msg.MsgGNSSCenterId);
+            Assert.Equal(20180920u, msg.CenterId);
             Assert.Equal(0x010000u, msg.VersionFlag);
             Assert.Equal(0u, msg.EncryptFlag);
             Assert.Equal(9999u, msg.EncryptKey);
@@ -137,7 +137,7 @@ namespace XUnitTest
             Assert.True(rs);
             Assert.Equal(2u, msg.Sequence);
             Assert.Equal(MessageKinds.主链路登录请求消息, msg.Kind);
-            Assert.Equal(20180920u, msg.MsgGNSSCenterId);
+            Assert.Equal(20180920u, msg.CenterId);
             Assert.Equal(0x010000u, msg.VersionFlag);
             Assert.Equal(0u, msg.EncryptFlag);
             Assert.Equal(9999u, msg.EncryptKey);

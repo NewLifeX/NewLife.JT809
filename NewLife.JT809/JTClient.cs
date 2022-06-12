@@ -16,6 +16,9 @@ public class JTClient : DisposeBase
     /// <summary>配置信息</summary>
     public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
 
+    /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
+    public UInt32 CenterId { get; set; }
+
     private ISocketClient _client;
     #endregion
 
@@ -71,6 +74,8 @@ public class JTClient : DisposeBase
         var msg = new JTMessage
         {
             Kind = att.Kind,
+            CenterId = CenterId,
+            VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
         };
 
@@ -106,6 +111,8 @@ public class JTClient : DisposeBase
             DownLinkIP = downIp,
             DownLinkPort = (UInt16)downPort,
         };
+
+        CenterId = model.MsgGNSSCENTERID;
 
         var rs = await SendAsync<JT809_0x1002>(model);
         if (rs == null || rs.Result != JT809_0x1002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");

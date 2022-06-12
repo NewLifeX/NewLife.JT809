@@ -129,24 +129,12 @@ namespace JT809Server
                 // 处理响应
                 if (result != null)
                 {
-                    //if (result is ServerResponseMessage response)
-                    //{
-                    //    response.Kind = msg.Kind;
-                    //    response.Sequence = msg.Sequence;
-                    //}
-                    //else if (result is ClientResponseMessage response2)
-                    //{
-                    //    //response2.Kind = msg.Kind;
-                    //    //response2.Sequence = msg.Sequence;
-                    //}
-                    //else
-                    {
-                        if (debug) WriteLog("响应 {0}", result.ToJsonJT809());
-                    }
+                    if (debug) WriteLog("响应 {0}", result.ToJsonJT809());
 
                     var rs = msg.CreateReply() as JTMessage;
                     rs.Sequence = (UInt16)Interlocked.Increment(ref _gid);
                     rs.SetResult(result);
+                    if (Config != null) rs.VersionFlag = Config.VersionFlag;
 
                     if (debug && !_nologs.Contains(msg.Kind)) WriteLog("=> {0}", rs);
 
