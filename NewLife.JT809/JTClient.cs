@@ -1,4 +1,5 @@
-﻿using NewLife.JT809.Messages;
+﻿using System.Reflection;
+using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -43,10 +44,24 @@ public class JTClient : DisposeBase
 
         _client.SendMessage(msg);
     }
+
+    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class
+    {
+        var att = body.GetType().GetCustomAttribute<MessageKindAttribute>();
+
+        var msg = new JTMessage
+        {
+            Kind = att.Kind
+        };
+
+        msg.WriteModel(body);
+
+        return await _client.SendMessageAsync(msg) as TResult;
+    }
     #endregion
 
     #region 链路管理
-    public void Connect(Int32 user, String pass, Int32 code, String downIp, Int32 downPort)
+    public async Task<UInt32> ConnectAsync(Int32 user, String pass, Int32 code, String downIp, Int32 downPort)
     {
         var model = new JT809_0x1001
         {
@@ -58,7 +73,12 @@ public class JTClient : DisposeBase
             DownLinkPort = (UInt16)downPort,
         };
 
-        Send(model);
+        //Send(model);
+
+        var rs = await SendAsync<JT809_0x1002>(model);
+        if (rs == null || rs.Result != JT809_0x1002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
+
+        return rs.VerifyCode;
     }
     #endregion
 

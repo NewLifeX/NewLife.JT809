@@ -88,9 +88,8 @@ public class JTCodec : Handler
         return list;
     }
 
-    const Int32 HEADER_LENGTH = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 1;
-    //private static readonly Byte[] _start = new Byte[] { 0x5b };
-    //private static readonly Byte[] _end = new Byte[] { 0x5d };
+    const Int32 HEADER_LENGTH = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 2 + 1;
+    const Int32 HEADER_LENGTH_2019 = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
     /// <summary>
     /// 获取包含分割字节在内的数据长度
     /// </summary>
@@ -100,14 +99,7 @@ public class JTCodec : Handler
     {
         if (pk.Total < HEADER_LENGTH) return 0;
 
-        return (Int32)pk.ReadBytes(1, 4).ToUInt32();
-        //var idx = pk.IndexOf(_start);
-        //if (idx < 0) return 0;
-
-        //var idx2 = pk.IndexOf(_end, idx + 1);
-        //if (idx2 < 0) return 0;
-
-        //return idx2 - idx + 1;
+        return (Int32)pk.ReadBytes(1, 4).ToUInt32(0, false);
     }
     #endregion
 }

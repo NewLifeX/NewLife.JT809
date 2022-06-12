@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace JT809Server.Controllers;
 
-internal class ControllerFactory
+public interface IJT809Handler
 {
 }

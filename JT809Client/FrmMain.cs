@@ -49,7 +49,7 @@ namespace JT809Client
             }
         }
 
-        private void btnLogin_Click(Object sender, EventArgs e)
+        private async void btnLogin_Click(Object sender, EventArgs e)
         {
             var user = txtUser.Text.ToInt();
             var pass = txtPass.Text;
@@ -57,7 +57,7 @@ namespace JT809Client
             var ip = txtMyIP.Text;
             var port = (Int32)numMyPort.Value;
 
-            _client.Connect(user, pass, code, ip, port);
+            var rs = await _client.ConnectAsync(user, pass, code, ip, port);
         }
     }
 }
