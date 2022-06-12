@@ -104,7 +104,7 @@ public class JTCodec : Handler
     /// </summary>
     /// <param name="pk"></param>
     /// <returns></returns>
-    protected Int32 GetLength(Packet pk)
+    public Int32 GetLength(Packet pk)
     {
         if (pk.Total < HEADER_LENGTH) return 0;
 

@@ -36,15 +36,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Messages\JT809_0x1007.cs" />
-    <Compile Remove="Messages\JT809_0x1008.cs" />
-    <Compile Remove="Messages\JT809_0x1102.cs" />
-    <Compile Remove="Messages\JT809_0x1103.cs" />
-    <Compile Remove="Messages\JT809_0x1200.cs" />
-    <Compile Remove="Messages\JT809_0x1300.cs" />
-    <Compile Remove="Messages\JT809_0x1400.cs" />
-    <Compile Remove="Messages\JT809_0x1500.cs" />
-    <Compile Remove="Messages\JT809_0x1600.cs" />
     <Compile Remove="Messages\JT809_0x9001.cs" />
     <Compile Remove="Messages\JT809_0x9002.cs" />
     <Compile Remove="Messages\JT809_0x9003.cs" />
@@ -135,7 +126,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="SubMessages\" />
   </ItemGroup>
 

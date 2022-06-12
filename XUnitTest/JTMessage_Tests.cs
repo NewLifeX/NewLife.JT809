@@ -27,7 +27,7 @@ namespace XUnitTest
                 "00" +
                 "00000000" +
                 "0000018157AED15A01" +
-                "14020000004E31323334353637383931320001000000005E7B1E28000000005E7B1E28000000005E7B1E28B4A8413132333435000000000000000000000000000131323334353637383931320000007B00000000" +
+                "14020000004E31323334353637383931320001000000005E027B1E28000000005E027B1E28000000005E027B1E28B4A8413132333435000000000000000000000000000131323334353637383931320000007B00000000" +
                 "F654" +
                 "5D";
             var dt = str.ToHex();
@@ -47,7 +47,7 @@ namespace XUnitTest
 
             // 校验写入
             var pk = msg.ToPacket();
-            //Assert.Equal(dt.ToHex(), pk.ToHex(256));
+            Assert.Equal(dt.ToHex(), pk.ToHex(256));
 
             //var rm = _factory.Parse(msg) as RegisterMessage;
             //Assert.NotNull(rm);
