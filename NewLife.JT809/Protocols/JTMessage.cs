@@ -9,7 +9,7 @@ using NewLife.Serialization;
 namespace NewLife.JT809.Protocols;
 
 /// <summary>JT808报文消息</summary>
-public class JTMessage : IMessage, IAccessor
+public class JTMessage : IAccessor
 {
     #region 属性
     ///// <summary>数据长度。包括头标识、数据头、数据体、CRC校验码和尾标识</summary>
@@ -41,14 +41,6 @@ public class JTMessage : IMessage, IAccessor
     /// <summary>是否响应</summary>
     /// <remarks>所有终端主发的消息均应要求平台应答</remarks>
     public Boolean Reply { get; set; }
-
-    /// <summary>是否错误响应</summary>
-    [IgnoreDataMember]
-    Boolean IMessage.Error { get; set; }
-
-    /// <summary>是否单向请求。单向请求无需等待响应</summary>
-    [IgnoreDataMember]
-    Boolean IMessage.OneWay { get; }
 
     /// <summary>负载数据</summary>
     [IgnoreDataMember]
@@ -151,6 +143,8 @@ public class JTMessage : IMessage, IAccessor
         var checkSum = reader.ReadUInt16();
         //if (checkSum != checkSum2) return false;
         if (checkSum != checkSum2) XTrace.WriteLine("checkSum Error {0:X2}!={1:X2}", checkSum, checkSum2);
+
+        Reply = MessageFactory.Instance.IsReply(Kind);
 
         // 尾部标识探测
         return reader.ReadByte() == 0x5d;
@@ -376,9 +370,11 @@ public class JTMessage : IMessage, IAccessor
     /// <param name="result"></param>
     public void SetResult(Object result)
     {
-        Reply = true;
+        //Reply = true;
 
         if (MessageFactory.Instance.Types.TryGetValue(result.GetType(), out var kind)) Kind = kind;
+
+        Reply = MessageFactory.Instance.IsReply(Kind);
 
         WriteModel(result);
     }
@@ -387,7 +383,11 @@ public class JTMessage : IMessage, IAccessor
     #region 辅助
     /// <summary>创建响应</summary>
     /// <returns></returns>
-    public IMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag, CenterId = CenterId };
+    public JTMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag, CenterId = CenterId };
+
+    //private static readonly ConcurrentDictionary<Type, MessageKinds> _cache = new();
+
+    //private static MessageKinds GetKind(Type type) => _cache.GetOrAdd(type, k => k.GetCustomAttribute<MessageKindAttribute>()?.Kind ?? MessageKinds.主链路登录请求消息);
 
     /// <summary>已重写。返回友好文本</summary>
     /// <returns></returns>

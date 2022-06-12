@@ -3,59 +3,45 @@ using NewLife.JT809.Protocols;
 using NewLife.Messaging;
 using NewLife.Model;
 using NewLife.Net;
+using NewLife.Net.Handlers;
 
 namespace NewLife.JT809;
 
 /// <summary>JT809网络封包</summary>
-public class JTCodec : Handler
+public class JTCodec : MessageCodec<JTMessage>
 {
     private Int32 _gid;
 
-    /// <summary>写入数据</summary>
+    /// <summary>实例化网络封包编码器</summary>
+    public JTCodec() => UserPacket = false;
+
+    /// <summary>编码</summary>
     /// <param name="context"></param>
-    /// <param name="message"></param>
+    /// <param name="msg"></param>
     /// <returns></returns>
-    public override Object Write(IHandlerContext context, Object message)
+    protected override Object Encode(IHandlerContext context, JTMessage msg)
     {
-        if (message is JTMessage msg)
+        if (msg.Sequence == 0) msg.Sequence = (Byte)Interlocked.Increment(ref _gid);
+
+        var ss = context.Owner as IExtend;
+        var config = ss["Config"] as JTConfig;
+        var ms = new MemoryStream();
+        if (msg.Write(ms, config))
         {
-            if (msg.Sequence == 0) msg.Sequence = (Byte)Interlocked.Increment(ref _gid);
-
-            //message = msg.ToPacket();
-
-            var ss = context.Owner as IExtend;
-            var config = ss["Config"] as JTConfig;
-            var ms = new MemoryStream();
-            if (msg.Write(ms, config))
-            {
-                ms.Position = 0;
-                message = new Packet(ms);
-            }
-        }
-
-        return base.Write(context, message);
-    }
-
-    /// <summary>读取数据</summary>
-    /// <param name="context"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    public override Object Read(IHandlerContext context, Object message)
-    {
-        if (message is not Packet pk) return base.Read(context, message);
-
-        // 解码得到多个消息
-        var list = Decode(context, pk);
-        if (list == null) return null;
-
-        foreach (var msg in list)
-        {
-            // 匹配输入回调，让上层事件收到分包信息。
-            // 这里很可能处于网络IO线程，阻塞了下一个Tcp包的接收
-            base.Read(context, msg);
+            ms.Position = 0;
+            return new Packet(ms);
         }
 
         return null;
+    }
+
+    /// <summary>加入队列</summary>
+    /// <param name="context"></param>
+    /// <param name="msg"></param>
+    /// <returns></returns>
+    protected override void AddToQueue(IHandlerContext context, JTMessage msg)
+    {
+        if (!msg.Reply) base.AddToQueue(context, msg);
     }
 
     /// <summary>连接关闭时，清空粘包编码器</summary>
@@ -69,12 +55,26 @@ public class JTCodec : Handler
         return base.Close(context, reason);
     }
 
+    /// <summary>是否匹配响应</summary>
+    /// <param name="request"></param>
+    /// <param name="response"></param>
+    /// <returns></returns>
+    protected override Boolean IsMatch(Object request, Object response)
+    {
+        if (request is not JTMessage req || response is not JTMessage res) return false;
+
+        // 请求响应前后配对
+        if (req.Reply || !res.Reply) return false;
+
+        return req.Sequence == res.Sequence;
+    }
+
     #region 粘包处理
     /// <summary>解码</summary>
     /// <param name="context"></param>
     /// <param name="pk">包</param>
     /// <returns></returns>
-    protected IList<JTMessage> Decode(IHandlerContext context, Packet pk)
+    protected override IList<JTMessage> Decode(IHandlerContext context, Packet pk)
     {
         var ss = context.Owner as IExtend;
         if (ss["Codec"] is not PacketCodec pc)

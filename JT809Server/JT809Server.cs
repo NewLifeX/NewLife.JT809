@@ -2,7 +2,6 @@
 using JT809Server.Controllers;
 using NewLife;
 using NewLife.JT809;
-using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -49,6 +48,8 @@ namespace JT809Server
         {
             WriteLog("支持根据登录请求识别协议版本 JTT809-2011/2019");
 
+            MessageFactory.Instance.Init();
+
             base.OnStart();
         }
     }
@@ -59,7 +60,7 @@ namespace JT809Server
         public JTConfig Config { get; set; }
 
         private Int32 _gid;
-        private MessageKinds[] _nologs = new[] { MessageKinds.主链路连接保持请求消息 };
+        private readonly MessageKinds[] _nologs = new[] { MessageKinds.主链路连接保持请求消息 };
         /// <summary>接收指令</summary>
         /// <param name="e"></param>
         protected override void OnReceive(ReceivedEventArgs e)
@@ -131,7 +132,7 @@ namespace JT809Server
                 {
                     if (debug) WriteLog("响应 {0}", result.ToJsonJT809());
 
-                    var rs = msg.CreateReply() as JTMessage;
+                    var rs = msg.CreateReply();
                     rs.Sequence = (UInt16)Interlocked.Increment(ref _gid);
                     rs.SetResult(result);
                     if (Config != null) rs.VersionFlag = Config.VersionFlag;

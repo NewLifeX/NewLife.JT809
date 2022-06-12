@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
-using NewLife.JT809;
+using NewLife.JT809.Messages;
 using NewLife.Reflection;
 using NewLife.Serialization;
 
@@ -15,8 +15,8 @@ public class MessageFactory
     #endregion
 
     #region 属性
-    ConcurrentDictionary<MessageKinds, Type> _map1 = new();
-    ConcurrentDictionary<Type, MessageKinds> _map2 = new();
+    private readonly ConcurrentDictionary<MessageKinds, Type> _map1 = new();
+    private readonly ConcurrentDictionary<Type, MessageKinds> _map2 = new();
 
     /// <summary>类型映射</summary>
     public IDictionary<MessageKinds, Type> Maps => _map1;
@@ -29,15 +29,15 @@ public class MessageFactory
     /// <summary>初始化，加载内部</summary>
     public void Init()
     {
-        //var ns = typeof(PingMessage).Namespace;
-        //foreach (var item in GetType().Assembly.GetTypes())
-        //{
-        //    if (item.Namespace == ns)
-        //    {
-        //        var att = item.GetCustomAttribute<MessageKindAttribute>();
-        //        if (att != null) Register(att.Kind, item);
-        //    }
-        //}
+        var ns = typeof(JT809_0x1001).Namespace;
+        foreach (var item in GetType().Assembly.GetTypes())
+        {
+            if (item.Namespace == ns)
+            {
+                var att = item.GetCustomAttribute<MessageKindAttribute>();
+                if (att != null) Register(att.Kind, item);
+            }
+        }
     }
 
     /// <summary>注册新类型</summary>
@@ -73,7 +73,7 @@ public class MessageFactory
     /// <returns></returns>
     public Object Parse(JTMessage message)
     {
-        var msg = Create((MessageKinds)message.Kind);
+        var msg = Create(message.Kind);
         if (msg == null) return null;
 
         var pk = message.Payload;
@@ -91,6 +91,24 @@ public class MessageFactory
         }
 
         return msg;
+    }
+
+    /// <summary>是否响应消息</summary>
+    /// <param name="kind"></param>
+    /// <returns></returns>
+    public Boolean IsReply(MessageKinds kind)
+    {
+        return kind switch
+        {
+            MessageKinds.主链路登录应答消息 or
+            MessageKinds.主链路注销应答消息 or
+            MessageKinds.主链路连接保持应答消息 or
+            MessageKinds.从链路连接应答信息 or
+            MessageKinds.从链路注销应答消息 or
+            MessageKinds.从链路连接保持应答消息 or
+            MessageKinds.平台链路连接情况与车辆定位消息传输情况上报应答消息_2019 => true,
+            _ => false,
+        };
     }
     #endregion
 }

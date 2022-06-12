@@ -23,6 +23,8 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 构造
+    static JTClient() => MessageFactory.Instance.Init();
+
     /// <summary>
     /// 销毁
     /// </summary>
@@ -67,27 +69,28 @@ public class JTClient : DisposeBase
         _client.SendMessage(msg);
     }
 
-    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class
+    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
     {
-        var att = body.GetType().GetCustomAttribute<MessageKindAttribute>();
+        //var att = body.GetType().GetCustomAttribute<MessageKindAttribute>();
 
         var msg = new JTMessage
         {
-            Kind = att.Kind,
+            //Kind = att.Kind,
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
         };
 
-        msg.WriteModel(body);
+        //msg.WriteModel(body);
+        msg.SetResult(body);
 
         WriteLog("=>{0}", msg);
 
-        var rs = await _client.SendMessageAsync(msg) as TResult;
+        var rs = await _client.SendMessageAsync(msg) as JTMessage;
 
         WriteLog("<={0}", rs);
 
-        return rs;
+        return rs.ReadModel<TResult>();
     }
     #endregion
 
