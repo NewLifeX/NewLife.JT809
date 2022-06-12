@@ -60,7 +60,8 @@ namespace JT809Server
         public JTConfig Config { get; set; }
 
         private Int32 _gid;
-        private readonly MessageKinds[] _nologs = new[] { MessageKinds.主链路连接保持请求消息 };
+        //private readonly MessageKinds[] _nologs = new[] { MessageKinds.主链路连接保持请求消息 };
+        private readonly MessageKinds[] _nologs = new MessageKinds[] { };
         /// <summary>接收指令</summary>
         /// <param name="e"></param>
         protected override void OnReceive(ReceivedEventArgs e)
