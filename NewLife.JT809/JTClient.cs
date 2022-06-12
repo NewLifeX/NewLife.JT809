@@ -87,9 +87,7 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 链路管理
-    /// <summary>
-    /// 登录请求
-    /// </summary>
+    /// <summary>登录</summary>
     /// <param name="user"></param>
     /// <param name="pass"></param>
     /// <param name="code"></param>
@@ -109,12 +107,38 @@ public class JTClient : DisposeBase
             DownLinkPort = (UInt16)downPort,
         };
 
-        //Send(model);
-
         var rs = await SendAsync<JT809_0x1002>(model);
         if (rs == null || rs.Result != JT809_0x1002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
 
         return rs.VerifyCode;
+    }
+
+    /// <summary>注销</summary>
+    /// <param name="user"></param>
+    /// <param name="pass"></param>
+    /// <returns></returns>
+    public async Task<JT809_0x1004> LogoutAsync(Int32 user, String pass)
+    {
+        var model = new JT809_0x1003
+        {
+            UserId = (UInt32)user,
+            Password = pass,
+        };
+
+        var rs = await SendAsync<JT809_0x1004>(model);
+
+        return rs;
+    }
+
+    /// <summary>心跳</summary>
+    /// <returns></returns>
+    public async Task<JT809_0x1006> PingAsync()
+    {
+        var model = new JT809_0x1005();
+
+        var rs = await SendAsync<JT809_0x1006>(model);
+
+        return rs;
     }
     #endregion
 

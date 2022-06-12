@@ -10,7 +10,7 @@ namespace NewLife.JT809.Messages;
 /// <para>业务数据类型标识：UP-DISCONNECT-REQ</para>
 /// <para>描述：下级平台在中断与上级平台的主链路连接时，应向上级平台发送主链路注销请求消息。</para>
 /// </summary>
-[MessageKind(MessageKinds.主链路登录应答消息)]
+[MessageKind(MessageKinds.主链路注销请求消息)]
 public class JT809_0x1003
 {
     /// <summary>

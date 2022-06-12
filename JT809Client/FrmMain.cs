@@ -74,17 +74,26 @@ namespace JT809Client
                 var port = (Int32)numMyPort.Value;
 
                 var rs = await _client.LoginAsync(user, pass, code, ip, port);
+                _log.Info("授权码：{0}", rs);
 
                 btn.Text = "注销";
                 btnPing.Enabled = true;
             }
             else
             {
-                //var rs = await _client.LoginAsync(user, pass, code, ip, port);
+                var user = txtUser.Text.ToInt();
+                var pass = txtPass.Text;
+
+                await _client.LogoutAsync(user, pass);
 
                 btn.Text = "登录";
                 btnPing.Enabled = false;
             }
+        }
+
+        private async void btnPing_Click(Object sender, EventArgs e)
+        {
+            await _client.PingAsync();
         }
     }
 }

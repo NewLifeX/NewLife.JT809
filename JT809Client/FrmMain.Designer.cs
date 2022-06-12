@@ -302,6 +302,7 @@
             this.btnPing.TabIndex = 20;
             this.btnPing.Text = "心跳";
             this.btnPing.UseVisualStyleBackColor = true;
+            this.btnPing.Click += new System.EventHandler(this.btnPing_Click);
             // 
             // FrmMain
             // 

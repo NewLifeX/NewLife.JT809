@@ -10,7 +10,7 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:上级平台收到下级平台发送的主链路注销请求消息后，向下级平台返回主链路注销应答消息，并记录链路注销日志，下级平台接收到应答消息后，可中断主从链路联接。</para>
 /// <para>主链路注销应答消息，数据体为空。</para>
 /// </summary>
-[MessageKind(MessageKinds.主链路登录应答消息)]
+[MessageKind(MessageKinds.主链路注销应答消息)]
 public class JT809_0x1004
 {
 }
