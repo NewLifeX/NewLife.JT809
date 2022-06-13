@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using NewLife.JT809.Messages;
+﻿using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -10,6 +9,9 @@ namespace NewLife.JT809;
 public class JTClient : DisposeBase
 {
     #region 属性
+    /// <summary>名称</summary>
+    public String Name { get; set; }
+
     /// <summary>服务端地址</summary>
     public NetUri Server { get; set; }
 
@@ -43,7 +45,10 @@ public class JTClient : DisposeBase
     /// </summary>
     public void Open()
     {
+        MessageFactory.Instance.Init();
+
         var client = Server.CreateRemote();
+        client.Name = Name;
         client.Add<JTCodec>();
         client.Log = Log;
 
@@ -80,6 +85,8 @@ public class JTClient : DisposeBase
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
         };
+
+        if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
 
         //msg.WriteModel(body);
         msg.SetResult(body);
@@ -147,6 +154,23 @@ public class JTClient : DisposeBase
         var model = new JT809_0x1005();
 
         var rs = await SendAsync<JT809_0x1006>(model);
+
+        return rs;
+    }
+
+    /// <summary>从链路登录</summary>
+    /// <param name="verifyCode"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task<JT809_0x9002> DownLoginAsync(UInt32 verifyCode)
+    {
+        var model = new JT809_0x9001
+        {
+            VerifyCode = verifyCode,
+        };
+
+        var rs = await SendAsync<JT809_0x9002>(model);
+        if (rs == null || rs.Result != JT809_0x9002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
 
         return rs;
     }

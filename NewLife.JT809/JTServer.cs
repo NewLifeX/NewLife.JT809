@@ -92,6 +92,7 @@ public class JTSession : NetSession
                     Version = JTVersion.JTT2019
                 };
                 this["Config"] = Config;
+                WriteLog("[{0}]协议版本：{1}", msg.CenterId, Config.Version);
             }
 
             Object result = null;

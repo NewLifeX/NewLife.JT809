@@ -9,7 +9,7 @@ namespace JT809Server
     {
         private readonly ITracer _tracer;
         private readonly IServiceProvider _serviceProvider;
-        private MainServer _server;
+        private MasterServer _server;
 
         public JT809Worker(ITracer tracer, IServiceProvider serviceProvider)
         {
@@ -21,7 +21,7 @@ namespace JT809Server
         {
             var set = JT809Setting.Current;
 
-            var server = new MainServer
+            var server = new MasterServer
             {
                 Port = set.Port,
 

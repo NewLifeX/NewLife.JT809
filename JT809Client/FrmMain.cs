@@ -1,4 +1,5 @@
-﻿using NewLife;
+﻿using JT809Client.Controllers;
+using NewLife;
 using NewLife.JT809;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
@@ -11,6 +12,7 @@ namespace JT809Client
         private ControlConfig _config;
         private ILog _log;
         private JTClient _client;
+        private SlaveServer _slave;
 
         public FrmMain() => InitializeComponent();
 
@@ -35,6 +37,7 @@ namespace JT809Client
             {
                 _client = new JTClient
                 {
+                    Name = "主链路",
                     Server = new NetUri(NetType.Tcp, txtServer.Text, (Int32)numPort.Value),
 
                     Log = _log,
@@ -73,6 +76,20 @@ namespace JT809Client
                 var ip = txtMyIP.Text;
                 var port = (Int32)numMyPort.Value;
 
+                var server = new SlaveServer
+                {
+                    Port = port,
+
+                    Log = _log,
+                    SessionLog = _log
+                };
+
+                server.AddHandler(new NormalController());
+
+                server.Start();
+
+                _slave = server;
+
                 var rs = await _client.LoginAsync(user, pass, code, ip, port);
                 _log.Info("授权码：{0}", rs);
 
@@ -91,9 +108,6 @@ namespace JT809Client
             }
         }
 
-        private async void btnPing_Click(Object sender, EventArgs e)
-        {
-            await _client.PingAsync();
-        }
+        private async void btnPing_Click(Object sender, EventArgs e) => await _client.PingAsync();
     }
 }

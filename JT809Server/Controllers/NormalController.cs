@@ -16,7 +16,44 @@ internal class NormalController : IJT809Handler
         var msg = message.ReadModel<JT809_0x1001>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
-        return new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = (UInt32)Rand.Next() };
+        var verifyCode = (UInt32)Rand.Next();
+        var ss = session as SlaveSession;
+        try
+        {
+            // 建立从链路的连接
+            var client = new JTClient
+            {
+                Name = "Slave",
+                Server = new NetUri(NetType.Tcp, msg.DownLinkIP, msg.DownLinkPort),
+                Config = ss.Config,
+
+                Log = ss.Log
+            };
+
+            client.Open();
+
+            //var rs = client.DownLoginAsync(verifyCode).Result;
+            Task.Run(() => BuildSlave(client, verifyCode));
+
+            ss.Slave = client;
+        }
+        catch (Exception ex)
+        {
+            XTrace.WriteException(ex);
+
+            return new JT809_0x1002 { Result = JT809_0x1002_Result.IP地址不正确 };
+        }
+
+        return new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = verifyCode };
+    }
+
+    async Task BuildSlave(JTClient client, UInt32 verifyCode)
+    {
+        // 延迟建立建立从链路登录请求，得等主链路验证码先回去
+        await Task.Delay(1000);
+        var rs = await client.DownLoginAsync(verifyCode);
+
+        client.WriteLog("建立从链路：{0}", rs?.Result);
     }
 
     [MessageKind(MessageKinds.主链路注销请求消息)]
