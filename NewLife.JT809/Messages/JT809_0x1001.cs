@@ -11,7 +11,7 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台发送用户名和密码等登录信息</para>
 /// </summary>
 [MessageKind(MessageKinds.主链路登录请求消息)]
-public class JT809_0x1001
+public class JT809_0x1001 : IAccessor
 {
     /// <summary>
     /// 用户名
@@ -41,4 +41,52 @@ public class JT809_0x1001
     /// 下级平台提供对应的从链路服务器端口号
     /// </summary>
     public UInt16 DownLinkPort { get; set; }
+
+    /// <summary>
+    /// 读取
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var jt2019 = false;
+        if (context is JTMessage message) jt2019 = message.JTT2019;
+
+        var reader = Helper.CreateReader(stream);
+
+        UserId = reader.ReadUInt32();
+        Password = reader.ReadFixedString(8);
+
+        if (jt2019) MsgGNSSCENTERID = reader.ReadUInt32();
+
+        DownLinkIP = reader.ReadFixedString(32);
+        DownLinkPort = reader.ReadUInt16();
+
+        return true;
+    }
+
+    /// <summary>
+    /// 写入
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var jt2019 = false;
+        if (context is JTMessage message) jt2019 = message.JTT2019;
+
+        var writer = Helper.CreateWriter(stream);
+
+        writer.Write(UserId);
+        writer.WriteFixedString(Password, 8);
+
+        if (jt2019) writer.Write(MsgGNSSCENTERID);
+
+        writer.WriteFixedString(DownLinkIP, 32);
+        writer.Write(DownLinkPort);
+
+        return true;
+    }
 }
