@@ -1,5 +1,6 @@
 ﻿using JT809Server;
 using JT809Server.Controllers;
+using NewLife.JT809.Handlers;
 using NewLife.Log;
 
 // 启用控制台日志，拦截所有异常

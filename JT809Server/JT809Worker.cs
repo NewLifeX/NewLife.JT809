@@ -1,5 +1,6 @@
 ﻿using JT809Server.Controllers;
 using NewLife;
+using NewLife.JT809.Handlers;
 using NewLife.Log;
 
 namespace JT809Server
@@ -8,7 +9,7 @@ namespace JT809Server
     {
         private readonly ITracer _tracer;
         private readonly IServiceProvider _serviceProvider;
-        private JT809Server _server;
+        private MainServer _server;
 
         public JT809Worker(ITracer tracer, IServiceProvider serviceProvider)
         {
@@ -20,7 +21,7 @@ namespace JT809Server
         {
             var set = JT809Setting.Current;
 
-            var server = new JT809Server
+            var server = new MainServer
             {
                 Port = set.Port,
 

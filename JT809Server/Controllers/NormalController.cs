@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809;
+using NewLife.JT809.Handlers;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
