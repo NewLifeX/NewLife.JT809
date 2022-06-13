@@ -43,10 +43,12 @@ namespace JT809Client
                     Log = _log,
                 };
 
-                if (Enum.TryParse<JTVersion>(cbVersion.SelectedText, true, out var version))
+                if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
                     _client.Config.Version = version;
 
                 _client.Open();
+
+                txtCode.Enabled = _client.Config.Version == JTVersion.JTT2019;
 
                 btn.Text = "断开";
                 gbConnect.Enabled = false;
@@ -54,6 +56,9 @@ namespace JT809Client
             }
             else
             {
+                _slave.TryDispose();
+                _slave = null;
+
                 _client.TryDispose();
                 _client = null;
 
@@ -84,6 +89,12 @@ namespace JT809Client
                     SessionLog = _log
                 };
 
+#if DEBUG
+                server.SocketLog = _log;
+                server.LogSend = true;
+                server.LogReceive = true;
+#endif
+
                 server.AddHandler(new NormalController());
 
                 server.Start();
@@ -102,6 +113,9 @@ namespace JT809Client
                 var pass = txtPass.Text;
 
                 await _client.LogoutAsync(user, pass);
+
+                _slave.TryDispose();
+                _slave = null;
 
                 btn.Text = "登录";
                 btnPing.Enabled = false;

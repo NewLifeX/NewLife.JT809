@@ -237,7 +237,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(64, 24);
             this.label8.TabIndex = 15;
-            this.label8.Text = "端口：";
+            this.label8.Text = "协议：";
             // 
             // cbVersion
             // 

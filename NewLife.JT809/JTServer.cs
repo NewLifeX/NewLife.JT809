@@ -85,14 +85,15 @@ public class JTSession : NetSession
         if (msg != null)
         {
             // 根据登录请求猜测协议版本，后续指令自适应
-            if (Config == null && msg.JTT2019)
+            if (Config == null)
             {
                 Config = new JTConfig
                 {
-                    Version = JTVersion.JTT2019
+                    Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011,
                 };
                 this["Config"] = Config;
-                WriteLog("[{0}]协议版本：{1}", msg.CenterId, Config.Version);
+
+                WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);
             }
 
             Object result = null;

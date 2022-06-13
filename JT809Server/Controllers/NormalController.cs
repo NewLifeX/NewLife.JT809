@@ -26,11 +26,12 @@ internal class NormalController : IJT809Handler
                 Name = "Slave",
                 Server = new NetUri(NetType.Tcp, msg.DownLinkIP, msg.DownLinkPort),
                 Config = ss.Config,
+                CenterId = verifyCode,
 
                 Log = ss.Log
             };
 
-            client.Open();
+            //client.Open();
 
             //var rs = client.DownLoginAsync(verifyCode).Result;
             Task.Run(() => BuildSlave(client, verifyCode));
@@ -51,6 +52,9 @@ internal class NormalController : IJT809Handler
     {
         // 延迟建立建立从链路登录请求，得等主链路验证码先回去
         await Task.Delay(1000);
+
+        client.Open();
+
         var rs = await client.DownLoginAsync(verifyCode);
 
         client.WriteLog("建立从链路：{0}", rs?.Result);

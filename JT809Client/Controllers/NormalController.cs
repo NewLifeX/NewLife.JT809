@@ -9,7 +9,7 @@ namespace JT809Client.Controllers;
 
 internal class NormalController : IJT809Handler
 {
-    [MessageKind(MessageKinds.主链路登录请求消息)]
+    [MessageKind(MessageKinds.从链路连接请求消息)]
     public Object Login(INetSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9001>();
