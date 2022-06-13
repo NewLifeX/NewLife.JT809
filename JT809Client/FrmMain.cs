@@ -100,6 +100,7 @@ namespace JT809Client
 #endif
 
                 server.AddHandler(new NormalController());
+                server.AddHandler(new InfoController());
 
                 server.Start();
 
@@ -157,7 +158,7 @@ namespace JT809Client
             }
 
             _log.Info("");
-            _log.Info("指令头部：");
+            _log.Info("指令头部[{0:X4}]：", (Int32)msg.Kind);
             //foreach (var pi in msg.GetType().GetProperties())
             //{
             //    _log.Info("{0}: {1}", pi.Name, pi.GetValue(msg, null));

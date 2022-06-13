@@ -4,18 +4,20 @@ namespace NewLife.JT809.Messages;
 
 /// <summary>
 ///  平台链路连接情况与车辆定位消息传输情况上报请求消息
-/// <para>链路类型：从链路</para>
-/// <para>消息方向:上级平台往下级平台</para>
-/// <para>业务类型标识:DOWN_MANAGE_MSG_REQ</para>
-/// <para>描述：上级平台向下级平台发送上报指定下级监控平台一段时间内链路连接情况与车辆定位消息传输情况请求</para>
 /// </summary>
+/// <remarks>
+/// 链路类型：从链路
+/// 消息方向：上级平台往下级平台
+/// 业务类型标识：DOWN_MANAGE_MSG_REQ
+/// 上级平台向下级平台发送上报指定下级监控平台一段时间内链路连接情况与车辆定位消息传输情况请求
+/// </remarks>
 [MessageKind(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019)]
 public class JT809_0x9102 : JT809ExchangeMessageBodies
 {
     /// <summary>
     /// 平台唯一编码
     /// </summary>
-    public String PlateformId { get; set; }
+    public String PlatformId { get; set; }
 
     /// <summary>
     /// 开始时间，用 UTC 时间表示
@@ -43,7 +45,7 @@ public class JT809_0x9102 : JT809ExchangeMessageBodies
         if (pk == null) return false;
 
         var reader = Helper.CreateReader(pk.GetStream());
-        PlateformId = reader.ReadFixedString(11);
+        PlatformId = reader.ReadFixedString(11);
         StartTime = reader.Read<Int64>().ToDateTime();
         EndTime = reader.Read<Int64>().ToDateTime();
 
@@ -61,7 +63,7 @@ public class JT809_0x9102 : JT809ExchangeMessageBodies
         var ms = new MemoryStream();
         var writer = Helper.CreateWriter(ms);
 
-        writer.WriteFixedString(PlateformId, 11);
+        writer.WriteFixedString(PlatformId, 11);
         writer.Write(StartTime.ToLong());
         writer.Write(EndTime.ToLong());
 

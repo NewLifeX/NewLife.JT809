@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -104,7 +105,10 @@ public class JTClient : DisposeBase
 
         WriteLog("<={0}", rs);
 
-        return rs.ReadModel<TResult>();
+        var result = rs.ReadModel<TResult>();
+        WriteLog("<={0}", result.ToJsonJT809());
+
+        return result;
     }
     #endregion
 
@@ -200,6 +204,36 @@ public class JTClient : DisposeBase
         };
 
         Send(model);
+    }
+
+    public async Task<JT809_0x1102> Send9102(String platformId, DateTime start, DateTime end)
+    {
+        var model = new JT809_0x9102
+        {
+            PlatformId = platformId,
+            StartTime = start,
+            EndTime = end
+        };
+
+        return await SendAsync<JT809_0x1102>(model);
+    }
+
+    public async Task<JT809_0x1102> Send9103(UInt16 subType, UInt32 sn, DateTime time)
+    {
+        var model = new JT809_0x9103
+        {
+            SubBusinessType = subType,
+        };
+        model.ManageMsgSNInform = new List<JT809ManageMsgSNInform>
+        {
+            new JT809ManageMsgSNInform
+            {
+                SubBusinessType = subType,
+                MsgSN = sn,
+                Time = time,
+            }
+        };
+        return await SendAsync<JT809_0x1102>(model);
     }
     #endregion
 

@@ -20,6 +20,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NewLife.Stardust" Version="2.2.2022.606-beta0640" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NewLife.JT809\NewLife.JT809.csproj" />
   </ItemGroup>
 
