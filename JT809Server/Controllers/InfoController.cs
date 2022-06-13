@@ -21,15 +21,22 @@ internal class InfoController : IJT809Handler
         {
             Task.Run(async () =>
             {
-                var platformId = Rand.NextString(8);
-                var start = DateTime.Now.AddSeconds(-Rand.Next(24 * 3600));
-                var end = start.AddHours(1);
+                try
+                {
+                    var platformId = Rand.NextString(8);
+                    var start = DateTime.Now.AddSeconds(-Rand.Next(24 * 3600));
+                    var end = start.AddHours(1);
 
-                await client.Send9102(platformId, start, end);
+                    await client.Send9102(platformId, start, end);
 
-                var sn = (UInt32)Rand.Next(65536);
+                    var sn = (UInt32)Rand.Next(65536);
 
-                await client.Send9103(02, sn, start);
+                    await client.Send9103(02, sn, start);
+                }
+                catch (Exception ex)
+                {
+                    XTrace.WriteException(ex);
+                }
             });
         }
 

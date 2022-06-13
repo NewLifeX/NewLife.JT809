@@ -240,7 +240,7 @@ public class JTClient : DisposeBase
     {
         var model = new JT809_0x9103
         {
-            SubBusinessType = subType,
+            DataType = subType,
         };
         model.ManageMsgSNInform = new List<JT809ManageMsgSNInform>
         {

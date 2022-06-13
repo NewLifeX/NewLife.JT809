@@ -24,7 +24,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     /// <summary>
     /// 子业务类型标识
     /// </summary>
-    public UInt16 SubBusinessType { get; set; }
+    public UInt16 DataType { get; set; }
 
     ///// <summary>
     ///// 后续数据长度
@@ -51,8 +51,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     {
         var reader = Helper.CreateReader(stream);
 
-        var header = context as JTMessage;
-        var jt2019 = header != null && header.JTT2019;
+        var jt2019 = context is JTMessage header && header.JTT2019;
 
         if (!jt2019)
         {
@@ -60,7 +59,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
             VehicleColor = (JT809VehicleColorType)reader.ReadByte();
         }
 
-        SubBusinessType = reader.ReadUInt16();
+        DataType = reader.ReadUInt16();
 
         var len = reader.ReadUInt32();
         if (len > 0) Payload = reader.ReadBytes((Int32)len);
@@ -78,8 +77,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     {
         var writer = Helper.CreateWriter(stream);
 
-        var header = context as JTMessage;
-        var jt2019 = header != null && header.JTT2019;
+        var jt2019 = context is JTMessage header && header.JTT2019;
 
         if (!jt2019)
         {
@@ -87,14 +85,14 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
             writer.Write(VehicleColor);
         }
 
-        writer.Write(SubBusinessType);
+        writer.Write(DataType);
 
         var pk = Payload;
         if (pk == null)
             writer.Write((Byte)0);
         else
         {
-            writer.Write(pk.Total);
+            writer.Write((Byte)pk.Total);
             pk.CopyTo(stream);
         }
 
