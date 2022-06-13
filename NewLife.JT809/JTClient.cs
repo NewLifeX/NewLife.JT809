@@ -78,6 +78,7 @@ public class JTClient : DisposeBase
 
         msg.SetResult(body);
 
+        WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
 
         _client.SendMessage(msg);
@@ -96,6 +97,7 @@ public class JTClient : DisposeBase
 
         msg.SetResult(body);
 
+        WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
 
         var rs = await _client.SendMessageAsync(msg) as JTMessage;

@@ -19,6 +19,14 @@ namespace JT809Server
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            // 加大网络HEX日志长度
+            var net = NewLife.Net.Setting.Current;
+            if (net.LogDataLength <= 64)
+            {
+                net.LogDataLength = 1024;
+                net.Save();
+            }
+
             var set = JT809Setting.Current;
 
             var server = new MasterServer

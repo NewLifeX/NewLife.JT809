@@ -36,6 +36,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Messages\JT809_2019_0x9101.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1201.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1202.cs" />
     <Compile Remove="SubMessages\JT809_0x1200_0x1203.cs" />

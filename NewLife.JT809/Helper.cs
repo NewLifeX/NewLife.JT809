@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using NewLife.Data;
 using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
@@ -44,7 +45,19 @@ public static class Helper
     /// </summary>
     /// <param name="stream"></param>
     /// <returns></returns>
-    public static Binary CreateWriter(Stream stream) => new() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+    public static Binary CreateWriter(Stream stream)
+    {
+        var writer = new Binary() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+
+        // 替换编码处理器，自定义序列化行为
+        for (var i = 0; i < writer.Handlers.Count; i++)
+        {
+            if (writer.Handlers[i] is BinaryGeneral)
+                writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
+        }
+
+        return writer;
+    }
 
     /// <summary>
     /// 快速读取
@@ -210,14 +223,15 @@ public static class Helper
     /// Json序列化，使用枚举字符串
     /// </summary>
     /// <param name="value"></param>
+    /// <param name="indented"></param>
     /// <returns></returns>
-    public static String ToJsonJT809(this Object value)
+    public static String ToJsonJT809(this Object value, Boolean indented = false)
     {
         var jw = new JsonWriter
         {
             //IgnoreNullValues = !nullValue,
             //CamelCase = camelCase,
-            //Indented = indented,
+            Indented = indented,
             //SmartIndented = indented,
             EnumString = true,
         };

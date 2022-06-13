@@ -142,7 +142,7 @@ public class JTMessage : IAccessor
         var checkSum2 = GetCheckSum(ms, 0, 0);
         var checkSum = reader.ReadUInt16();
         //if (checkSum != checkSum2) return false;
-        if (checkSum != checkSum2) XTrace.WriteLine("checkSum Error {0:X2}!={1:X2}", checkSum, checkSum2);
+        if (checkSum != checkSum2) XTrace.WriteLine("Crc16 Error {0:X2}!={1:X2}", checkSum, checkSum2);
 
         Reply = MessageFactory.Instance.IsReply(Kind);
 

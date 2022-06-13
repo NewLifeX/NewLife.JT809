@@ -5,6 +5,7 @@ using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
 using NewLife.Security;
+using NewLife.Serialization;
 
 namespace JT809Client
 {
@@ -129,11 +130,54 @@ namespace JT809Client
 
         private void btnPositionCount_Click(Object sender, EventArgs e)
         {
-            var count = Rand.Next();
-            var start = DateTime.Now.AddSeconds(-Rand.Next());
+            var count = Rand.Next(10000);
+            var start = DateTime.Now.AddSeconds(-Rand.Next(24 * 3600));
             var end = start.AddHours(1);
 
             _client.PositionCount(count, start, end);
+        }
+
+        private void btnDecode_Click(Object sender, EventArgs e)
+        {
+            var hex = txtCommand.Text;
+            if (hex.IsNullOrEmpty()) return;
+
+            var buf = hex.ToHex();
+            _log.Info("报文长度[{0}]字节", buf.Length);
+
+            var msg = new JTMessage();
+            //if (_client?.Config != null) msg.JTT2019 = _client.Config.Version == JTVersion.JTT2019;
+            if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
+                msg.JTT2019 = version == JTVersion.JTT2019;
+
+            if (!msg.Read(hex.ToHex()))
+            {
+                _log.Info("解码失败！");
+                return;
+            }
+
+            _log.Info("");
+            _log.Info("指令头部：");
+            //foreach (var pi in msg.GetType().GetProperties())
+            //{
+            //    _log.Info("{0}: {1}", pi.Name, pi.GetValue(msg, null));
+            //}
+            //_log.Info(msg.ToJson(true));
+            _log.Info(msg.ToJsonJT809(true));
+
+            _log.Info("");
+            _log.Info("主体数据[{0}]：{1}", msg.Payload?.Total, msg.Payload?.ToHex(1024));
+            var model = MessageFactory.Instance.Parse(msg);
+            //foreach (var pi in model.GetType().GetProperties())
+            //{
+            //    _log.Info("{0}: {1}", pi.Name, pi.GetValue(msg, null));
+            //}
+            _log.Info(model.ToJsonJT809(true));
+        }
+
+        private void btnClear_Click(Object sender, EventArgs e)
+        {
+            rtbLog.Clear();
         }
     }
 }

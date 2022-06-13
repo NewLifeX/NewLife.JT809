@@ -12,6 +12,14 @@ internal static class Program
     {
         XTrace.UseWinForm();
 
+        // 加大网络HEX日志长度
+        var set = NewLife.Net.Setting.Current;
+        if (set.LogDataLength <= 64)
+        {
+            set.LogDataLength = 1024;
+            set.Save();
+        }
+
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();

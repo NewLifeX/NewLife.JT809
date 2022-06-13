@@ -117,12 +117,12 @@ public enum MessageKinds : UInt16
     ///</summary>
     [Description("接收车辆定位信息数量通知消息")]
     接收车辆定位信息数量通知消息 = 0x9101,
-    ///<summary>
-    ///发送车辆定位信息数据量通知消息_2019
-    ///DOWN_TOTAL_RECV_BACK_MSG
-    ///</summary>
-    [Description("发送车辆定位信息数据量通知消息_2019")]
-    发送车辆定位信息数据量通知消息_2019 = 0x9101,
+    /////<summary>
+    /////发送车辆定位信息数据量通知消息_2019
+    /////DOWN_TOTAL_RECV_BACK_MSG
+    /////</summary>
+    //[Description("发送车辆定位信息数据量通知消息_2019")]
+    //发送车辆定位信息数据量通知消息_2019 = 0x9101,
     ///<summary>
     ///平台链路连接情况与车辆定位消息传输情况上报请求消息_2019
     ///DOWN_TOTAL_RECV_BACK_MSG

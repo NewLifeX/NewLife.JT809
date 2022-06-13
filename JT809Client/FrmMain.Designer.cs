@@ -52,11 +52,16 @@
             this.btnPositionCount = new System.Windows.Forms.Button();
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.btnPing = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtCommand = new System.Windows.Forms.TextBox();
+            this.btnDecode = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
             this.gbConnect.SuspendLayout();
             this.gbInfo.SuspendLayout();
             this.gbAuth.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -258,9 +263,9 @@
             this.rtbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbLog.Location = new System.Drawing.Point(12, 385);
+            this.rtbLog.Location = new System.Drawing.Point(12, 452);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(1152, 619);
+            this.rtbLog.Size = new System.Drawing.Size(1152, 552);
             this.rtbLog.TabIndex = 17;
             this.rtbLog.Text = "";
             // 
@@ -269,7 +274,7 @@
             this.gbInfo.Controls.Add(this.btnPositionCount);
             this.gbInfo.Location = new System.Drawing.Point(12, 248);
             this.gbInfo.Name = "gbInfo";
-            this.gbInfo.Size = new System.Drawing.Size(1152, 131);
+            this.gbInfo.Size = new System.Drawing.Size(1152, 96);
             this.gbInfo.TabIndex = 18;
             this.gbInfo.TabStop = false;
             this.gbInfo.Text = "链路业务";
@@ -317,11 +322,51 @@
             this.btnPing.UseVisualStyleBackColor = true;
             this.btnPing.Click += new System.EventHandler(this.btnPing_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnClear);
+            this.groupBox1.Controls.Add(this.txtCommand);
+            this.groupBox1.Controls.Add(this.btnDecode);
+            this.groupBox1.Location = new System.Drawing.Point(12, 350);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1152, 96);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "辅助功能";
+            // 
+            // txtCommand
+            // 
+            this.txtCommand.Location = new System.Drawing.Point(21, 39);
+            this.txtCommand.Name = "txtCommand";
+            this.txtCommand.Size = new System.Drawing.Size(852, 30);
+            this.txtCommand.TabIndex = 22;
+            // 
+            // btnDecode
+            // 
+            this.btnDecode.Location = new System.Drawing.Point(910, 29);
+            this.btnDecode.Name = "btnDecode";
+            this.btnDecode.Size = new System.Drawing.Size(100, 50);
+            this.btnDecode.TabIndex = 21;
+            this.btnDecode.Text = "解码";
+            this.btnDecode.UseVisualStyleBackColor = true;
+            this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(1034, 29);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(100, 50);
+            this.btnClear.TabIndex = 23;
+            this.btnClear.Text = "清空";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1176, 1016);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbAuth);
             this.Controls.Add(this.gbInfo);
             this.Controls.Add(this.rtbLog);
@@ -337,6 +382,8 @@
             this.gbInfo.ResumeLayout(false);
             this.gbAuth.ResumeLayout(false);
             this.gbAuth.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -367,5 +414,9 @@
         private GroupBox gbAuth;
         private Button btnPing;
         private Button btnPositionCount;
+        private GroupBox groupBox1;
+        private TextBox txtCommand;
+        private Button btnDecode;
+        private Button btnClear;
     }
 }
