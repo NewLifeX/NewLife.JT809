@@ -67,20 +67,8 @@ public class JTClient : DisposeBase
 
     private void Send(Object body)
     {
-        var msg = new JTMessage();
-
-        msg.WriteModel(body);
-
-        _client.SendMessage(msg);
-    }
-
-    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
-    {
-        //var att = body.GetType().GetCustomAttribute<MessageKindAttribute>();
-
         var msg = new JTMessage
         {
-            //Kind = att.Kind,
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
@@ -88,7 +76,24 @@ public class JTClient : DisposeBase
 
         if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
 
-        //msg.WriteModel(body);
+        msg.SetResult(body);
+
+        WriteLog("=>{0}", msg);
+
+        _client.SendMessage(msg);
+    }
+
+    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
+    {
+        var msg = new JTMessage
+        {
+            CenterId = CenterId,
+            VersionFlag = Config.VersionFlag,
+            Time = DateTime.Now,
+        };
+
+        if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
+
         msg.SetResult(body);
 
         WriteLog("=>{0}", msg);
@@ -173,6 +178,26 @@ public class JTClient : DisposeBase
         if (rs == null || rs.Result != JT809_0x9002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
 
         return rs;
+    }
+    #endregion
+
+    #region 信息统计
+    /// <summary>
+    /// 上报接收车辆定位信息数量通知消息
+    /// </summary>
+    /// <param name="count"></param>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    public void PositionCount(Int32 count, DateTime start, DateTime end)
+    {
+        var model = new JT809_0x9101
+        {
+            DynamicInfoTotal = (UInt32)count,
+            StartTime = start,
+            EndTime = end
+        };
+
+        Send(model);
     }
     #endregion
 

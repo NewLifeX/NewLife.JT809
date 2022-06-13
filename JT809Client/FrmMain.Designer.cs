@@ -48,12 +48,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.cbVersion = new System.Windows.Forms.ComboBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbInfo = new System.Windows.Forms.GroupBox();
+            this.btnPositionCount = new System.Windows.Forms.Button();
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.btnPing = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
             this.gbConnect.SuspendLayout();
+            this.gbInfo.SuspendLayout();
             this.gbAuth.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -262,14 +264,25 @@
             this.rtbLog.TabIndex = 17;
             this.rtbLog.Text = "";
             // 
-            // groupBox2
+            // gbInfo
             // 
-            this.groupBox2.Location = new System.Drawing.Point(12, 248);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1152, 131);
-            this.groupBox2.TabIndex = 18;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "链路业务";
+            this.gbInfo.Controls.Add(this.btnPositionCount);
+            this.gbInfo.Location = new System.Drawing.Point(12, 248);
+            this.gbInfo.Name = "gbInfo";
+            this.gbInfo.Size = new System.Drawing.Size(1152, 131);
+            this.gbInfo.TabIndex = 18;
+            this.gbInfo.TabStop = false;
+            this.gbInfo.Text = "链路业务";
+            // 
+            // btnPositionCount
+            // 
+            this.btnPositionCount.Location = new System.Drawing.Point(21, 29);
+            this.btnPositionCount.Name = "btnPositionCount";
+            this.btnPositionCount.Size = new System.Drawing.Size(137, 50);
+            this.btnPositionCount.TabIndex = 21;
+            this.btnPositionCount.Text = "定位数量通知";
+            this.btnPositionCount.UseVisualStyleBackColor = true;
+            this.btnPositionCount.Click += new System.EventHandler(this.btnPositionCount_Click);
             // 
             // gbAuth
             // 
@@ -310,7 +323,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1176, 1016);
             this.Controls.Add(this.gbAuth);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.gbInfo);
             this.Controls.Add(this.rtbLog);
             this.Controls.Add(this.gbConnect);
             this.Controls.Add(this.btnConnect);
@@ -321,6 +334,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).EndInit();
             this.gbConnect.ResumeLayout(false);
             this.gbConnect.PerformLayout();
+            this.gbInfo.ResumeLayout(false);
             this.gbAuth.ResumeLayout(false);
             this.gbAuth.PerformLayout();
             this.ResumeLayout(false);
@@ -347,10 +361,11 @@
         private Button btnLogin;
         private GroupBox gbConnect;
         private RichTextBox rtbLog;
-        private GroupBox groupBox2;
+        private GroupBox gbInfo;
         private Label label8;
         private ComboBox cbVersion;
         private GroupBox gbAuth;
         private Button btnPing;
+        private Button btnPositionCount;
     }
 }

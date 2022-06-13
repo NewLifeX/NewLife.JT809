@@ -13,6 +13,7 @@ var host = Host.CreateDefaultBuilder(args)
         var star = services.AddStardust();
 
         services.AddSingleton<IJT809Handler, NormalController>();
+        services.AddSingleton<IJT809Handler, InfoController>();
 
         services.AddHostedService<Worker>();
         services.AddHostedService<JT809Worker>();

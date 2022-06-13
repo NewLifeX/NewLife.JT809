@@ -4,6 +4,7 @@ using NewLife.JT809;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
+using NewLife.Security;
 
 namespace JT809Client
 {
@@ -53,6 +54,7 @@ namespace JT809Client
                 btn.Text = "断开";
                 gbConnect.Enabled = false;
                 gbAuth.Enabled = true;
+                gbInfo.Enabled = true;
             }
             else
             {
@@ -65,6 +67,7 @@ namespace JT809Client
                 btn.Text = "连接";
                 gbConnect.Enabled = true;
                 gbAuth.Enabled = false;
+                gbInfo.Enabled = false;
             }
         }
 
@@ -123,5 +126,14 @@ namespace JT809Client
         }
 
         private async void btnPing_Click(Object sender, EventArgs e) => await _client.PingAsync();
+
+        private void btnPositionCount_Click(Object sender, EventArgs e)
+        {
+            var count = Rand.Next();
+            var start = DateTime.Now.AddSeconds(-Rand.Next());
+            var end = start.AddHours(1);
+
+            _client.PositionCount(count, start, end);
+        }
     }
 }

@@ -3,13 +3,15 @@
 namespace NewLife.JT809.Messages
 {
     /// <summary>
-    ///  发送车辆定位信息数量通知信息
-    /// <para>链路类型：主链路</para>
-    /// <para>消息方向:上级平台往下级平台</para>
-    /// <para>业务类型标识: UP_MANAGE_TOTAL_RECV_BACK_MSG</para>
-    /// <para>描述:下级平台向上级平台定量通知已经上传的车辆定位信息数量(如:每收到10,000 条车辆定位信息通知一次)</para>
-    /// <para>本条消息不需下级平台应答。</para>
+    /// 发送车辆定位信息数量通知信息
     /// </summary>
+    /// <remarks>
+    /// 链路类型：主链路
+    /// 消息方向:下级平台往上级平台
+    /// 业务类型标识: UP_MANAGE_TOTAL_RECV_BACK_MSG
+    /// 下级平台向上级平台定量通知已经上传的车辆定位信息数量(如:每收到10,000 条车辆定位信息通知一次)
+    /// 本条消息不需上级平台应答。
+    /// </remarks>
     [MessageKind(MessageKinds.接收车辆定位信息数量通知消息)]
     public class JT809_0x9101
     {
