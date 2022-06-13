@@ -23,7 +23,7 @@ internal class InfoController : IJT809Handler
         };
     }
 
-    [MessageKind(MessageKinds.接收车辆定位信息数量通知消息)]
+    [MessageKind(MessageKinds.下发平台间消息序列号通知消息_2019)]
     public Object Info_9103(INetSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9103>();

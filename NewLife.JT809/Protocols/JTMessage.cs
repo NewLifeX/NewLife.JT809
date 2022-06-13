@@ -229,6 +229,9 @@ public class JTMessage : IAccessor
             case MessageKinds.主链路连接保持请求消息:
                 jt2019 = len >= HEADER_LENGTH_2019 + (0);
                 return true;
+            case MessageKinds.从链路连接请求消息:
+                jt2019 = len >= HEADER_LENGTH_2019 + (4);
+                return true;
             default:
                 jt2019 = false;
                 break;

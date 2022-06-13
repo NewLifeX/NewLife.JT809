@@ -17,4 +17,22 @@ internal class NormalController : IJT809Handler
 
         return new JT809_0x9002 { Result = JT809_0x9002_Result.成功 };
     }
+
+    [MessageKind(MessageKinds.从链路注销请求消息)]
+    public Object Logout(INetSession session, JTMessage message)
+    {
+        var msg = message.ReadModel<JT809_0x9003>();
+        XTrace.WriteLine(msg.ToJsonJT809());
+
+        return new JT809_0x9004();
+    }
+
+    [MessageKind(MessageKinds.从链路连接保持请求消息)]
+    public Object Ping(INetSession session, JTMessage message)
+    {
+        var msg = message.ReadModel<JT809_0x9005>();
+        XTrace.WriteLine(msg.ToJsonJT809());
+
+        return new JT809_0x9006();
+    }
 }

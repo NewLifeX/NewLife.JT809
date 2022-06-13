@@ -153,9 +153,7 @@ public class JTClient : DisposeBase
             Password = pass,
         };
 
-        var rs = await SendAsync<JT809_0x1004>(model);
-
-        return rs;
+        return await SendAsync<JT809_0x1004>(model);
     }
 
     /// <summary>心跳</summary>
@@ -164,9 +162,7 @@ public class JTClient : DisposeBase
     {
         var model = new JT809_0x1005();
 
-        var rs = await SendAsync<JT809_0x1006>(model);
-
-        return rs;
+        return await SendAsync<JT809_0x1006>(model);
     }
 
     /// <summary>从链路登录</summary>
@@ -184,6 +180,28 @@ public class JTClient : DisposeBase
         if (rs == null || rs.Result != JT809_0x9002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
 
         return rs;
+    }
+
+    /// <summary>从链路注销</summary>
+    /// <param name="verifyCode"></param>
+    /// <returns></returns>
+    public async Task<JT809_0x9004> DownLogoutAsync(UInt32 verifyCode)
+    {
+        var model = new JT809_0x9003
+        {
+            VerifyCode = verifyCode,
+        };
+
+        return await SendAsync<JT809_0x9004>(model);
+    }
+
+    /// <summary>从链路心跳</summary>
+    /// <returns></returns>
+    public async Task<JT809_0x9006> DownPingAsync()
+    {
+        var model = new JT809_0x9005();
+
+        return await SendAsync<JT809_0x9006>(model);
     }
     #endregion
 

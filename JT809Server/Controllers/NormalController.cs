@@ -58,6 +58,12 @@ internal class NormalController : IJT809Handler
         var rs = await client.DownLoginAsync(verifyCode);
 
         client.WriteLog("建立从链路：{0}", rs?.Result);
+
+        await Task.Delay(1000);
+
+        await client.DownPingAsync();
+
+        client.WriteLog("从链路心跳");
     }
 
     [MessageKind(MessageKinds.主链路注销请求消息)]
