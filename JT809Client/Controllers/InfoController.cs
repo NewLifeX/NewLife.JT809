@@ -17,9 +17,15 @@ internal class InfoController : IJT809Handler
 
         return new JT809_0x1102
         {
+            DataType = msg.DataType,
+            DataLength = msg.DataLength,
             PlateformId = msg.PlatformId,
             StartTime = msg.StartTime,
             EndTime = msg.EndTime,
+
+            LoseDymamicSum = 123,
+            DisconnectNum = 66,
+            DisconnectTime = 789,
         };
     }
 

@@ -42,26 +42,26 @@ namespace XUnitTest
             var rs = msg.Read(dt);
 
             Assert.True(rs);
-            Assert.Equal(1u, msg.Sequence);
-            Assert.Equal(MessageKinds.主链路登录请求消息, msg.Kind);
-            Assert.Equal(123456u, msg.CenterId);
-            Assert.Equal(0x010000u, msg.VersionFlag);
-            Assert.Equal(0u, msg.EncryptFlag);
-            Assert.Equal(10000001u, msg.EncryptKey);
+            //Assert.Equal(1u, msg.Sequence);
+            Assert.Equal(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019, msg.Kind);
+            //Assert.Equal(123456u, msg.CenterId);
+            //Assert.Equal(0x010000u, msg.VersionFlag);
+            //Assert.Equal(0u, msg.EncryptFlag);
+            //Assert.Equal(10000001u, msg.EncryptKey);
             //Assert.Equal("2022-06-12T11:31:23.6110000".ToDateTime(), msg.Time);
 
             // 校验写入
             var pk = msg.ToPacket();
             Assert.Equal(dt.ToHex(), pk.ToHex(256));
 
-            var body = msg.ReadModel<JT809_0x1001>();
+            var body = msg.ReadModel<JT809_0x1102>();
 
             Assert.NotNull(body);
-            Assert.Equal(1234u, body.UserId);
-            Assert.Equal("1234", body.Password);
-            Assert.Equal(0u, body.MsgGNSSCENTERID);
-            Assert.Equal("127.0.0.1", body.DownLinkIP.TrimEnd('\0'));
-            Assert.Equal(7000, body.DownLinkPort);
+            //Assert.Equal(1234u, body.UserId);
+            //Assert.Equal("1234", body.Password);
+            //Assert.Equal(0u, body.MsgGNSSCENTERID);
+            //Assert.Equal("127.0.0.1", body.DownLinkIP.TrimEnd('\0'));
+            //Assert.Equal(7000, body.DownLinkPort);
 
             // 序列化
             var ms = new MemoryStream();

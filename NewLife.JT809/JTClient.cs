@@ -228,6 +228,8 @@ public class JTClient : DisposeBase
     {
         var model = new JT809_0x9102
         {
+            DataType = 0x9102,
+            DataLength = 27,
             PlatformId = platformId,
             StartTime = start,
             EndTime = end
