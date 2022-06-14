@@ -28,13 +28,18 @@ namespace XUnitTest
             };
 
             var ms = new MemoryStream();
-            msg.Write(ms, null);
+            //msg.Write(ms, null);
+            var bn = Helper.CreateWriter(ms);
+            bn.Write(msg);
 
             var buf = ms.ToArray();
 
             ms = new MemoryStream(buf);
             var msg2 = new JT809_0x9102();
-            var rs = msg2.Read(ms, null);
+            //var rs = msg2.Read(ms, null);
+            var bn2=Helper.CreateWriter(ms);
+            Object obj = msg2;
+            var rs = bn2.TryRead(null, ref obj);
 
             Assert.True(rs);
         }
@@ -52,13 +57,18 @@ namespace XUnitTest
             };
 
             var ms = new MemoryStream();
-            msg.Write(ms, header);
+            //msg.Write(ms, header);
+            var bn = Helper.CreateWriter(ms);
+            bn.Write(msg);
 
             var buf = ms.ToArray();
 
             ms = new MemoryStream(buf);
             var msg2 = new JT809_0x9102();
-            var rs = msg2.Read(ms, header);
+            //var rs = msg2.Read(ms, header);
+            var bn2 = Helper.CreateWriter(ms);
+            Object obj = msg2;
+            var rs = bn2.TryRead(null, ref obj);
 
             Assert.True(rs);
         }
@@ -68,18 +78,22 @@ namespace XUnitTest
         {
             var str =
                 "5B" +
-                "00000040" +
+                "00000043" +
                 "00000003" +
                 "9102" +
-                "7AF8FE92" +
+                "00003039" +
                 "01020F" +
                 "00" +
                 "00000000" +
-                "0000018163522FFB" +
+                "0000018163B6BEF3" +
 
-                "00001B4D4648475A024D5351000000000001816160EF1B000001816197DD9B" +
+                "0000" +
+                "00000000" +
+                "36506657-35614F46-000000" +
+                "0000018161C0B382" +
+                "0000018161F7A202" +
 
-                "FA4E" +
+                "3D06" +
                 "5D";
             var dt = str.ToHex();
 
@@ -88,11 +102,11 @@ namespace XUnitTest
 
             //Assert.True(rs);
             Assert.Equal(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019, msg.Kind);
-            Assert.Equal(2063138450u, msg.CenterId);
+            Assert.Equal(12345u, msg.CenterId);
             Assert.Equal(0x01020Fu, msg.VersionFlag);
             Assert.Equal(0u, msg.EncryptFlag);
             Assert.Equal(0u, msg.EncryptKey);
-            Assert.Equal("2022-06-14T17:45:39.5790000".ToDateTime(), msg.Time);
+            Assert.Equal("2022-06-14T19:35:29.7790000".ToDateTime(), msg.Time);
 
             Assert.True(msg.JTT2019);
 

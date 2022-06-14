@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.Messages;
 
@@ -12,11 +13,22 @@ namespace NewLife.JT809.Messages;
 /// 上级平台向下级平台发送上报指定下级监控平台一段时间内链路连接情况与车辆定位消息传输情况请求
 /// </remarks>
 [MessageKind(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019)]
-public class JT809_0x9102 : JT809ExchangeMessageBodies
+public class JT809_0x9102 //: IAccessor
 {
+    /// <summary>
+    /// 子业务类型标识
+    /// </summary>
+    public UInt16 DataType { get; set; }
+
+    /// <summary>
+    /// 数据长度
+    /// </summary>
+    public UInt32 DataLength { get; set; }
+
     /// <summary>
     /// 平台唯一编码
     /// </summary>
+    [FieldSize(11)]
     public String PlatformId { get; set; }
 
     /// <summary>
@@ -31,47 +43,47 @@ public class JT809_0x9102 : JT809ExchangeMessageBodies
     /// </summary>
     public DateTime EndTime { get; set; }
 
-    /// <summary>
-    /// 读取
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public override Boolean Read(Stream stream, Object context)
-    {
-        if (!base.Read(stream, context)) return false;
+    ///// <summary>
+    ///// 读取
+    ///// </summary>
+    ///// <param name="stream"></param>
+    ///// <param name="context"></param>
+    ///// <returns></returns>
+    //public override Boolean Read(Stream stream, Object context)
+    //{
+    //    if (!base.Read(stream, context)) return false;
 
-        var pk = Payload;
-        if (pk == null) return false;
+    //    var pk = Payload;
+    //    if (pk == null) return false;
 
-        var reader = Helper.CreateReader(pk.GetStream());
-        PlatformId = reader.ReadFixedString(11);
-        StartTime = reader.Read<Int64>().ToDateTime();
-        EndTime = reader.Read<Int64>().ToDateTime();
+    //    var reader = Helper.CreateReader(pk.GetStream());
+    //    PlatformId = reader.ReadFixedString(11);
+    //    StartTime = reader.Read<Int64>().ToDateTime();
+    //    EndTime = reader.Read<Int64>().ToDateTime();
 
-        return true;
-    }
+    //    return true;
+    //}
 
-    /// <summary>
-    /// 写入
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public override Boolean Write(Stream stream, Object context)
-    {
-        //if (!base.Write(stream, context)) return false;
+    ///// <summary>
+    ///// 写入
+    ///// </summary>
+    ///// <param name="stream"></param>
+    ///// <param name="context"></param>
+    ///// <returns></returns>
+    //public override Boolean Write(Stream stream, Object context)
+    //{
+    //    //if (!base.Write(stream, context)) return false;
 
-        var ms = new MemoryStream();
-        var writer = Helper.CreateWriter(ms);
+    //    var ms = new MemoryStream();
+    //    var writer = Helper.CreateWriter(ms);
 
-        writer.WriteFixedString(PlatformId, 11);
-        writer.Write(StartTime.ToLong());
-        writer.Write(EndTime.ToLong());
+    //    writer.WriteFixedString(PlatformId, 11);
+    //    writer.Write(StartTime.ToLong());
+    //    writer.Write(EndTime.ToLong());
 
-        Payload = ms.ToArray();
+    //    Payload = ms.ToArray();
 
-        //return true;
-        return base.Write(stream, context);
-    }
+    //    //return true;
+    //    return base.Write(stream, context);
+    //}
 }

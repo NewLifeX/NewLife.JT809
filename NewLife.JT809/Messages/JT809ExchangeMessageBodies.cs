@@ -1,4 +1,5 @@
-﻿using NewLife.Data;
+﻿using System.Runtime.Serialization;
+using NewLife.Data;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.Serialization;
@@ -38,6 +39,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     //public JT809SubBodies SubBodies { get; set; }
 
     /// <summary>子业务数据体</summary>
+    [IgnoreDataMember]
     public Packet Payload { get; set; }
     #endregion
 
@@ -62,8 +64,8 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
 
         DataType = reader.ReadUInt16();
 
-        var len = reader.ReadByte();
-        if (len > 0) Payload = reader.ReadBytes((Int32)len);
+        var len = reader.ReadInt32();
+        if (len > 0) Payload = reader.ReadBytes(len);
 
         return true;
     }
@@ -90,10 +92,10 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
 
         var pk = Payload;
         if (pk == null)
-            writer.Write((Byte)0);
+            writer.Write(0);
         else
         {
-            writer.Write((Byte)pk.Total);
+            writer.Write(pk.Total);
             pk.CopyTo(stream);
         }
 

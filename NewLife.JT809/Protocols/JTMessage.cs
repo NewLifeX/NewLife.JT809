@@ -399,6 +399,6 @@ public class JTMessage : IAccessor
 
     /// <summary>已重写。返回友好文本</summary>
     /// <returns></returns>
-    public override String ToString() => $"[{Kind}] {CenterId} Seq={Sequence} [{Payload?.Total}]";
+    public override String ToString() => $"[{(Int32)Kind:X4}][{Kind}] {CenterId} Seq={Sequence} [{Payload?.Total}]";
     #endregion
 }
