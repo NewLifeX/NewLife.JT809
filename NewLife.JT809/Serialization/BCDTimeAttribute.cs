@@ -9,10 +9,13 @@ namespace NewLife.JT809.Serialization;
 public class BCDTimeAttribute : AccessorAttribute
 {
     /// <summary>长度</summary>
-    public Int32 Length { get; set; }
+    public Int32 Length { get; set; } = 6;
 
     /// <summary>格式化字符串</summary>
     public String Format { get; set; } = "yyMMddHHmmss";
+
+    /// <summary>BCD时间序列化</summary>
+    public BCDTimeAttribute() { }
 
     /// <summary>>BCD时间序列化</summary>
     /// <param name="length"></param>

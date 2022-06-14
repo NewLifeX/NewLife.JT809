@@ -37,60 +37,6 @@
 
   <ItemGroup>
     <Compile Remove="Messages\JT809_2019_0x9101.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1201.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1202.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1203.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1205.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1206.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1207.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1208.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x1209.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x120A.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x120B.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x120C.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x120D.cs" />
-    <Compile Remove="SubMessages\JT809_0x1200_0x120E.cs" />
-    <Compile Remove="SubMessages\JT809_0x1300_0x1301.cs" />
-    <Compile Remove="SubMessages\JT809_0x1300_0x1302.cs" />
-    <Compile Remove="SubMessages\JT809_0x1300_0x1303.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1401.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1402.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1403.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1411.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1412.cs" />
-    <Compile Remove="SubMessages\JT809_0x1400_0x1413.cs" />
-    <Compile Remove="SubMessages\JT809_0x1500_0x1501.cs" />
-    <Compile Remove="SubMessages\JT809_0x1500_0x1502.cs" />
-    <Compile Remove="SubMessages\JT809_0x1500_0x1503.cs" />
-    <Compile Remove="SubMessages\JT809_0x1500_0x1504.cs" />
-    <Compile Remove="SubMessages\JT809_0x1500_0x1505.cs" />
-    <Compile Remove="SubMessages\JT809_0x1600_0x1601.cs" />
-    <Compile Remove="SubMessages\JT809_0x1600_0x1602.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9201.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9202.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9203.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9204.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9205.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9206.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9207.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9208.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x9209.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x920A.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x920B.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x920C.cs" />
-    <Compile Remove="SubMessages\JT809_0x9200_0x920D.cs" />
-    <Compile Remove="SubMessages\JT809_0x9300_0x9301.cs" />
-    <Compile Remove="SubMessages\JT809_0x9300_0x9302.cs" />
-    <Compile Remove="SubMessages\JT809_0x9300_0x9303.cs" />
-    <Compile Remove="SubMessages\JT809_0x9400_0x9401.cs" />
-    <Compile Remove="SubMessages\JT809_0x9400_0x9402.cs" />
-    <Compile Remove="SubMessages\JT809_0x9400_0x9403.cs" />
-    <Compile Remove="SubMessages\JT809_0x9500_0x9501.cs" />
-    <Compile Remove="SubMessages\JT809_0x9500_0x9502.cs" />
-    <Compile Remove="SubMessages\JT809_0x9500_0x9503.cs" />
-    <Compile Remove="SubMessages\JT809_0x9500_0x9504.cs" />
-    <Compile Remove="SubMessages\JT809_0x9500_0x9505.cs" />
-    <Compile Remove="SubMessages\JT809_0x9600_0x9601.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -107,10 +53,6 @@
 
   <ItemGroup>
     <Content Include="..\Doc\leaf.png" Link="leaf.png" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SubMessages\" />
   </ItemGroup>
 
 </Project>

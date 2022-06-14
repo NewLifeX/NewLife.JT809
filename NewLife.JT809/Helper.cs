@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using NewLife.Data;
 using NewLife.JT809.Serialization;
 using NewLife.Serialization;
@@ -133,6 +134,31 @@ public static class Helper
         var len = binary.Stream.Length - binary.Stream.Position;
         var buf = binary.ReadBytes((Int32)len);
         return Encoding.GetString(buf)?.Trim('\0');
+    }
+
+    /// <summary>读取BCD时间</summary>
+    /// <param name="binary"></param>
+    /// <param name="len"></param>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public static DateTime ReadBCDTime(this Binary binary, Int32 len = 6, String format = "yyMMddHHmmss")
+    {
+        var str = binary.ReadBCD(len);
+        if (DateTime.TryParseExact(str, format, null, DateTimeStyles.None, out var dt))
+            return dt;
+
+        return DateTime.MinValue;
+    }
+
+    /// <summary>写入BCD时间</summary>
+    /// <param name="binary"></param>
+    /// <param name="dt"></param>
+    /// <param name="len"></param>
+    /// <param name="format"></param>
+    public static void WriteBCDTime(this Binary binary, DateTime dt, Int32 len = 6, String format = "yyMMddHHmmss")
+    {
+        var str = dt.ToString(format);
+        binary.WriteBCD(str, len);
     }
 
     //public static UInt16 ReadUInt16(this Binary binary) => binary.Read<UInt16>();

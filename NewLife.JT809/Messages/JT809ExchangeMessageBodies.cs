@@ -14,6 +14,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     /// <summary>
     /// 车牌号
     /// </summary>
+    [FieldSize(21)]
     public String VehicleNo { get; set; }
 
     /// <summary>
