@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 using NewLife.JT809.Messages;
+using NewLife.JT809.SubMessages;
+using NewLife.Log;
 using NewLife.Reflection;
 using NewLife.Serialization;
 
@@ -38,6 +40,15 @@ public class MessageFactory
                 if (att != null) Register(att.Kind, item);
             }
         }
+        ns = typeof(JT809_0x1200_0x1201).Namespace;
+        foreach (var item in GetType().Assembly.GetTypes())
+        {
+            if (item.Namespace == ns)
+            {
+                var att = item.GetCustomAttribute<MessageKindAttribute>();
+                if (att != null) Register(att.Kind, item);
+            }
+        }
     }
 
     /// <summary>注册新类型</summary>
@@ -45,6 +56,9 @@ public class MessageFactory
     /// <param name="type"></param>
     public void Register(MessageKinds kind, Type type)
     {
+        if (_map1.TryGetValue(kind, out var t) && t != type)
+            XTrace.WriteLine("指令[0:X4]已注册到{1}，重复注册{2}", (Int32)kind, t.Name, type.Name);
+
         _map1[kind] = type;
         _map2[type] = kind;
     }
