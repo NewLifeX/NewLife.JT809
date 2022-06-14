@@ -66,7 +66,8 @@ public class JTCodec : MessageCodec<JTMessage>
         // 请求响应前后配对
         if (req.Reply || !res.Reply) return false;
 
-        return req.Sequence == res.Sequence;
+        //return req.Sequence == res.Sequence;
+        return true;
     }
 
     #region 粘包处理
