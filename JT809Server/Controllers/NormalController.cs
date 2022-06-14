@@ -26,7 +26,7 @@ internal class NormalController : IJT809Handler
                 Name = "Slave",
                 Server = new NetUri(NetType.Tcp, msg.DownLinkIP, msg.DownLinkPort),
                 Config = ss.Config,
-                CenterId = verifyCode,
+                CenterId = message.CenterId,
 
                 Log = ss.Log
             };
