@@ -60,6 +60,8 @@ public class JT809_0x9102 : JT809ExchangeMessageBodies
     /// <returns></returns>
     public override Boolean Write(Stream stream, Object context)
     {
+        //if (!base.Write(stream, context)) return false;
+
         var ms = new MemoryStream();
         var writer = Helper.CreateWriter(ms);
 
@@ -69,6 +71,7 @@ public class JT809_0x9102 : JT809ExchangeMessageBodies
 
         Payload = ms.ToArray();
 
+        //return true;
         return base.Write(stream, context);
     }
 }

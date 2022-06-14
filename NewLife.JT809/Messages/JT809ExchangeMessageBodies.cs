@@ -62,7 +62,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
 
         DataType = reader.ReadUInt16();
 
-        var len = reader.ReadUInt32();
+        var len = reader.ReadByte();
         if (len > 0) Payload = reader.ReadBytes((Int32)len);
 
         return true;
