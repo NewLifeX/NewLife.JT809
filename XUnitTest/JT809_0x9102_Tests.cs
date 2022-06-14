@@ -112,5 +112,22 @@ namespace XUnitTest
 
             var body = msg.ReadModel<JT809_0x9102>();
         }
+
+        [Fact]
+        public void Test222()
+        {
+            var str = "27660000001B3130303130000000000000000000004EBC924F000000004EBC924F";
+            var dt = str.ToHex();
+
+            var bn = Helper.CreateReader(new MemoryStream(dt));
+
+            var body = bn.Read<JT809_0x9102>();
+
+            Assert.NotNull(body);
+            Assert.Equal(10086, body.DataType);
+            Assert.Equal("10010", body.PlatformId);
+            Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.StartTime);
+            Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.EndTime);
+        }
     }
 }
