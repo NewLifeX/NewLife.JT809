@@ -25,7 +25,9 @@ namespace JT809Client
 
             rtbLog.Clear();
             rtbLog.SetDefaultStyle(12);
-            _log = new TextControlLog { Control = rtbLog };
+            //_log = new TextControlLog { Control = rtbLog };
+            rtbLog.UseWinFormControl();
+            _log = XTrace.Log;
 
             if (txtMyIP.Text.IsNullOrEmpty()) txtMyIP.Text = NetHelper.MyIP() + "";
         }
@@ -154,7 +156,7 @@ namespace JT809Client
             if (!msg.Read(hex.ToHex()))
             {
                 _log.Info("解码失败！");
-                return;
+                //return;
             }
 
             _log.Info("");

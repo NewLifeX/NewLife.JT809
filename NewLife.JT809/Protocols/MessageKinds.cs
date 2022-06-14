@@ -176,6 +176,7 @@ public enum MessageKinds : UInt16
     [Description("从链路平台间信息交互业务")]
     从链路平台间信息交互业务 = 0x9300,
     #endregion
+
     #region 车辆报警信息交互类(2013)  报警信息交互业务类(2019)
     ///<summary>
     ///主链路报警信息交互消息  
@@ -183,6 +184,7 @@ public enum MessageKinds : UInt16
     ///</summary>
     [Description("主链路报警信息交互消息")]
     主链路报警信息交互消息 = 0x1400,
+
     ///<summary>
     ///从链路报警信息交互消息 
     ///DOWN_WARN_MSG
@@ -190,6 +192,7 @@ public enum MessageKinds : UInt16
     [Description("从链路报警信息交互消息")]
     从链路报警信息交互消息 = 0x9400,
     #endregion
+
     #region 车辆监管类 
     ///<summary>
     ///主链路车辆监管消息 
@@ -197,6 +200,7 @@ public enum MessageKinds : UInt16
     ///</summary>
     [Description("主链路车辆监管消息")]
     主链路车辆监管消息 = 0x1500,
+
     ///<summary>
     ///从链路车辆监管消息
     ///DOWN_CTRL_MSG
@@ -204,6 +208,7 @@ public enum MessageKinds : UInt16
     [Description("从链路车辆监管消息")]
     从链路车辆监管消息 = 0x9500,
     #endregion
+
     #region 车辆静态信息交换类
     ///<summary>
     ///主链路静态信息交换消息 

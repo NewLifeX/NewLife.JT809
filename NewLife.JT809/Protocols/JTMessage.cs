@@ -132,6 +132,11 @@ public class JTMessage : IAccessor
         // 根据登录请求，猜测协议版本
         if (config == null && TryGuessVersion(Kind, len, out var jt2019)) JTT2019 = jt2019;
 
+#if DEBUG
+        var len2 = ms.Length + 1;
+        if (len != len2) XTrace.WriteLine("指令[{0:X4}]标称有{1}字节，而实际有{2}字节（转义前）", (Int32)Kind, len, len2);
+#endif
+
         // 2019新增
         if (JTT2019) Time = reader.Read<Int64>().ToDateTime();
 
