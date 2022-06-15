@@ -1,6 +1,7 @@
 ﻿using JT809Client.Controllers;
 using NewLife;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using NewLife.Log;
 using NewLife.Net;
@@ -101,9 +102,6 @@ namespace JT809Client
                 server.LogReceive = true;
 #endif
 
-                server.AddHandler(new NormalController());
-                server.AddHandler(new InfoController());
-
                 server.Start();
 
                 _slave = server;
@@ -192,12 +190,26 @@ namespace JT809Client
             {
                 XTrace.WriteException(ex);
             }
+
+            if (model is JT809_0x1200 j1200) _log.Info("子业务编码：[{0:X4}]{1}", j1200.DataType, (MessageKinds)j1200.DataType);
+
             _log.Info(model.ToJsonJT809(true));
         }
 
         private void btnClear_Click(Object sender, EventArgs e)
         {
             rtbLog.Clear();
+        }
+
+        private void btnExchange_Click(Object sender, EventArgs e)
+        {
+            var frm = new FrmExchange
+            {
+                Client = _client,
+                Log = _log
+            };
+
+            frm.Show();
         }
     }
 }

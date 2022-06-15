@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using NewLife.Data;
+﻿using NewLife.Data;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.Serialization;

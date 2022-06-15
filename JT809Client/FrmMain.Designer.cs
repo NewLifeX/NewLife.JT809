@@ -53,9 +53,10 @@
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.btnPing = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnClear = new System.Windows.Forms.Button();
             this.txtCommand = new System.Windows.Forms.TextBox();
             this.btnDecode = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.btnExchange = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
             this.gbConnect.SuspendLayout();
@@ -271,6 +272,7 @@
             // 
             // gbInfo
             // 
+            this.gbInfo.Controls.Add(this.btnExchange);
             this.gbInfo.Controls.Add(this.btnPositionCount);
             this.gbInfo.Location = new System.Drawing.Point(12, 248);
             this.gbInfo.Name = "gbInfo";
@@ -334,6 +336,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "辅助功能";
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(1034, 29);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(100, 50);
+            this.btnClear.TabIndex = 23;
+            this.btnClear.Text = "清空";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // txtCommand
             // 
             this.txtCommand.Location = new System.Drawing.Point(21, 39);
@@ -351,15 +363,15 @@
             this.btnDecode.UseVisualStyleBackColor = true;
             this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
             // 
-            // btnClear
+            // btnExchange
             // 
-            this.btnClear.Location = new System.Drawing.Point(1034, 29);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(100, 50);
-            this.btnClear.TabIndex = 23;
-            this.btnClear.Text = "清空";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnExchange.Location = new System.Drawing.Point(175, 29);
+            this.btnExchange.Name = "btnExchange";
+            this.btnExchange.Size = new System.Drawing.Size(137, 50);
+            this.btnExchange.TabIndex = 22;
+            this.btnExchange.Text = "动态信息交换";
+            this.btnExchange.UseVisualStyleBackColor = true;
+            this.btnExchange.Click += new System.EventHandler(this.btnExchange_Click);
             // 
             // FrmMain
             // 
@@ -418,5 +430,6 @@
         private TextBox txtCommand;
         private Button btnDecode;
         private Button btnClear;
+        private Button btnExchange;
     }
 }
