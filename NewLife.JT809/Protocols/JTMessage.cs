@@ -134,7 +134,7 @@ public class JTMessage : IAccessor
 
 #if DEBUG
         var len2 = ms.Length + 1;
-        if (len != len2) XTrace.WriteLine("指令[{0:X4}]标称有{1}字节，而实际有{2}字节（转义前）", (Int32)Kind, len, len2);
+        if (len != len2) XTrace.WriteLine("指令[{0:X4}]标称有{1}字节，而实际有{2}字节（未转义）", (Int32)Kind, len, len2);
 #endif
 
         // 2019新增
@@ -147,7 +147,7 @@ public class JTMessage : IAccessor
         var checkSum2 = GetCheckSum(ms, 0, 0);
         var checkSum = reader.ReadUInt16();
         //if (checkSum != checkSum2) return false;
-        if (checkSum != checkSum2) XTrace.WriteLine("Crc16 Error {0:X2}!={1:X2}", checkSum, checkSum2);
+        if (checkSum != checkSum2) XTrace.WriteLine("Crc16 Error {0:X4}!={1:X4}", checkSum, checkSum2);
 
         Reply = MessageFactory.Instance.IsReply(Kind);
 

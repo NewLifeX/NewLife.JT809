@@ -11,7 +11,7 @@ namespace NewLife.JT809.Messages;
 /// <para>下级平台收到上级平台下发的“平台链路连接情况与车辆定位消息传输情况上报请求消息”后，上报指定平台，指定时间段内的平台链路连接情况与车辆定位消息传输情况</para>
 /// </summary>
 [MessageKind(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报应答消息_2019)]
-public class JT809_0x1102 
+public class JT809_0x1102 : ISubMessage
 {
     /// <summary>
     /// 子业务类型标识

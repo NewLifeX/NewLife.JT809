@@ -80,10 +80,10 @@ public class JTSession : NetSession
         debug = true;
 #endif
 
-        var msg = e.Message as JTMessage;
-        if (debug && !_nologs.Contains(msg.Kind)) WriteLog("<= {0}", msg);
-        if (msg != null)
+        if (e.Message is JTMessage msg)
         {
+            if (debug && !_nologs.Contains(msg.Kind)) WriteLog("<= {0}", msg);
+
             // 根据登录请求猜测协议版本，后续指令自适应
             if (Config == null)
             {
