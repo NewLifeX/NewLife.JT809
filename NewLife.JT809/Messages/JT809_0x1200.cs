@@ -14,7 +14,7 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台发送车辆动态信息交换业务数据包</para>
 /// </summary>
 [MessageKind(MessageKinds.主链路车辆动态信息交换业务)]
-public class JT809_0x1200 //: IAccessor
+public class JT809_0x1200 : IAccessor
 {
     #region 属性
     /// <summary>
@@ -33,80 +33,100 @@ public class JT809_0x1200 //: IAccessor
     /// </summary>
     public UInt16 DataType { get; set; }
 
-    /// <summary>
-    /// 后续数据长度
-    /// </summary>
-    public UInt32 DataLength { get; set; }
-
     ///// <summary>
-    ///// 子业务数据体
+    ///// 后续数据长度
     ///// </summary>
-    //[IgnoreDataMember]
-    //public Object Body { get; set; }
+    //public UInt32 DataLength { get; set; }
 
-    /// <summary>子业务数据体</summary>
-    //[IgnoreDataMember]
-    [FieldSize(nameof(DataLength))]
-    public Packet Payload { get; set; }
+    ///// <summary>子业务数据体</summary>
+    ////[IgnoreDataMember]
+    //[FieldSize(nameof(DataLength))]
+    //public Packet Payload { get; set; }
+
+    /// <summary>
+    /// 子业务数据体
+    /// </summary>
+    public Object Body { get; set; }
     #endregion
 
     #region 方法
-    ///// <summary>
-    ///// 读取
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public virtual Boolean Read(Stream stream, Object context)
-    //{
-    //    var reader = Helper.CreateReader(stream);
+    /// <summary>
+    /// 读取
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public virtual Boolean Read(Stream stream, Object context)
+    {
+        var reader = Helper.CreateReader(stream);
 
-    //    var jt2019 = context is JTMessage header && header.JTT2019;
+        VehicleNo = reader.ReadFixedString(21);
+        VehicleColor = (JT809VehicleColorType)reader.ReadByte();
+        DataType = reader.ReadUInt16();
 
-    //    if (!jt2019)
-    //    {
-    //        VehicleNo = reader.ReadFixedString(21);
-    //        VehicleColor = (JT809VehicleColorType)reader.ReadByte();
-    //    }
+        var len = reader.ReadInt32();
+        if (len > 0)
+        {
+            var model = MessageFactory.Instance.Create((MessageKinds)DataType);
+            if (model == null)
+                Body = reader.ReadBytes(len);
+            else
+            {
+                if (!reader.TryRead(null, ref model)) return false;
+                Body = model;
+            }
+        }
 
-    //    DataType = reader.ReadUInt16();
+        return true;
+    }
 
-    //    var len = reader.ReadInt32();
-    //    if (len > 0) Payload = reader.ReadBytes(len);
+    /// <summary>
+    /// 写入
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public virtual Boolean Write(Stream stream, Object context)
+    {
+        var writer = Helper.CreateWriter(stream);
 
-    //    return true;
-    //}
+        writer.WriteFixedString(VehicleNo, 21);
+        writer.Write(VehicleColor);
 
-    ///// <summary>
-    ///// 写入
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public virtual Boolean Write(Stream stream, Object context)
-    //{
-    //    var writer = Helper.CreateWriter(stream);
+        // 修正数据
+        if (Body is Byte[] buf)
+        {
+            writer.Write(DataType);
 
-    //    var jt2019 = context is JTMessage header && header.JTT2019;
+            writer.Write(buf.Length);
+            writer.Write(buf, 0, buf.Length);
+        }
+        else if (Body is Packet pk)
+        {
+            writer.Write(DataType);
 
-    //    if (!jt2019)
-    //    {
-    //        writer.WriteFixedString(VehicleNo, 21);
-    //        writer.Write(VehicleColor);
-    //    }
+            writer.Write(pk.Total);
+            pk.CopyTo(stream);
+        }
+        else if (Body != null)
+        {
+            if (MessageFactory.Instance.Types.TryGetValue(Body.GetType(), out var kind))
+                DataType = (UInt16)kind;
 
-    //    writer.Write(DataType);
+            writer.Write(DataType);
 
-    //    var pk = Payload;
-    //    if (pk == null)
-    //        writer.Write(0);
-    //    else
-    //    {
-    //        writer.Write(pk.Total);
-    //        pk.CopyTo(stream);
-    //    }
+            //writer.Write(Body);
+            // 必须先序列化后面，需要用到长度
+            var ms = new MemoryStream();
+            var writer2 = Helper.CreateWriter(ms);
+            writer2.Write(Body);
 
-    //    return true;
-    //}
+            ms.Position = 0;
+            writer.Write((Int32)ms.Length);
+            ms.CopyTo(stream);
+        }
+
+        return true;
+    }
     #endregion
 }
