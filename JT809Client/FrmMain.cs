@@ -161,20 +161,35 @@ namespace JT809Client
 
             _log.Info("");
             _log.Info("指令头部[{0:X4}]：", (Int32)msg.Kind);
-            //foreach (var pi in msg.GetType().GetProperties())
-            //{
-            //    _log.Info("{0}: {1}", pi.Name, pi.GetValue(msg, null));
-            //}
-            //_log.Info(msg.ToJson(true));
             _log.Info(msg.ToJsonJT809(true));
 
             _log.Info("");
             _log.Info("主体数据[{0}]：{1}", msg.Payload?.Total, msg.Payload?.ToHex(1024));
-            var model = MessageFactory.Instance.Parse(msg);
-            //foreach (var pi in model.GetType().GetProperties())
-            //{
-            //    _log.Info("{0}: {1}", pi.Name, pi.GetValue(msg, null));
-            //}
+            //var model = MessageFactory.Instance.Parse(msg);
+            //_log.Info(model.ToJsonJT809(true));
+
+            // 分开解码，即使出错也能输出部分结果
+            var model = MessageFactory.Instance.Create(msg.Kind);
+            try
+            {
+                var pk = msg.Payload;
+                if (pk != null && pk.Total > 0)
+                {
+                    var ms = pk.GetStream();
+                    if (model is IAccessor accessor)
+                        accessor.Read(ms, msg);
+                    else
+                        Helper.CreateReader(ms).TryRead(null, ref model);
+
+#if DEBUG
+                    if (ms.Position < ms.Length) XTrace.WriteLine($"解析未完成，可用[{ms.Length}]，实际[{ms.Position}]");
+#endif
+                }
+            }
+            catch (Exception ex)
+            {
+                XTrace.WriteException(ex);
+            }
             _log.Info(model.ToJsonJT809(true));
         }
 
