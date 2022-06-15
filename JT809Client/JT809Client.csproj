@@ -39,4 +39,10 @@
     <ProjectReference Include="..\NewLife.JT809\NewLife.JT809.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="FrmAlarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

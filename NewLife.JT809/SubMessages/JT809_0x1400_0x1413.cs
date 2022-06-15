@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -23,6 +24,7 @@ public class JT809_0x1400_0x1413
     /// <summary>
     /// 发起报警平台唯一编码，由平台所在地行政区划大码和平台编号组成
     /// </summary>
+    [FieldSize(11)]
     public String SourcePlatformId { get; set; }
     /// <summary>
     /// 报警时间 utc
@@ -47,14 +49,17 @@ public class JT809_0x1400_0x1413
     /// <summary>
     /// 督办人
     /// </summary>
+    [FieldSize(16)]
     public String Supervisor { get; set; }
     /// <summary>
     /// 督办人联系电话
     /// </summary>
+    [FieldSize(20)]
     public String SupervisorTel { get; set; }
     /// <summary>
     /// 督办人联系电子邮件
     /// </summary>
+    [FieldSize(32)]
     public String SupervisorEmail { get; set; }
 
     //public void Serialize(ref JT809MessagePackWriter writer, JT809_0x1400_0x1413 value, IJT809Config config)

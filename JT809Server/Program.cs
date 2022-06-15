@@ -15,6 +15,7 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IJT809Handler, NormalController>();
         services.AddSingleton<IJT809Handler, InfoController>();
         services.AddSingleton<IJT809Handler, J1200Controller>();
+        services.AddSingleton<IJT809Handler, J1400Controller>();
 
         services.AddHostedService<Worker>();
         services.AddHostedService<JT809Worker>();

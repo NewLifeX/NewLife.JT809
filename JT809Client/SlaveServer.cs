@@ -12,6 +12,7 @@ internal class SlaveServer : JTServer
         AddHandler(new NormalController());
         AddHandler(new InfoController());
         AddHandler(new J9200Controller());
+        AddHandler(new J9400Controller());
 
         base.OnStart();
     }

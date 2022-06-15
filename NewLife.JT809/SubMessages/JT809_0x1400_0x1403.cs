@@ -1,5 +1,6 @@
 ﻿using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -29,51 +30,67 @@ public class JT809_0x1400_0x1403
     /// <summary>
     /// 发起报警平台唯一编码，由平台所在地行政区域代码和平台编号组成
     /// </summary>
+    [FieldSize(11)]
     public String SourcePlatformId { get; set; }
+
     /// <summary>
     /// 报警类型
     /// </summary>
     public JT809WarnType WarnType { get; set; }
+
     /// <summary>
     /// 报警时间
     /// </summary>
     public DateTime WarnTime { get; set; }
+
     /// <summary>
     /// 事件开始时间 utc
     /// </summary>
     public DateTime StartTime { get; set; }
+
     /// <summary>
     /// 事件结束时间 utc
     /// </summary>
     public DateTime EndTime { get; set; }
+
     /// <summary>
     /// 车牌号码 非车辆相关报警全填0
     /// </summary>
+    [FieldSize(21)]
     public String VehicleNo { get; set; }
+
     /// <summary>
     /// 车牌颜色  非车辆相关报警全填0
     /// </summary>
     public JT809VehicleColorType VehicleColor { get; set; }
+
     /// <summary>
     /// 被报警平台唯一编码，由平台所在地行政区划代码和平台编号组成。非平台相关报警全填0
     /// </summary>
+    [FieldSize(11)]
     public String DestinationPlatformId { get; set; }
+
     /// <summary>
     /// 线路ID 808-2019中0x8606规定的报文中的线路ＩＤ
     /// </summary>
     public UInt32 DRVLineId { get; set; }
+
     /// <summary>
     /// 数据长度
     /// </summary>
     public UInt32 InfoLength { get; set; }
+
     /// <summary>
     /// 信息内容
     /// </summary>
+    [FieldSize(nameof(InfoLength))]
     public String InfoContent { get; set; }
+
     /// <summary>
     /// 报警信息ID
     /// </summary>
     public UInt32 InfoID { get; set; }
+
     /// <summary>
     /// 处理结果
     /// </summary>

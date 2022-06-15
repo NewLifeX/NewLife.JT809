@@ -122,6 +122,8 @@ public class MessageFactory
             MessageKinds.从链路连接保持应答消息 or
             MessageKinds.平台链路连接情况与车辆定位消息传输情况上报应答消息_2019 => true,
             MessageKinds.上传平台间消息序列号通知消息_2019 => true,
+            MessageKinds.报警督办应答消息 => true,
+            MessageKinds.上报报警督办应答消息 => true,
             _ => false,
         };
     }

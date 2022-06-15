@@ -191,7 +191,7 @@ namespace JT809Client
                 XTrace.WriteException(ex);
             }
 
-            if (model is JT809_0x1200 j1200) _log.Info("子业务编码：[{0:X4}]{1}", j1200.DataType, (MessageKinds)j1200.DataType);
+            if (model is ISubMessage sub) _log.Info("子业务编码：[{0:X4}]{1}", sub.DataType, (MessageKinds)sub.DataType);
 
             _log.Info(model.ToJsonJT809(true));
         }
@@ -204,6 +204,17 @@ namespace JT809Client
         private void btnExchange_Click(Object sender, EventArgs e)
         {
             var frm = new FrmExchange
+            {
+                Client = _client,
+                Log = _log
+            };
+
+            frm.Show();
+        }
+
+        private void btnAlarm_Click(Object sender, EventArgs e)
+        {
+            var frm = new FrmAlarm
             {
                 Client = _client,
                 Log = _log

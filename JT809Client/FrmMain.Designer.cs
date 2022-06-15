@@ -49,6 +49,7 @@
             this.cbVersion = new System.Windows.Forms.ComboBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.gbInfo = new System.Windows.Forms.GroupBox();
+            this.btnExchange = new System.Windows.Forms.Button();
             this.btnPositionCount = new System.Windows.Forms.Button();
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.btnPing = new System.Windows.Forms.Button();
@@ -56,7 +57,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.txtCommand = new System.Windows.Forms.TextBox();
             this.btnDecode = new System.Windows.Forms.Button();
-            this.btnExchange = new System.Windows.Forms.Button();
+            this.btnAlarm = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
             this.gbConnect.SuspendLayout();
@@ -272,6 +273,7 @@
             // 
             // gbInfo
             // 
+            this.gbInfo.Controls.Add(this.btnAlarm);
             this.gbInfo.Controls.Add(this.btnExchange);
             this.gbInfo.Controls.Add(this.btnPositionCount);
             this.gbInfo.Location = new System.Drawing.Point(12, 248);
@@ -280,6 +282,16 @@
             this.gbInfo.TabIndex = 18;
             this.gbInfo.TabStop = false;
             this.gbInfo.Text = "链路业务";
+            // 
+            // btnExchange
+            // 
+            this.btnExchange.Location = new System.Drawing.Point(175, 29);
+            this.btnExchange.Name = "btnExchange";
+            this.btnExchange.Size = new System.Drawing.Size(137, 50);
+            this.btnExchange.TabIndex = 22;
+            this.btnExchange.Text = "动态信息交换";
+            this.btnExchange.UseVisualStyleBackColor = true;
+            this.btnExchange.Click += new System.EventHandler(this.btnExchange_Click);
             // 
             // btnPositionCount
             // 
@@ -363,15 +375,15 @@
             this.btnDecode.UseVisualStyleBackColor = true;
             this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
             // 
-            // btnExchange
+            // btnAlarm
             // 
-            this.btnExchange.Location = new System.Drawing.Point(175, 29);
-            this.btnExchange.Name = "btnExchange";
-            this.btnExchange.Size = new System.Drawing.Size(137, 50);
-            this.btnExchange.TabIndex = 22;
-            this.btnExchange.Text = "动态信息交换";
-            this.btnExchange.UseVisualStyleBackColor = true;
-            this.btnExchange.Click += new System.EventHandler(this.btnExchange_Click);
+            this.btnAlarm.Location = new System.Drawing.Point(329, 29);
+            this.btnAlarm.Name = "btnAlarm";
+            this.btnAlarm.Size = new System.Drawing.Size(137, 50);
+            this.btnAlarm.TabIndex = 23;
+            this.btnAlarm.Text = "报警信息交换";
+            this.btnAlarm.UseVisualStyleBackColor = true;
+            this.btnAlarm.Click += new System.EventHandler(this.btnAlarm_Click);
             // 
             // FrmMain
             // 
@@ -431,5 +443,6 @@
         private Button btnDecode;
         private Button btnClear;
         private Button btnExchange;
+        private Button btnAlarm;
     }
 }

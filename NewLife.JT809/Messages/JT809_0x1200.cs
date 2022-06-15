@@ -13,7 +13,7 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台发送车辆动态信息交换业务数据包</para>
 /// </summary>
 [MessageKind(MessageKinds.主链路车辆动态信息交换业务)]
-public class JT809_0x1200 : IAccessor
+public class JT809_0x1200 : IAccessor, ISubMessage
 {
     #region 属性
     /// <summary>
