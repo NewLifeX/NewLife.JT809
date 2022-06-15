@@ -1,6 +1,7 @@
 ﻿using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 using NewLife.Log;
 using NewLife.Net;
 
@@ -255,6 +256,26 @@ public class JTClient : DisposeBase
         };
         return await SendAsync<JT809_0x1103>(model);
     }
+    #endregion
+
+    #region 信息交互
+    /// <summary>提交车辆注册信息</summary>
+    /// <param name="plate"></param>
+    /// <param name="color"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task<JT809_0x9200_0x9201> RegisterAsync(String plate, Int32 color, JT809_0x1200_0x1201 model)
+    {
+        var req = new JT809_0x1200
+        {
+            DataType = 0x1201,
+            VehicleNo = plate,
+            VehicleColor = (JT809VehicleColorType)color,
+            Body = model
+        };
+        return await SendAsync<JT809_0x9200_0x9201>(req);
+    }
+
     #endregion
 
     #region 日志

@@ -2,6 +2,7 @@
 using NewLife.JT809.Handlers;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 using NewLife.Log;
 using NewLife.Net;
 
@@ -14,6 +15,20 @@ internal class J1200Controller : IJT809Handler
     {
         var msg = message.ReadModel<JT809_0x1200>();
         XTrace.WriteLine(msg.ToJsonJT809());
+
+        switch (msg.DataType)
+        {
+            case 0x1201:
+                var j1201 = msg.Body as JT809_0x1200_0x1201;
+                return new JT809_0x9200_0x9201
+                {
+                    DataType = 0x9201,
+                    MsgSn = message.Sequence,
+                    Result = JT809_0x9201_Result.审核通过_完成注册
+                };
+            default:
+                break;
+        }
 
         return null;
     }

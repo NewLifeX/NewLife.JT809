@@ -19,16 +19,18 @@ public enum JT809_0x9201_Result : Byte
 ///  <para>描述:上级平台在收到下级平台上报的车辆注册信息后，向下级平台发送车辆注册应答消息</para>
 /// </summary>
 [MessageKind(MessageKinds.车辆注册信息应答消息)]
-public class JT809_0x9200_0x9201
+public class JT809_0x9200_0x9201 : ISubMessage
 {
     /// <summary>
     /// 车辆注册醒醒消息源子业务类型标识
     /// </summary>
     public UInt16 DataType { get; set; }
+
     /// <summary>
     /// 车辆注册信息消息源报文序号
     /// </summary>
     public UInt32 MsgSn { get; set; }
+
     /// <summary>
     /// 处理结果
     /// </summary>

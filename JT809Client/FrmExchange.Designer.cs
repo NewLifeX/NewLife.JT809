@@ -33,7 +33,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtPlate = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnJ1201 = new System.Windows.Forms.Button();
+            this.btnRegister = new System.Windows.Forms.Button();
             this.btnLocation = new System.Windows.Forms.Button();
             this.btnLocation2 = new System.Windows.Forms.Button();
             this.btnMonitorStart = new System.Windows.Forms.Button();
@@ -93,15 +93,15 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "车牌号：";
             // 
-            // btnJ1201
+            // btnRegister
             // 
-            this.btnJ1201.Location = new System.Drawing.Point(44, 121);
-            this.btnJ1201.Name = "btnJ1201";
-            this.btnJ1201.Size = new System.Drawing.Size(124, 50);
-            this.btnJ1201.TabIndex = 15;
-            this.btnJ1201.Text = "车辆注册";
-            this.btnJ1201.UseVisualStyleBackColor = true;
-            this.btnJ1201.Click += new System.EventHandler(this.btnJ1201_Click);
+            this.btnRegister.Location = new System.Drawing.Point(44, 121);
+            this.btnRegister.Name = "btnRegister";
+            this.btnRegister.Size = new System.Drawing.Size(124, 50);
+            this.btnRegister.TabIndex = 15;
+            this.btnRegister.Text = "车辆注册";
+            this.btnRegister.UseVisualStyleBackColor = true;
+            this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
             // 
             // btnLocation
             // 
@@ -197,7 +197,7 @@
             this.Controls.Add(this.btnLocation2);
             this.Controls.Add(this.btnLocation);
             this.Controls.Add(this.gbInfo);
-            this.Controls.Add(this.btnJ1201);
+            this.Controls.Add(this.btnRegister);
             this.Name = "FrmExchange";
             this.Text = "FrmExchange";
             this.Load += new System.EventHandler(this.FrmExchange_Load);
@@ -210,7 +210,7 @@
         #endregion
 
         private GroupBox gbInfo;
-        private Button btnJ1201;
+        private Button btnRegister;
         private Label label4;
         private TextBox txtPlate;
         private Label label3;

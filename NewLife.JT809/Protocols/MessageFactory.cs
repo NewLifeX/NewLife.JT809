@@ -124,6 +124,7 @@ public class MessageFactory
             MessageKinds.上传平台间消息序列号通知消息_2019 => true,
             MessageKinds.报警督办应答消息 => true,
             MessageKinds.上报报警督办应答消息 => true,
+            MessageKinds.车辆注册信息应答消息 => true,
             _ => false,
         };
     }
