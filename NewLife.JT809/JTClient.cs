@@ -238,22 +238,22 @@ public class JTClient : DisposeBase
         return await SendAsync<JT809_0x1102>(model);
     }
 
-    public async Task<JT809_0x1102> Send9103(UInt16 subType, UInt32 sn, DateTime time)
+    public async Task<JT809_0x1103> Send9103(UInt16 subType, UInt32 sn, DateTime time)
     {
         var model = new JT809_0x9103
         {
             DataType = subType,
         };
-        model.ManageMsgSNInform = new List<JT809ManageMsgSNInform>
+        model.Messages = new List<JT809ManageMsgSNInform>
         {
             new JT809ManageMsgSNInform
             {
-                SubBusinessType = subType,
+                Kind = subType,
                 MsgSN = sn,
                 Time = time,
             }
         };
-        return await SendAsync<JT809_0x1102>(model);
+        return await SendAsync<JT809_0x1103>(model);
     }
     #endregion
 

@@ -37,7 +37,8 @@ internal class InfoController : IJT809Handler
 
         return new JT809_0x1103
         {
-            ManageMsgSNInform = msg.ManageMsgSNInform,
+            DataType = msg.DataType,
+            Messages = msg.Messages,
         };
     }
 }
