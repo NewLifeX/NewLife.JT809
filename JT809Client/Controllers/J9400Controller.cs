@@ -18,7 +18,7 @@ internal class J9400Controller : IJT809Handler
 
         return new JT809_0x1400_0x1401
         {
-            SupervisionID = msg.SupervisionID,
+            MsgSn = msg.SupervisionID,
             Result = JT809_0x1401_Result.已处理完毕
         };
     }
