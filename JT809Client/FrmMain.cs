@@ -145,6 +145,8 @@ namespace JT809Client
             var hex = txtCommand.Text;
             if (hex.IsNullOrEmpty()) return;
 
+            _config.Save();
+
             var buf = hex.ToHex();
             _log.Info("报文长度[{0}]字节", buf.Length);
 
