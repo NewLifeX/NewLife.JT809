@@ -3,6 +3,7 @@ using NewLife;
 using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 using NewLife.Log;
 using NewLife.Net;
 using NewLife.Security;
@@ -194,6 +195,12 @@ namespace JT809Client
             if (model is ISubMessage sub) _log.Info("子业务编码：[{0:X4}]{1}", sub.DataType, (MessageKinds)sub.DataType);
 
             _log.Info(model.ToJsonJT809(true));
+
+            if (model is JT809_0x1200 j1200 && j1200.Body is JT809_0x1200_0x1202 j1202)
+            {
+                _log.Info("定位数据：");
+                _log.Info(j1202.Location.ToJsonJT809(true));
+            }
         }
 
         private void btnClear_Click(Object sender, EventArgs e)

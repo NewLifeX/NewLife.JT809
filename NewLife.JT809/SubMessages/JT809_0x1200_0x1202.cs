@@ -1,4 +1,7 @@
-﻿using NewLife.JT809.Protocols;
+﻿using System.Runtime.Serialization;
+using NewLife.JT809.Models;
+using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -24,44 +27,60 @@ public class JT809_0x1200_0x1202
     /// 是否使用国测局批准的地图保密插件进行加密 1 已加密 0未加密
     /// </summary>
     public JT809_VehiclePositionEncrypt Encrypt { get; set; }
+
     /// <summary>
     /// 车辆定位信息数据长度
     /// </summary>
     public UInt32 DataLength { get; set; }
+
     /// <summary>
     /// 车辆定位信息内容，包括车辆位置基本信息和位置附加信息
     /// 其数据格式安装 808-2019中8.12要求
     /// </summary>
+    [FieldSize(nameof(DataLength))]
     public Byte[] GnssData { get; set; }
+
     /// <summary>
     /// 监控平台唯一编码，由平台所在地行政区域代码和平台编码组成  11位
     /// </summary>
+    [FieldSize(11)]
     public String PlatformId1 { get; set; }
+
     /// <summary>
     /// 报警状态，二进制标识 0 正常 1表示报警
     /// 具体定义按照808-2019中表18的规定
     /// </summary>
     public UInt32 Alarm1 { get; set; }
+
     /// <summary>
     /// 市级监控平台唯一编码，由平台所在地行政区域代码和平台编码组成
     /// 未填写时，全填0，无市级平台应由省级平台全填1  11位
     /// </summary>
+    [FieldSize(11)]
     public String PlatformId2 { get; set; }
+
     /// <summary>
     /// 报警状态，二进制标识 0 正常 1表示报警
     /// 具体定义按照808-2019中表18的规定
     /// </summary>
     public UInt32 Alarm2 { get; set; }
+
     /// <summary>
     /// 省级监控平台唯一编码，由平台所在地行政区域代码和平台编码组成
     ///  未填写时，全填0  11位
     /// </summary>
+    [FieldSize(11)]
     public String PlatformId3 { get; set; }
+
     /// <summary>
     /// 报警状态，二进制标识 0 正常 1表示报警
     /// 具体定义按照808-2019中表18的规定
     /// </summary>
     public UInt32 Alarm3 { get; set; }
+
+    /// <summary>卫星定位数据</summary>
+    [IgnoreDataMember]
+    public LocationMessage Location { get; set; }
 
     ///// <summary>
     ///// 车辆定位信息 2011版本
