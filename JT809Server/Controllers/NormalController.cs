@@ -17,6 +17,7 @@ internal class NormalController : IJT809Handler
         XTrace.WriteLine(msg.ToJsonJT809());
 
         var verifyCode = (UInt32)Rand.Next();
+#if !WINDOWS
         var ss = session as SlaveSession;
         try
         {
@@ -44,6 +45,7 @@ internal class NormalController : IJT809Handler
 
             return new JT809_0x1002 { Result = JT809_0x1002_Result.IP地址不正确 };
         }
+#endif
 
         return new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = verifyCode };
     }

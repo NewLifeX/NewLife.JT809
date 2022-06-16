@@ -22,6 +22,7 @@
     <Compile Remove="Controllers\IJT809Handler.cs" />
     <Compile Remove="Controllers\MessageHandler.cs" />
     <Compile Remove="JT809Server.cs" />
+    <Compile Remove="Worker.cs" />
   </ItemGroup>
 
   <ItemGroup>

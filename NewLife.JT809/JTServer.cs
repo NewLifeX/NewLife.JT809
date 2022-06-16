@@ -10,6 +10,9 @@ namespace NewLife.JT809;
 /// <summary>JT809服务器</summary>
 public class JTServer : NetServer<JTSession>
 {
+    ///// <summary>配置信息</summary>
+    //public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
+
     /// <summary>
     /// 消息处理器集合
     /// </summary>

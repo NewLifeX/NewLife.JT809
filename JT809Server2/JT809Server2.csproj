@@ -20,11 +20,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\JT809Client\ControlConfig.cs" Link="ControlConfig.cs" />
+    <Compile Include="..\JT809Server\Controllers\InfoController.cs" Link="Controllers\InfoController.cs" />
+    <Compile Include="..\JT809Server\Controllers\J1200Controller.cs" Link="Controllers\J1200Controller.cs" />
+    <Compile Include="..\JT809Server\Controllers\J1400Controller.cs" Link="Controllers\J1400Controller.cs" />
+    <Compile Include="..\JT809Server\Controllers\NormalController.cs" Link="Controllers\NormalController.cs" />
+    <Compile Include="..\JT809Server\JT809Setting.cs" Link="JT809Setting.cs" />
+    <Compile Include="..\JT809Server\MasterServer.cs" Link="MasterServer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NewLife.Stardust" Version="2.2.2022.606-beta0640" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NewLife.JT809\NewLife.JT809.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

@@ -70,6 +70,7 @@ namespace JT809Client
                 _client = null;
 
                 btn.Text = "连接";
+                btnLogin.Text = "登录";
                 gbConnect.Enabled = true;
                 gbAuth.Enabled = false;
                 gbInfo.Enabled = false;

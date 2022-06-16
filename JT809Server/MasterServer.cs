@@ -1,12 +1,20 @@
-﻿using NewLife.JT809;
-using NewLife.JT809.Messages;
-using NewLife.JT809.Protocols;
+﻿using JT809Server.Controllers;
+using NewLife.JT809;
 using NewLife.Net;
 
 namespace JT809Server;
 
 internal class MasterServer : JTServer
 {
+    protected override void OnStart()
+    {
+        AddHandler(new NormalController());
+        AddHandler(new InfoController());
+        AddHandler(new J1200Controller());
+        AddHandler(new J1400Controller());
+
+        base.OnStart();
+    }
 
     protected override INetSession CreateSession(ISocketSession session) => new SlaveSession();
 }

@@ -47,10 +47,10 @@ namespace JT809Server
             }
 #endif
 
-            foreach (var item in _serviceProvider.GetServices<IJT809Handler>())
-            {
-                server.AddHandler(item);
-            }
+            //foreach (var item in _serviceProvider.GetServices<IJT809Handler>())
+            //{
+            //    server.AddHandler(item);
+            //}
 
             server.Start();
 

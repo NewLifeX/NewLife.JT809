@@ -72,6 +72,7 @@
             this.btnClear.TabIndex = 23;
             this.btnClear.Text = "清空";
             this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnDecode
             // 
@@ -81,6 +82,7 @@
             this.btnDecode.TabIndex = 21;
             this.btnDecode.Text = "解码";
             this.btnDecode.UseVisualStyleBackColor = true;
+            this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
             // 
             // groupBox1
             // 
@@ -110,6 +112,7 @@
             this.btnPing.TabIndex = 20;
             this.btnPing.Text = "心跳";
             this.btnPing.UseVisualStyleBackColor = true;
+            this.btnPing.Click += new System.EventHandler(this.btnPing_Click);
             // 
             // gbAuth
             // 
@@ -131,7 +134,7 @@
             this.gbAuth.Size = new System.Drawing.Size(1152, 132);
             this.gbAuth.TabIndex = 27;
             this.gbAuth.TabStop = false;
-            this.gbAuth.Text = "基本信息";
+            this.gbAuth.Text = "从链路信息";
             // 
             // numMyPort
             // 
@@ -184,6 +187,7 @@
             this.btnLogin.TabIndex = 15;
             this.btnLogin.Text = "登录";
             this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // label4
             // 
@@ -355,6 +359,7 @@
             this.btnOpen.TabIndex = 23;
             this.btnOpen.Text = "开始";
             this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // FrmMain
             // 
@@ -369,6 +374,7 @@
             this.Controls.Add(this.btnOpen);
             this.Name = "FrmMain";
             this.Text = "JT/T809政府监管平台";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbAuth.ResumeLayout(false);
