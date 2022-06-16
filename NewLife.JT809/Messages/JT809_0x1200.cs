@@ -24,16 +24,12 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
 
         // 解析卫星数据
         if (Body is JT809_0x1200_0x1202 j1202)
+            j1202.Decode();
+        else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
         {
-            var buf = j1202.GnssData;
-            if (buf != null && buf.Length > 0)
+            foreach (var item in j1203.GNSS)
             {
-                var ms = new MemoryStream(buf);
-                var location = new LocationMessage();
-                if (location.Read(ms, null))
-                {
-                    j1202.Location = location;
-                }
+                item.Decode();
             }
         }
 
@@ -48,16 +44,12 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
     {
         // 提前写入卫星数据
         if (Body is JT809_0x1200_0x1202 j1202)
+            j1202.Encode();
+        else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
         {
-            if (j1202.Location != null)
+            foreach (var item in j1203.GNSS)
             {
-                var ms = new MemoryStream();
-                if (j1202.Location.Write(ms, null))
-                {
-                    var buf = ms.ToArray();
-                    j1202.DataLength = (UInt32)buf.Length;
-                    j1202.GnssData = buf;
-                }
+                item.Encode();
             }
         }
 

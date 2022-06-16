@@ -23,6 +23,7 @@ public enum JT809_VehiclePositionEncrypt : Byte
 [MessageKind(MessageKinds.实时上传车辆定位信息)]
 public class JT809_0x1200_0x1202
 {
+    #region 属性
     /// <summary>
     /// 是否使用国测局批准的地图保密插件进行加密 1 已加密 0未加密
     /// </summary>
@@ -81,6 +82,42 @@ public class JT809_0x1200_0x1202
     /// <summary>卫星定位数据</summary>
     [IgnoreDataMember]
     public LocationMessage Location { get; set; }
+
+    #endregion
+
+    #region 方法
+    /// <summary>解码卫星定位数据</summary>
+    /// <returns></returns>
+    public Boolean Decode()
+    {
+        var buf = GnssData;
+        if (buf == null || buf.Length == 0) return false;
+
+        var ms = new MemoryStream(buf);
+        var location = new LocationMessage();
+        if (!location.Read(ms, null)) return false;
+
+        Location = location;
+
+        return true;
+    }
+
+    /// <summary>编码卫星定位数据</summary>
+    /// <returns></returns>
+    public Boolean Encode()
+    {
+        if (Location == null) return false;
+
+        var ms = new MemoryStream();
+        if (!Location.Write(ms, null)) return false;
+
+        var buf = ms.ToArray();
+        DataLength = (UInt32)buf.Length;
+        GnssData = buf;
+
+        return true;
+    }
+    #endregion
 
     ///// <summary>
     ///// 车辆定位信息 2011版本
