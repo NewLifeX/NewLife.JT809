@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -17,9 +18,11 @@ public class JT809_0x1200_0x1203
     ///// <summary>
     ///// 卫星定位数据个数 1大于GNSS_CNT小于5
     ///// </summary>
-    //public Byte GNSSCount { get; set; }
+    //public Byte Count { get; set; }
+
     /// <summary>
     /// 卫星定位数据集合
     /// </summary>
+    //[FieldSize(nameof(Count))]
     public List<JT809_0x1200_0x1202> GNSS { get; set; }
 }

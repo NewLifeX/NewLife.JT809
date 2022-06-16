@@ -29,7 +29,7 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
         {
             foreach (var item in j1203.GNSS)
             {
-                item.Decode();
+                item?.Decode();
             }
         }
 
@@ -49,7 +49,7 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
         {
             foreach (var item in j1203.GNSS)
             {
-                item.Encode();
+                item?.Encode();
             }
         }
 

@@ -29,7 +29,14 @@ public static class Helper
     /// <returns></returns>
     public static Binary CreateReader(Stream stream)
     {
-        var reader = new Binary() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+        var reader = new Binary()
+        {
+            Stream = stream,
+            Encoding = Encoding,
+            IsLittleEndian = false,
+            UseFieldSize = true,
+            UseRef = false,
+        };
 
         // 替换编码处理器，自定义序列化行为
         for (var i = 0; i < reader.Handlers.Count; i++)
@@ -48,7 +55,14 @@ public static class Helper
     /// <returns></returns>
     public static Binary CreateWriter(Stream stream)
     {
-        var writer = new Binary() { Stream = stream, Encoding = Encoding, IsLittleEndian = false, UseFieldSize = true };
+        var writer = new Binary()
+        {
+            Stream = stream,
+            Encoding = Encoding,
+            IsLittleEndian = false,
+            UseFieldSize = true,
+            UseRef = false,
+        };
 
         // 替换编码处理器，自定义序列化行为
         for (var i = 0; i < writer.Handlers.Count; i++)
