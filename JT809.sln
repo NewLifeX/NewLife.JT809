@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT809Client", "JT809Client\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT809Client2", "JT809Client2\JT809Client2.csproj", "{FC8A80B7-DD7E-4A7A-8F74-53A554233809}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT809Server2", "JT809Server2\JT809Server2.csproj", "{67C74BC9-D0B8-4A31-AE5C-0AAE630E0C90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{FC8A80B7-DD7E-4A7A-8F74-53A554233809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC8A80B7-DD7E-4A7A-8F74-53A554233809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC8A80B7-DD7E-4A7A-8F74-53A554233809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C74BC9-D0B8-4A31-AE5C-0AAE630E0C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C74BC9-D0B8-4A31-AE5C-0AAE630E0C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C74BC9-D0B8-4A31-AE5C-0AAE630E0C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C74BC9-D0B8-4A31-AE5C-0AAE630E0C90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
