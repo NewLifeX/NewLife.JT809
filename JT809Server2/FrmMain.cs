@@ -66,6 +66,7 @@ namespace JT809Server2
                 }
 #endif
 
+                server.Received += Server_Received;
                 server.Start();
 
                 _server = server;
@@ -95,6 +96,25 @@ namespace JT809Server2
                 gbConnect.Enabled = true;
                 gbAuth.Enabled = false;
                 gbInfo.Enabled = false;
+            }
+        }
+
+        private void Server_Received(Object sender, ReceivedEventArgs e)
+        {
+            if (e.Message is JTMessage msg)
+            {
+                if (msg.Kind == MessageKinds.主链路登录请求消息)
+                {
+                    var model = msg.ReadModel<JT809_0x1001>();
+                    this.Invoke(() =>
+                    {
+                        txtUser.Text = model.UserId + "";
+                        txtPass.Text = model.Password;
+                        txtCode.Text = model.MsgGNSSCENTERID + "";
+                        txtMyIP.Text = model.DownLinkIP;
+                        numMyPort.Value = model.DownLinkPort;
+                    });
+                }
             }
         }
 
