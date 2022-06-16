@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -8,7 +9,7 @@ namespace NewLife.JT809.SubMessages;
 /// <para>描述:上级平台应答下级平台发送的"补报车辆静态信息清求"消息</para>
 /// </summary>
 [MessageKind(MessageKinds.补报车辆静态信息应答)]
-public class JT809_0x1600_0x1601
+public class JT809_0x1600_0x1601 : IAccessor
 {
     /// <summary>
     /// 对应补报车辆静态信息请求消息源子业务类型标识
@@ -23,25 +24,35 @@ public class JT809_0x1600_0x1601
     /// </summary>
     public String CarInfo { get; set; }
 
-    //public JT809_0x1600_0x1601 Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
-    //{
-    //    JT809_0x1600_0x1601 value = new JT809_0x1600_0x1601();
-    //    if (config.Version == JT809Version.JTT2019)
-    //    {
-    //        value.SourceDataType = reader.ReadUInt16();
-    //        value.SourceMsgSn = reader.ReadUInt32();
-    //    }
-    //    value.CarInfo = reader.ReadRemainStringContent();
-    //    return value;
-    //}
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public virtual Boolean Read(Stream stream, Object context)
+    {
+        var reader = Helper.CreateReader(stream);
 
-    //public void Serialize(ref JT809MessagePackWriter writer, JT809_0x1600_0x1601 value, IJT809Config config)
-    //{
-    //    if (config.Version == JT809Version.JTT2019)
-    //    {
-    //        writer.WriteUInt16(value.SourceDataType);
-    //        writer.WriteUInt32(value.SourceMsgSn);
-    //    }
-    //    writer.WriteString(value.CarInfo);
-    //}
+        SourceDataType = reader.ReadUInt16();
+        SourceMsgSn = reader.ReadUInt32();
+        CarInfo = stream.ToStr();
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public virtual Boolean Write(Stream stream, Object context)
+    {
+        var writer = Helper.CreateWriter(stream);
+
+        writer.Write(SourceDataType);
+        writer.Write(SourceMsgSn);
+
+        var buf = CarInfo?.GetBytes();
+        if (buf != null && buf.Length > 0) writer.Write(buf, 0, buf.Length);
+
+        return true;
+    }
 }
