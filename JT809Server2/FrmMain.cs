@@ -1,4 +1,5 @@
-﻿using JT809Client;
+﻿using System.Reflection;
+using JT809Client;
 using JT809Server;
 using NewLife;
 using NewLife.JT809;
@@ -7,6 +8,7 @@ using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
 using NewLife.Log;
 using NewLife.Net;
+using NewLife.Reflection;
 using NewLife.Serialization;
 
 namespace JT809Server2
@@ -22,6 +24,9 @@ namespace JT809Server2
 
         private void FrmMain_Load(Object sender, EventArgs e)
         {
+            var asm = AssemblyX.Create(Assembly.GetExecutingAssembly());
+            Text = String.Format("{2} v{0} {1:HH:mm:ss}", asm.FileVersion, asm.Compile, Text);
+
             _config = new ControlConfig { Control = this, FileName = "jt809.json" };
             _config.Load();
 
