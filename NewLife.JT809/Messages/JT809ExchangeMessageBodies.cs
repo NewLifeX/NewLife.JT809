@@ -1,15 +1,12 @@
-﻿using System.Runtime.Serialization;
-using NewLife.Data;
+﻿using NewLife.Data;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.Messages;
 
-/// <summary>
-/// 交换信息体
-/// </summary>
-public abstract class JT809ExchangeMessageBodies : IAccessor
+/// <summary>交换信息体。包含车牌和颜色</summary>
+public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
 {
     #region 属性
     /// <summary>
@@ -28,19 +25,8 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     /// </summary>
     public UInt16 DataType { get; set; }
 
-    ///// <summary>
-    ///// 后续数据长度
-    ///// </summary>
-    //public UInt32 DataLength { get; set; }
-
-    ///// <summary>
-    ///// 子业务数据体
-    ///// </summary>
-    //public JT809SubBodies SubBodies { get; set; }
-
     /// <summary>子业务数据体</summary>
-    [IgnoreDataMember]
-    public Packet Payload { get; set; }
+    public Object Body { get; set; }
     #endregion
 
     #region 方法
@@ -54,18 +40,22 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     {
         var reader = Helper.CreateReader(stream);
 
-        var jt2019 = context is JTMessage header && header.JTT2019;
-
-        if (!jt2019)
-        {
-            VehicleNo = reader.ReadFixedString(21);
-            VehicleColor = (JT809VehicleColorType)reader.ReadByte();
-        }
-
+        VehicleNo = reader.ReadFixedString(21);
+        VehicleColor = (JT809VehicleColorType)reader.ReadByte();
         DataType = reader.ReadUInt16();
 
         var len = reader.ReadInt32();
-        if (len > 0) Payload = reader.ReadBytes(len);
+        if (len > 0)
+        {
+            var model = MessageFactory.Instance.Create((MessageKinds)DataType);
+            if (model == null)
+                Body = reader.ReadBytes(len);
+            else
+            {
+                if (!reader.TryRead(null, ref model)) return false;
+                Body = model;
+            }
+        }
 
         return true;
     }
@@ -80,23 +70,40 @@ public abstract class JT809ExchangeMessageBodies : IAccessor
     {
         var writer = Helper.CreateWriter(stream);
 
-        var jt2019 = context is JTMessage header && header.JTT2019;
+        writer.WriteFixedString(VehicleNo, 21);
+        writer.Write(VehicleColor);
 
-        if (!jt2019)
+        // 修正数据
+        if (Body is Byte[] buf)
         {
-            writer.WriteFixedString(VehicleNo, 21);
-            writer.Write(VehicleColor);
+            writer.Write(DataType);
+
+            writer.Write(buf.Length);
+            writer.Write(buf, 0, buf.Length);
         }
-
-        writer.Write(DataType);
-
-        var pk = Payload;
-        if (pk == null)
-            writer.Write(0);
-        else
+        else if (Body is Packet pk)
         {
+            writer.Write(DataType);
+
             writer.Write(pk.Total);
             pk.CopyTo(stream);
+        }
+        else if (Body != null)
+        {
+            if (MessageFactory.Instance.Types.TryGetValue(Body.GetType(), out var kind))
+                DataType = (UInt16)kind;
+
+            writer.Write(DataType);
+
+            //writer.Write(Body);
+            // 必须先序列化后面，需要用到长度
+            var ms = new MemoryStream();
+            var writer2 = Helper.CreateWriter(ms);
+            writer2.Write(Body);
+
+            ms.Position = 0;
+            writer.Write((Int32)ms.Length);
+            ms.CopyTo(stream);
         }
 
         return true;

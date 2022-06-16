@@ -12,7 +12,7 @@ internal class J1400Controller : IJT809Handler
     [MessageKind(MessageKinds.主链路报警信息交互消息)]
     public Object J1400(INetSession session, JTMessage message)
     {
-        var msg = message.ReadModel<JT809_0x1200>();
+        var msg = message.ReadModel<JT809_0x1400>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
         return null;
