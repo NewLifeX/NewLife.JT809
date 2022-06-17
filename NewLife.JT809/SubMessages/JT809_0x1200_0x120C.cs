@@ -39,7 +39,6 @@ public class JT809_0x1200_0x120C
     /// <summary>
     /// 证件有效期，时分秒均用0表示
     /// </summary>
-    [BCDTime]
     public DateTime ValidDate { get; set; }
 
     //public JT809_0x1200_0x120C Deserialize(ref JT809MessagePackReader reader, IJT809Config config)

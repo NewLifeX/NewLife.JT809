@@ -38,17 +38,18 @@ public class JT809_0x9500_0x9504 : IAccessor
     /// <summary>
     /// 开始时间
     /// </summary>
-    [BCDTime]
     public DateTime StartTime { get; set; }
+
     /// <summary>
     /// 开始时间
     /// </summary>
-    [BCDTime]
     public DateTime EndTime { get; set; }
+
     /// <summary>
     /// 命令字ID
     /// </summary>
     public JT809CommandType Command { get; set; }
+
     /// <summary>
     /// 最大数据数
     /// </summary>

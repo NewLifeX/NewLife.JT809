@@ -30,38 +30,44 @@ public class JT809_0x9400_0x9401
     /// 报警信息来源
     /// </summary>
     public JT809WarnSrc WarnSrc { get; set; }
+
     /// <summary>
     /// 报警类型
     /// </summary>
     public UInt16 WarnType { get; set; }
+
     /// <summary>
     /// 报警时间UTCDateTime
     /// </summary>
-    [BCDTime]
     public DateTime WarnTime { get; set; }
+
     /// <summary>
     /// 报警督办ID HexString
     /// </summary>
     public UInt32 SupervisionID { get; set; }
+
     /// <summary>
     /// 督办截止时间
     /// </summary>
-    [BCDTime]
     public DateTime SupervisionEndTime { get; set; }
+
     /// <summary>
     /// 督办级别
     /// </summary>
     public JT809_9401_SupervisionLevel SupervisionLevel { get; set; }
+
     /// <summary>
     /// 督办人
     /// </summary>
     [FieldSize(16)]
     public String Supervisor { get; set; }
+
     /// <summary>
     /// 督办联系电话
     /// </summary>
     [FieldSize(20)]
     public String SupervisorTel { get; set; }
+
     /// <summary>
     /// 督办联系电子邮件
     /// </summary>

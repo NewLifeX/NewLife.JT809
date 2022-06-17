@@ -14,11 +14,10 @@ public class JT809_0x1200_0x1207
     /// <summary>
     /// 开始时间，用 UTC 时间表示
     /// </summary>
-    [BCDTime]
     public DateTime StartTime { get; set; }
+
     /// <summary>
     /// 结束时间，用 UTC 时间表示
     /// </summary>
-    [BCDTime]
     public DateTime EndTime { get; set; }
 }

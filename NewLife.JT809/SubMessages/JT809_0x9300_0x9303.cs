@@ -21,6 +21,5 @@ public class JT809_0x9300_0x9303
     /// 重传起始系统utc时间
     /// 8位
     /// </summary>
-    [BCDTime]
     public DateTime Time { get; set; }
 }

@@ -1,5 +1,4 @@
 ﻿using NewLife.JT809.Protocols;
-using NewLife.JT809.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -14,11 +13,10 @@ public class JT809_0x1200_0x1209
     /// <summary>
     /// 开始时间，用 UTC 时间表示
     /// </summary>
-    [BCDTime]
     public DateTime StartTime { get; set; }
+
     /// <summary>
     /// 结束时间，用 UTC 时间表示
     /// </summary>
-    [BCDTime]
     public DateTime EndTime { get; set; }
 }

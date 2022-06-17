@@ -1,5 +1,4 @@
 ﻿using NewLife.JT809.Protocols;
-using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
@@ -16,34 +15,39 @@ public class JT809_0x1200_0x120A
     /// 对应上报驾驶员身份请求信息源子业务类型标识
     /// </summary>
     public UInt16 SourceDataType { get; set; }
+
     /// <summary>
     /// 对应上报驾驶员身份请求消息源报文序列号
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
+
     /// <summary>
     /// 驾驶员姓名
     /// </summary>
     [FieldSize(16)]
     public String DriverName { get; set; }
+
     /// <summary>
     /// 身份证编号
     /// </summary>
     [FieldSize(20)]
     public String DriverID { get; set; }
+
     /// <summary>
     /// 从业资格证（备用）
     /// </summary>
     [FieldSize(40)]
     public String Licence { get; set; }
+
     /// <summary>
     /// 发证机构名称（备用）
     /// </summary>
     [FieldSize(200)]
     public String OrgName { get; set; }
+
     /// <summary>
     /// 证件有效期，时分秒均用0表示
     /// </summary>
-    [BCDTime]
     public DateTime ValidDate { get; set; }
 
     //public JT809_0x1200_0x120A Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
