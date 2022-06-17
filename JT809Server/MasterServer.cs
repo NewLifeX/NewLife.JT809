@@ -11,7 +11,10 @@ internal class MasterServer : JTServer
         AddHandler(new NormalController());
         AddHandler(new InfoController());
         AddHandler(new J1200Controller());
+        AddHandler(new J1300Controller());
         AddHandler(new J1400Controller());
+        AddHandler(new J1500Controller());
+        AddHandler(new J1600Controller());
 
         base.OnStart();
     }

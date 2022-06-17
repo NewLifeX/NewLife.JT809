@@ -27,7 +27,10 @@
     <Compile Include="..\JT809Client\ControlConfig.cs" Link="ControlConfig.cs" />
     <Compile Include="..\JT809Server\Controllers\InfoController.cs" Link="Controllers\InfoController.cs" />
     <Compile Include="..\JT809Server\Controllers\J1200Controller.cs" Link="Controllers\J1200Controller.cs" />
+    <Compile Include="..\JT809Server\Controllers\J1300Controller.cs" Link="Controllers\J1300Controller.cs" />
     <Compile Include="..\JT809Server\Controllers\J1400Controller.cs" Link="Controllers\J1400Controller.cs" />
+    <Compile Include="..\JT809Server\Controllers\J1500Controller.cs" Link="Controllers\J1500Controller.cs" />
+    <Compile Include="..\JT809Server\Controllers\J1600Controller.cs" Link="Controllers\J1600Controller.cs" />
     <Compile Include="..\JT809Server\Controllers\NormalController.cs" Link="Controllers\NormalController.cs" />
     <Compile Include="..\JT809Server\JT809Setting.cs" Link="JT809Setting.cs" />
     <Compile Include="..\JT809Server\MasterServer.cs" Link="MasterServer.cs" />
