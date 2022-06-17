@@ -10,6 +10,6 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台发送平台间交互信息</para>
 /// </summary>
 [MessageKind(MessageKinds.主链路平台间信息交互消息)]
-public class JT809_0x1300 : JT809ExchangeMessageBodies
+public class JT809_0x1300 : JT809ExchangeMessage
 {
 }

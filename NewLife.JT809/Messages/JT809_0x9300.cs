@@ -1,16 +1,15 @@
 ﻿using NewLife.JT809.Protocols;
 
-namespace NewLife.JT809.Messages
+namespace NewLife.JT809.Messages;
+
+/// <summary>
+/// 从链路平台间信息交互业务
+/// <para>链路类型:从链路</para>
+/// <para>消息方向:上级平台往下级平台</para>
+/// <para>业务数据类型标识:DOWN_PLATFORM_MSG</para>
+/// <para>描述:上级平台向下级平台发送平台问交互信息</para>
+/// </summary>
+[MessageKind(MessageKinds.从链路平台间信息交互业务)]
+public class JT809_0x9300 : JT809ExchangeMessage
 {
-    /// <summary>
-    /// 从链路平台间信息交互业务
-    /// <para>链路类型:从链路</para>
-    /// <para>消息方向:上级平台往下级平台</para>
-    /// <para>业务数据类型标识:DOWN_PLATFORM_MSG</para>
-    /// <para>描述:上级平台向下级平台发送平台问交互信息</para>
-    /// </summary>
-    [MessageKind(MessageKinds.从链路平台间信息交互业务)]
-    public class JT809_0x9300 : JT809ExchangeMessageBodies
-    {
-    }
 }
