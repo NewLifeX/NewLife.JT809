@@ -100,7 +100,7 @@ public class MessageFactory
                 Helper.CreateReader(ms).TryRead(null, ref msg);
 
 #if DEBUG
-            if (ms.Position < ms.Length) XTrace.WriteLine($"解析未完成，可用[{ms.Length}]，实际[{ms.Position}]");
+            if (ms.Position < ms.Length) XTrace.WriteLine($"解析未完成，可用[{ms.Length}]字节，实际解析仅使用[{ms.Position}]字节");
 #endif
         }
 

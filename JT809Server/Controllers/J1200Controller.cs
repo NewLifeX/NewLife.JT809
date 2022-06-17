@@ -26,6 +26,10 @@ internal class J1200Controller : IJT809Handler
                     MsgSn = message.Sequence,
                     Result = JT809_0x9201_Result.审核通过_完成注册
                 };
+            case 0x1202:
+                var j1202 = msg.Body as JT809_0x1200_0x1202;
+                XTrace.WriteLine(msg.ToJsonJT809());
+                break;
             default:
                 break;
         }
