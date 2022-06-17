@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -14,17 +15,21 @@ public class JT809_0x1200_0x120B
     /// 对应上报车辆电子运单源子业务类型标识
     /// </summary>
     public UInt16 SourceDataType { get; set; }
+
     /// <summary>
     ///  对应上报车辆电子运单源报文序列号
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
+
     /// <summary>
     /// 电子运单数据体长度
     /// </summary>
     public UInt32 EwaybillLength { get; set; }
+
     /// <summary>
     /// 电子运单数据内容
     /// </summary>
+    [FieldSize(nameof(EwaybillLength))]
     public String EwaybillInfo { get; set; }
 
     //public JT809_0x1200_0x120B Deserialize(ref JT809MessagePackReader reader, IJT809Config config)

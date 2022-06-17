@@ -26,16 +26,19 @@ public class JT809_0x1300_0x1301
     /// 查岗对象的类型
     /// </summary>
     public JT809_0x1301_ObjectType ObjectType { get; set; }
+
     /// <summary>
     /// 查岗应答人姓名
     /// </summary>
     [FieldSize(16)]
     public String Responder { get; set; }
+
     /// <summary>
     /// 查岗应答人联系电话
     /// </summary>
     [FieldSize(20)]
     public String ResponderTel { get; set; }
+
     /// <summary>
     /// 查岗对象的ID
     /// 2013:12位
@@ -43,22 +46,27 @@ public class JT809_0x1300_0x1301
     /// </summary>
     [FieldSize(20)]
     public String ObjectID { get; set; }
+
     /// <summary>
     /// 对应平台查岗请求消息源子业务类型标识
     /// </summary>
     public UInt16 SourceDataType { get; set; }
+
     /// <summary>
     /// 对应平台查岗请求消息源报文序列号
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
-    /// <summary>
-    /// 信息ID
-    /// </summary>
-    public UInt32 InfoID { get; set; }
+
+    ///// <summary>
+    ///// 信息ID
+    ///// </summary>
+    //public UInt32 InfoID { get; set; }
+
     /// <summary>
     /// 数据长度
     /// </summary>
     public UInt32 InfoLength { get; set; }
+
     /// <summary>
     /// 应答内容
     /// </summary>

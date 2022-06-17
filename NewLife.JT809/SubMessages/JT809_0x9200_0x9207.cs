@@ -25,10 +25,12 @@ public class JT809_0x9200_0x9207
     /// 对应申请交换指定车辆定位信息请求消息源子业务类型标识
     /// </summary>
     public UInt16 SourceDataType { get; set; }
+
     /// <summary>
     ///  对应申请交换指定车辆定位信息请求消息源报文序列号
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
+
     /// <summary>
     /// 返回结果
     /// </summary>

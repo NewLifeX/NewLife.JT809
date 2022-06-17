@@ -23,14 +23,17 @@ public class JT809_0x9200_0x920D
     /// 线路ＩＤ，按照８０８－２０１９中0x8606规定的报文中的线路ID
     /// </summary>
     public UInt32 DRVLineID { get; set; }
+
     /// <summary>
     /// 处理结果 0x00 完成记录，0x01 审核通过，完成记录 0x02信息错误，未完成记录0x03 审核未通过，未完成记录
     /// </summary>
     public JT809_0x920D_Result Result { get; set; }
+
     /// <summary>
     /// 未通过原因内容长度
     /// </summary>
     public UInt16 ReasonLength { get; set; }
+
     /// <summary>
     /// 经过GBK编码后的未通过原因
     /// </summary>

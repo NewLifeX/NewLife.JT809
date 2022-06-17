@@ -15,15 +15,18 @@ public class JT809_0x1300_0x1303
     /// 对应需要重传消息地子业务类型标识
     /// </summary>
     public UInt16 RetranDataType { get; set; }
+
     /// <summary>
     /// 重传消息总数
     /// </summary>
     public Byte SerialCount { get; set; }
+
     /// <summary>
     /// 需要重传消息的起始报文序列号
     /// <para>如只请求重传一个消息，则起始消息报文序列号和结束消息报文序列号相同 </para>
     /// </summary>
     public UInt32 BeginMessageNumber { get; set; }
+
     /// <summary>
     /// 需要重传消息的结束的报文序列号
     /// <para>如只请求重传一个消息，则起始消息报文序列号和结束消息报文序列号相同 </para>

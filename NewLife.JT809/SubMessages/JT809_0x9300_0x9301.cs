@@ -25,22 +25,28 @@ public class JT809_0x9300_0x9301
     /// 查岗对象的类型
     /// </summary>
     public JT809_0x9301_ObjectType ObjectType { get; set; }
+
     /// <summary>
     /// 查岗对象的ID
     /// </summary>
+    [FieldSize(20)]
     public String ObjectID { get; set; }
+
     /// <summary>
     /// 查岗应答时限
     /// </summary>
     public Byte AnswerTime { get; set; }
+
     /// <summary>
     /// 信息ID
     /// </summary>
     public UInt32 InfoID { get; set; }
+
     /// <summary>
     /// 数据长度
     /// </summary>
     public UInt32 InfoLength { get; set; }
+
     /// <summary>
     /// 应答内容
     /// </summary>

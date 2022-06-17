@@ -15,6 +15,7 @@ public class JT809_0x1200_0x120D
     /// 电子运单数据体长度
     /// </summary>
     public UInt32 EwaybillLength { get; set; }
+
     /// <summary>
     /// 电子运单数据内容
     /// </summary>
