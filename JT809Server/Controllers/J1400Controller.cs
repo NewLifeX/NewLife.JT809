@@ -15,6 +15,8 @@ internal class J1400Controller : IJT809Handler
         var msg = message.ReadModel<JT809_0x1400>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
+        XTrace.WriteLine("子业务[{0:X4}]：{1}", msg.DataType, (MessageKinds)msg.DataType);
+
         return null;
     }
 }

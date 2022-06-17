@@ -16,6 +16,8 @@ internal class J9600Controller : IJT809Handler
         var msg = message.ReadModel<JT809_0x9600>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
+        XTrace.WriteLine("子业务[{0:X4}]：{1}", msg.DataType, (MessageKinds)msg.DataType);
+
         var model = msg.Body as JT809_0x9600_0x9601;
 
         return new JT809_0x1600_0x1601

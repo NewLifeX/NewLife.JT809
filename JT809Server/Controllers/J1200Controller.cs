@@ -16,6 +16,8 @@ internal class J1200Controller : IJT809Handler
         var msg = message.ReadModel<JT809_0x1200>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
+        XTrace.WriteLine("子业务[{0:X4}]：{1}", msg.DataType, (MessageKinds)msg.DataType);
+
         switch (msg.DataType)
         {
             case 0x1201:

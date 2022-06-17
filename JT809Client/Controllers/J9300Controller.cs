@@ -16,6 +16,8 @@ internal class J9300Controller : IJT809Handler
         var msg = message.ReadModel<JT809_0x9300>();
         XTrace.WriteLine(msg.ToJsonJT809());
 
+        XTrace.WriteLine("子业务[{0:X4}]：{1}", msg.DataType, (MessageKinds)msg.DataType);
+
         //return new JT809_0x1400_0x1401
         //{
         //    MsgSn = msg.SupervisionID,
