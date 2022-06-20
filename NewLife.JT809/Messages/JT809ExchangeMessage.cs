@@ -30,12 +30,12 @@ public abstract class JT809ExchangeMessage : IAccessor, ISubMessage
 
         DataType = reader.ReadUInt16();
 
-        var len = reader.ReadInt32();
+        var len = reader.ReadUInt32();
         if (len > 0)
         {
             var model = MessageFactory.Instance.Create((MessageKinds)DataType);
             if (model == null)
-                Body = reader.ReadBytes(len);
+                Body = reader.ReadBytes((Int32)len);
             else
             {
                 if (!reader.TryRead(null, ref model)) return false;

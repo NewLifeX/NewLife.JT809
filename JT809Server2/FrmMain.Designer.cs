@@ -46,7 +46,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtMyIP = new System.Windows.Forms.TextBox();
             this.btnAlarm = new System.Windows.Forms.Button();
-            this.btnExchange = new System.Windows.Forms.Button();
+            this.btnQuery = new System.Windows.Forms.Button();
             this.btnPositionCount = new System.Windows.Forms.Button();
             this.gbInfo = new System.Windows.Forms.GroupBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
@@ -249,14 +249,15 @@
             this.btnAlarm.Text = "报警信息交换";
             this.btnAlarm.UseVisualStyleBackColor = true;
             // 
-            // btnExchange
+            // btnQuery
             // 
-            this.btnExchange.Location = new System.Drawing.Point(175, 29);
-            this.btnExchange.Name = "btnExchange";
-            this.btnExchange.Size = new System.Drawing.Size(137, 50);
-            this.btnExchange.TabIndex = 22;
-            this.btnExchange.Text = "动态信息交换";
-            this.btnExchange.UseVisualStyleBackColor = true;
+            this.btnQuery.Location = new System.Drawing.Point(175, 29);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(137, 50);
+            this.btnQuery.TabIndex = 22;
+            this.btnQuery.Text = "政府查岗";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnPositionCount
             // 
@@ -270,7 +271,7 @@
             // gbInfo
             // 
             this.gbInfo.Controls.Add(this.btnAlarm);
-            this.gbInfo.Controls.Add(this.btnExchange);
+            this.gbInfo.Controls.Add(this.btnQuery);
             this.gbInfo.Controls.Add(this.btnPositionCount);
             this.gbInfo.Location = new System.Drawing.Point(12, 242);
             this.gbInfo.Name = "gbInfo";
@@ -408,7 +409,7 @@
         private Label label7;
         private TextBox txtMyIP;
         private Button btnAlarm;
-        private Button btnExchange;
+        private Button btnQuery;
         private Button btnPositionCount;
         private GroupBox gbInfo;
         private RichTextBox rtbLog;

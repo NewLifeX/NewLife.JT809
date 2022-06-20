@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Stardust" Version="2.2.2022.606-beta0640" />
+    <PackageReference Include="NewLife.Stardust" Version="2.2.2022.619-beta1000" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +54,12 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FrmQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

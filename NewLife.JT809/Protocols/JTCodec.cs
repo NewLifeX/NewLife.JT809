@@ -64,7 +64,8 @@ public class JTCodec : MessageCodec<JTMessage>
         if (request is not JTMessage req || response is not JTMessage res) return false;
 
         // 请求响应前后配对
-        if (req.Reply || !res.Reply) return false;
+        //if (req.Reply || !res.Reply) return false;
+        if (req.Reply) return false;
 
         //return req.Sequence == res.Sequence;
         return true;

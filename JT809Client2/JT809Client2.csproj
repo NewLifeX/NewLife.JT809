@@ -21,7 +21,10 @@
   <ItemGroup>
     <Compile Include="..\JT809Client\Controllers\InfoController.cs" Link="Controllers\InfoController.cs" />
     <Compile Include="..\JT809Client\Controllers\J9200Controller.cs" Link="Controllers\J9200Controller.cs" />
+    <Compile Include="..\JT809Client\Controllers\J9300Controller.cs" Link="Controllers\J9300Controller.cs" />
     <Compile Include="..\JT809Client\Controllers\J9400Controller.cs" Link="Controllers\J9400Controller.cs" />
+    <Compile Include="..\JT809Client\Controllers\J9500Controller.cs" Link="Controllers\J9500Controller.cs" />
+    <Compile Include="..\JT809Client\Controllers\J9600Controller.cs" Link="Controllers\J9600Controller.cs" />
     <Compile Include="..\JT809Client\Controllers\NormalController.cs" Link="Controllers\NormalController.cs" />
     <Compile Include="..\JT809Client\SlaveServer.cs" Link="SlaveServer.cs" />
   </ItemGroup>

@@ -67,7 +67,7 @@ public class JTClient : DisposeBase
         _client = client;
     }
 
-    private void Send(Object body)
+    public void Send(Object body)
     {
         var msg = new JTMessage
         {
@@ -86,7 +86,7 @@ public class JTClient : DisposeBase
         _client.SendMessage(msg);
     }
 
-    private async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
+    public async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
     {
         var msg = new JTMessage
         {
@@ -276,6 +276,23 @@ public class JTClient : DisposeBase
         return await SendAsync<JT809_0x9200_0x9201>(req);
     }
 
+    /// <summary>
+    /// 在从链路上发送9300系列指令
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task<TResult> Send9300Async<TResult>(Object model) where TResult : class, new()
+    {
+        var req = new JT809_0x9300
+        {
+            DataType = 0x1201,
+            Body = model
+        };
+        var rs = await SendAsync<JT809_0x1300>(req);
+
+        return rs.Body as TResult;
+    }
     #endregion
 
     #region 日志

@@ -225,5 +225,16 @@ namespace JT809Server2
         }
 
         private async void btnPing_Click(Object sender, EventArgs e) => await _client.DownPingAsync();
+
+        private void btnQuery_Click(Object sender, EventArgs e)
+        {
+            var frm = new FrmQuery
+            {
+                Client = _client,
+                Log = _log
+            };
+
+            frm.Show();
+        }
     }
 }

@@ -18,11 +18,29 @@ internal class J9300Controller : IJT809Handler
 
         XTrace.WriteLine("子业务[{0:X4}]：{1}", msg.DataType, (MessageKinds)msg.DataType);
 
-        //return new JT809_0x1400_0x1401
-        //{
-        //    MsgSn = msg.SupervisionID,
-        //    Result = JT809_0x1401_Result.已处理完毕
-        //};
+        switch (msg.DataType)
+        {
+            case 0x9301:
+                var j9301 = msg.Body as JT809_0x9300_0x9301;
+                var model = new JT809_0x1300_0x1301
+                {
+                    ObjectType = (JT809_0x1301_ObjectType)j9301.ObjectType,
+                    ObjectID = j9301.ObjectID,
+
+                    Responder = "张三",
+                    ResponderTel = "13012345678",
+
+                    InfoContent = $"[{j9301.ObjectID}]不在，我不明白这个问题\"{j9301.InfoContent}\"",
+                };
+                return new JT809_0x1300
+                {
+                    DataType = 0x1301,
+                    Body = model,
+                };
+            default:
+                break;
+        }
+
         return null;
     }
 }
