@@ -47,6 +47,8 @@ namespace JT809Server2
             if (btn.Text == "开始")
             {
                 var set = JT809Setting.Current;
+                set.Port = (Int32)numPort.Value;
+                set.Save();
 
                 var server = new MasterServer
                 {
