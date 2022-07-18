@@ -34,14 +34,14 @@
             this.txtQuestion = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnQuery = new System.Windows.Forms.Button();
-            this.btnLocation = new System.Windows.Forms.Button();
-            this.btnLocation2 = new System.Windows.Forms.Button();
             this.btnMonitorStart = new System.Windows.Forms.Button();
             this.btnMonitorEnd = new System.Windows.Forms.Button();
             this.btnHistory = new System.Windows.Forms.Button();
             this.btnDriver = new System.Windows.Forms.Button();
             this.btnWaybill = new System.Windows.Forms.Button();
             this.btnDriveLine = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtObjectId = new System.Windows.Forms.TextBox();
             this.gbInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,26 +103,6 @@
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
-            // btnLocation
-            // 
-            this.btnLocation.Location = new System.Drawing.Point(203, 121);
-            this.btnLocation.Name = "btnLocation";
-            this.btnLocation.Size = new System.Drawing.Size(124, 50);
-            this.btnLocation.TabIndex = 21;
-            this.btnLocation.Text = "车辆定位";
-            this.btnLocation.UseVisualStyleBackColor = true;
-            this.btnLocation.Click += new System.EventHandler(this.btnLocation_Click);
-            // 
-            // btnLocation2
-            // 
-            this.btnLocation2.Location = new System.Drawing.Point(358, 121);
-            this.btnLocation2.Name = "btnLocation2";
-            this.btnLocation2.Size = new System.Drawing.Size(124, 50);
-            this.btnLocation2.TabIndex = 22;
-            this.btnLocation2.Text = "定位补传";
-            this.btnLocation2.UseVisualStyleBackColor = true;
-            this.btnLocation2.Click += new System.EventHandler(this.btnLocation2_Click);
-            // 
             // btnMonitorStart
             // 
             this.btnMonitorStart.Location = new System.Drawing.Point(44, 201);
@@ -183,19 +163,36 @@
             this.btnDriveLine.UseVisualStyleBackColor = true;
             this.btnDriveLine.Click += new System.EventHandler(this.btnDriveLine_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(214, 134);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 24);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "查岗对象：";
+            // 
+            // txtObjectId
+            // 
+            this.txtObjectId.Location = new System.Drawing.Point(317, 131);
+            this.txtObjectId.Name = "txtObjectId";
+            this.txtObjectId.Size = new System.Drawing.Size(150, 30);
+            this.txtObjectId.TabIndex = 30;
+            this.txtObjectId.Text = "Stone";
+            // 
             // FrmQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(755, 373);
+            this.Controls.Add(this.txtObjectId);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnDriveLine);
             this.Controls.Add(this.btnWaybill);
             this.Controls.Add(this.btnDriver);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.btnMonitorEnd);
             this.Controls.Add(this.btnMonitorStart);
-            this.Controls.Add(this.btnLocation2);
-            this.Controls.Add(this.btnLocation);
             this.Controls.Add(this.gbInfo);
             this.Controls.Add(this.btnQuery);
             this.Name = "FrmQuery";
@@ -204,6 +201,7 @@
             this.gbInfo.ResumeLayout(false);
             this.gbInfo.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -215,13 +213,13 @@
         private TextBox txtQuestion;
         private Label label3;
         private ComboBox cbObjectType;
-        private Button btnLocation;
-        private Button btnLocation2;
         private Button btnMonitorStart;
         private Button btnMonitorEnd;
         private Button btnHistory;
         private Button btnDriver;
         private Button btnWaybill;
         private Button btnDriveLine;
+        private Label label1;
+        private TextBox txtObjectId;
     }
 }

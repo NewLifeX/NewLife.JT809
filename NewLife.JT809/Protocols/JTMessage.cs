@@ -186,7 +186,7 @@ public class JTMessage : IAccessor
         writer.Write(EncryptKey);
 
         // 2019新增
-        if (JTT2019) writer.Write(Time.ToLong());
+        if (JTT2019) writer.Write(Time.ToUniversalTime().ToLong());
 
         if (pk != null) pk.CopyTo(writer.Stream);
 

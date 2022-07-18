@@ -28,7 +28,8 @@ public partial class FrmQuery : Form
         var model = new JT809_0x9300_0x9301
         {
             ObjectType = (JT809_0x9301_ObjectType)cbObjectType.SelectedItem,
-            ObjectID = "stone",
+            //ObjectID = "stone",
+            ObjectID = txtObjectId.Text,
             AnswerTime = 15,
             InfoContent = txtQuestion.Text,
         };

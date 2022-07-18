@@ -113,7 +113,7 @@ public class JTCodec : MessageCodec<JTMessage>
         var len = (Int32)pk.ReadBytes(1, 4).ToUInt32(0, false);
         if (len <= 0) return 0;
 
-        // 遇到转移字符，增加长度
+        // 遇到转义字符，增加长度
         for (var i = 0; i < pk.Total - 1; i++)
         {
             var b = pk[i];
