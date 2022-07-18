@@ -198,6 +198,8 @@ namespace JT809Server2
                     Name = "主链路",
                     Server = new NetUri(NetType.Tcp, ip, port),
 
+                    CenterId = verifyCode,
+
                     Log = _log,
                 };
 
@@ -207,7 +209,7 @@ namespace JT809Server2
                 _client.Open();
 
                 var rs = await _client.DownLoginAsync(verifyCode);
-                _log.Info("授权码：{0}", rs);
+                _log.Info("授权码：{0}", rs.Result);
 
                 btn.Text = "注销";
                 btnPing.Enabled = true;
