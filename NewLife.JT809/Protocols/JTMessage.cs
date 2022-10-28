@@ -129,25 +129,40 @@ public class JTMessage : IAccessor
         EncryptFlag = (Byte)(flag & 0xFF);
         EncryptKey = reader.Read<UInt32>();
 
-        // 根据登录请求，猜测协议版本
-        if (config == null && TryGuessVersion(Kind, len, out var jt2019)) JTT2019 = jt2019;
-
 #if DEBUG
         var len2 = ms.Length + 1;
         if (len != len2) XTrace.WriteLine("指令[{0:X4}]标称有{1}字节，而实际有{2}字节（未转义）", (Int32)Kind, len, len2);
 #endif
 
+        // 根据登录请求，猜测协议版本
+        if (TryGuessVersion(Kind, len, out var jt2019))
+        {
+            var ver = jt2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
+            if (JTT2019 != jt2019 && (config == null || config.Version != ver))
+                XTrace.WriteLine("指令[{0:X4}]配置协议版本：{1}，实际协议版本：{2}", (Int32)Kind, config?.Version, ver);
+
+            JTT2019 = jt2019;
+        }
+
         // 2019新增
-        if (JTT2019) Time = reader.Read<Int64>().ToDateTime();
+        if (JTT2019)
+        {
+            var t = reader.Read<Int64>();
+            if (t < 9999L * 365 * 34 * 3600)
+                Time = t.ToDateTime();
+        }
 
         // 负载数据
         len -= JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (len > 0) Payload = reader.ReadBytes(len);
 
-        var checkSum2 = GetCheckSum(ms, 0, 0);
-        var checkSum = reader.ReadUInt16();
-        //if (checkSum != checkSum2) return false;
-        if (checkSum != checkSum2) XTrace.WriteLine("Crc16 Error {0:X4}!={1:X4}", checkSum, checkSum2);
+        //if (ms.Position + 2 < ms.Length)
+        {
+            var checkSum2 = GetCheckSum(ms, 0, 0);
+            var checkSum = reader.ReadUInt16();
+            //if (checkSum != checkSum2) return false;
+            if (checkSum != checkSum2) XTrace.WriteLine("Crc16 Error {0:X4}!={1:X4}", checkSum, checkSum2);
+        }
 
         Reply = MessageFactory.Instance.IsReply(Kind);
 
@@ -230,6 +245,9 @@ public class JTMessage : IAccessor
         {
             case MessageKinds.主链路登录请求消息:
                 jt2019 = len >= HEADER_LENGTH_2019 + (4 + 8 + 4 + 32 + 2);
+                return true;
+            case MessageKinds.主链路登录应答消息:
+                jt2019 = len >= HEADER_LENGTH_2019 + (1 + 4);
                 return true;
             case MessageKinds.主链路连接保持请求消息:
                 jt2019 = len >= HEADER_LENGTH_2019 + (0);

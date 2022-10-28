@@ -31,7 +31,7 @@ namespace XUnitTest
             var reader = Helper.CreateReader(new MemoryStream(dt));
             //reader.IgnoreMembers.Add("DownLinkIP");
             //reader.IgnoreMembers.Add("DownLinkPort");
-            reader.EnableTrace();
+            //reader.EnableTrace();
 
             var body = reader.Read<JT809_0x1001>();
 
