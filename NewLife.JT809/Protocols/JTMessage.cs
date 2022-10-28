@@ -54,8 +54,8 @@ public class JTMessage : IAccessor
     #endregion
 
     #region 读写
-    const Int32 HEADER_LENGTH = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 2 + 1;
-    const Int32 HEADER_LENGTH_2019 = 1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
+    const Int32 HEADER_LENGTH = 26; //1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 2 + 1;
+    const Int32 HEADER_LENGTH_2019 = 34; //1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
 
     /// <summary>解析数据流</summary>
     /// <param name="stream"></param>
@@ -201,7 +201,7 @@ public class JTMessage : IAccessor
         writer.Write(EncryptKey);
 
         // 2019新增
-        if (JTT2019) writer.Write(Time.ToUniversalTime().ToLong());
+        if (JTT2019) writer.Write(Time.ToLong());
 
         if (pk != null) pk.CopyTo(writer.Stream);
 
