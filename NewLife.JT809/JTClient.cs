@@ -276,6 +276,23 @@ public class JTClient : DisposeBase
         return await SendAsync<JT809_0x9200_0x9201>(req);
     }
 
+    /// <summary>提交定位信息</summary>
+    /// <param name="plate"></param>
+    /// <param name="color"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public async Task<JT809_0x9200_0x9202> LocationAsync(String plate, Int32 color, JT809_0x1200_0x1202 model)
+    {
+        var req = new JT809_0x1200
+        {
+            DataType = 0x1202,
+            VehicleNo = plate,
+            VehicleColor = (JT809VehicleColorType)color,
+            Body = model
+        };
+        return await SendAsync<JT809_0x9200_0x9202>(req);
+    }
+
     /// <summary>
     /// 在从链路上发送9300系列指令
     /// </summary>

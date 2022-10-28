@@ -41,9 +41,26 @@ public partial class FrmExchange : Form
         await Client.RegisterAsync(plate, color, model);
     }
 
-    private void btnLocation_Click(Object sender, EventArgs e)
+    private async void btnLocation_Click(Object sender, EventArgs e)
     {
+        var location = new LocationMessage
+        {
+            Latitude = (Int32)(31.162668 * 1_000_000),
+            Longitude = (Int32)(121.407858 * 1_000_000),
+            Altitude = 123,
+            Speed = 85 * 10,
+            Direction = 321,
+            GPSTime = DateTime.UtcNow,
+        };
+        var model = new JT809_0x1200_0x1202
+        {
+            Location = location,
+        };
 
+        var plate = txtPlate.Text;
+        var color = cbColor.SelectedItem.ToInt();
+
+        await Client.LocationAsync(plate, color, model);
     }
 
     private void btnLocation2_Click(Object sender, EventArgs e)
