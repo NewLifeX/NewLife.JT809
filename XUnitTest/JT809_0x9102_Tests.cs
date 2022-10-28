@@ -20,6 +20,8 @@ namespace XUnitTest
         [Fact]
         public void Test9102()
         {
+            var message = new JTMessage();
+
             var msg = new JT809_0x9102
             {
                 PlatformId = "XXX",
@@ -29,7 +31,7 @@ namespace XUnitTest
 
             var ms = new MemoryStream();
             //msg.Write(ms, null);
-            var bn = Helper.CreateWriter(ms);
+            var bn = Helper.CreateWriter(ms, message);
             bn.Write(msg);
 
             var buf = ms.ToArray();
@@ -37,7 +39,7 @@ namespace XUnitTest
             ms = new MemoryStream(buf);
             var msg2 = new JT809_0x9102();
             //var rs = msg2.Read(ms, null);
-            var bn2=Helper.CreateWriter(ms);
+            var bn2 = Helper.CreateWriter(ms, message);
             Object obj = msg2;
             var rs = bn2.TryRead(null, ref obj);
 
@@ -58,7 +60,7 @@ namespace XUnitTest
 
             var ms = new MemoryStream();
             //msg.Write(ms, header);
-            var bn = Helper.CreateWriter(ms);
+            var bn = Helper.CreateWriter(ms, header);
             bn.Write(msg);
 
             var buf = ms.ToArray();
@@ -66,7 +68,7 @@ namespace XUnitTest
             ms = new MemoryStream(buf);
             var msg2 = new JT809_0x9102();
             //var rs = msg2.Read(ms, header);
-            var bn2 = Helper.CreateWriter(ms);
+            var bn2 = Helper.CreateWriter(ms, header);
             Object obj = msg2;
             var rs = bn2.TryRead(null, ref obj);
 
@@ -119,7 +121,8 @@ namespace XUnitTest
             var str = "27660000001B3130303130000000000000000000004EBC924F000000004EBC924F";
             var dt = str.ToHex();
 
-            var bn = Helper.CreateReader(new MemoryStream(dt));
+            var message = new JTMessage { JTT2019 = true };
+            var bn = Helper.CreateReader(new MemoryStream(dt), message);
 
             var body = bn.Read<JT809_0x9102>();
 

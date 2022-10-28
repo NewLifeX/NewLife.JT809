@@ -148,7 +148,7 @@ public class JTMessage : IAccessor
         if (JTT2019)
         {
             var t = reader.Read<Int64>();
-            if (t < 9999L * 365 * 34 * 3600)
+            if (t < 9999L * 365 * 34 * 3600 * 1000)
                 Time = t.ToDateTime();
         }
 

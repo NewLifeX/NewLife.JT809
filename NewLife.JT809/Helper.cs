@@ -23,14 +23,69 @@ public static class Helper
         Encoding = Encoding.GetEncoding("GBK");
     }
 
+    ///// <summary>
+    ///// 创建读取器
+    ///// </summary>
+    ///// <param name="stream"></param>
+    ///// <returns></returns>
+    //public static Binary CreateReader(Stream stream)
+    //{
+    //    var reader = new Binary()
+    //    {
+    //        Stream = stream,
+    //        Encoding = Encoding,
+    //        IsLittleEndian = false,
+    //        UseFieldSize = true,
+    //        UseRef = false,
+    //        TrimZero = true,
+    //    };
+
+    //    //// 替换编码处理器，自定义序列化行为
+    //    //for (var i = 0; i < reader.Handlers.Count; i++)
+    //    //{
+    //    //    if (reader.Handlers[i] is BinaryGeneral)
+    //    //        reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
+    //    //}
+
+    //    return reader;
+    //}
+
+    ///// <summary>
+    ///// 创建写入器
+    ///// </summary>
+    ///// <param name="stream"></param>
+    ///// <returns></returns>
+    //public static Binary CreateWriter(Stream stream)
+    //{
+    //    var writer = new Binary()
+    //    {
+    //        Stream = stream,
+    //        Encoding = Encoding,
+    //        IsLittleEndian = false,
+    //        UseFieldSize = true,
+    //        UseRef = false,
+    //        TrimZero = true,
+    //    };
+
+    //    //// 替换编码处理器，自定义序列化行为
+    //    //for (var i = 0; i < writer.Handlers.Count; i++)
+    //    //{
+    //    //    if (writer.Handlers[i] is BinaryGeneral)
+    //    //        writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
+    //    //}
+
+    //    return writer;
+    //}
+
     /// <summary>
     /// 创建读取器
     /// </summary>
     /// <param name="stream"></param>
+    /// <param name="message"></param>
     /// <returns></returns>
-    public static Binary CreateReader(Stream stream)
+    public static Binary CreateReader(Stream stream, JTMessage message)
     {
-        var reader = new Binary()
+        var reader = new Binary
         {
             Stream = stream,
             Encoding = Encoding,
@@ -38,14 +93,16 @@ public static class Helper
             UseFieldSize = true,
             UseRef = false,
             TrimZero = true,
+
+            Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
         };
 
-        //// 替换编码处理器，自定义序列化行为
-        //for (var i = 0; i < reader.Handlers.Count; i++)
-        //{
-        //    if (reader.Handlers[i] is BinaryGeneral)
-        //        reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
-        //}
+        // 替换编码处理器，自定义序列化行为
+        for (var i = 0; i < reader.Handlers.Count; i++)
+        {
+            if (reader.Handlers[i] is BinaryGeneral)
+                reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
+        }
 
         return reader;
     }
@@ -54,10 +111,11 @@ public static class Helper
     /// 创建写入器
     /// </summary>
     /// <param name="stream"></param>
+    /// <param name="message"></param>
     /// <returns></returns>
-    public static Binary CreateWriter(Stream stream)
+    public static Binary CreateWriter(Stream stream, JTMessage message)
     {
-        var writer = new Binary()
+        var writer = new Binary
         {
             Stream = stream,
             Encoding = Encoding,
@@ -65,68 +123,37 @@ public static class Helper
             UseFieldSize = true,
             UseRef = false,
             TrimZero = true,
+
+            Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
         };
 
-        //// 替换编码处理器，自定义序列化行为
-        //for (var i = 0; i < writer.Handlers.Count; i++)
-        //{
-        //    if (writer.Handlers[i] is BinaryGeneral)
-        //        writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
-        //}
+        // 替换编码处理器，自定义序列化行为
+        for (var i = 0; i < writer.Handlers.Count; i++)
+        {
+            if (writer.Handlers[i] is BinaryGeneral)
+                writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
+        }
 
         return writer;
     }
 
-    /// <summary>
-    /// 创建读取器
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    public static Binary CreateReader(Stream stream, JTMessage message) => new()
-    {
-        Stream = stream,
-        Encoding = Encoding,
-        IsLittleEndian = false,
-        UseFieldSize = true,
-        TrimZero = true,
-
-        Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
-    };
-
-    /// <summary>
-    /// 创建写入器
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    public static Binary CreateWriter(Stream stream, JTMessage message) => new()
-    {
-        Stream = stream,
-        Encoding = Encoding,
-        IsLittleEndian = false,
-        UseFieldSize = true,
-
-        Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
-    };
-
-    /// <summary>
-    /// 快速读取
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    public static T FastRead<T>(Byte[] data)
-    {
-        var binary = new Binary
-        {
-            Stream = new MemoryStream(data),
-            UseFieldSize = true,
-            UseRef = false,
-            //Log = XTrace.Log
-        };
-        return binary.Read<T>();
-    }
+    ///// <summary>
+    ///// 快速读取
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    ///// <param name="data"></param>
+    ///// <returns></returns>
+    //public static T FastRead<T>(Byte[] data)
+    //{
+    //    var binary = new Binary
+    //    {
+    //        Stream = new MemoryStream(data),
+    //        UseFieldSize = true,
+    //        UseRef = false,
+    //        //Log = XTrace.Log
+    //    };
+    //    return binary.Read<T>();
+    //}
 
     //public static Int32 GetGBKLength(this String value) => Encoding.GetByteCount(value);
 

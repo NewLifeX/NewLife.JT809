@@ -56,7 +56,7 @@ public class JT809_0x1001 : IAccessor
         UserId = reader.ReadUInt32();
         Password = reader.ReadFixedString(8);
 
-        if (header.JTT2019) MsgGNSSCENTERID = reader.ReadUInt32();
+        if (header?.JTT2019 ?? false) MsgGNSSCENTERID = reader.ReadUInt32();
 
         DownLinkIP = reader.ReadFixedString(32);
         DownLinkPort = reader.ReadUInt16();
@@ -78,7 +78,7 @@ public class JT809_0x1001 : IAccessor
         writer.Write(UserId);
         writer.WriteFixedString(Password, 8);
 
-        if (header.JTT2019) writer.Write(MsgGNSSCENTERID);
+        if (header?.JTT2019 ?? false) writer.Write(MsgGNSSCENTERID);
 
         writer.WriteFixedString(DownLinkIP, 32);
         writer.Write(DownLinkPort);

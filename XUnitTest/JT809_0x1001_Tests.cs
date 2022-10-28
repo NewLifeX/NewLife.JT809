@@ -28,7 +28,9 @@ namespace XUnitTest
                 "0329";
             var dt = str.ToHex();
 
-            var reader = Helper.CreateReader(new MemoryStream(dt));
+            var message = new JTMessage();
+
+            var reader = Helper.CreateReader(new MemoryStream(dt), message);
             //reader.IgnoreMembers.Add("DownLinkIP");
             //reader.IgnoreMembers.Add("DownLinkPort");
             //reader.EnableTrace();
@@ -43,8 +45,8 @@ namespace XUnitTest
             Assert.Equal(809, body.DownLinkPort);
 
             // 序列化
-            var ms=new MemoryStream();
-            var writer = Helper.CreateWriter(ms);
+            var ms = new MemoryStream();
+            var writer = Helper.CreateWriter(ms, message);
             writer.Write(body);
 
             var hex = ms.ToArray().ToHex();
@@ -100,7 +102,7 @@ namespace XUnitTest
 
             // 序列化
             var ms = new MemoryStream();
-            var writer = Helper.CreateWriter(ms);
+            var writer = Helper.CreateWriter(ms, msg);
             writer.Write(body);
 
             var hex = ms.ToArray().ToHex();

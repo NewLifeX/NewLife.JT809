@@ -65,7 +65,7 @@ namespace XUnitTest
 
             // 序列化
             var ms = new MemoryStream();
-            var writer = Helper.CreateWriter(ms);
+            var writer = Helper.CreateWriter(ms, msg);
             writer.Write(body);
 
             var hex = ms.ToArray().ToHex();
