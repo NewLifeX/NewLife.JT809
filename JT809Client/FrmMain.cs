@@ -185,7 +185,7 @@ namespace JT809Client
                     if (model is IAccessor accessor)
                         accessor.Read(ms, msg);
                     else
-                        Helper.CreateReader(ms).TryRead(null, ref model);
+                        Helper.CreateReader(ms, msg).TryRead(null, ref model);
 
                     if (ms.Position < ms.Length) XTrace.WriteLine($"解析未完成，可用[{ms.Length}]字节，实际解析仅使用[{ms.Position}]字节");
                 }

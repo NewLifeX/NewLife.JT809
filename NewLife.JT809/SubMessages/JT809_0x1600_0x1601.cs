@@ -30,7 +30,8 @@ public class JT809_0x1600_0x1601 : IAccessor
     /// <returns></returns>
     public virtual Boolean Read(Stream stream, Object context)
     {
-        var reader = Helper.CreateReader(stream);
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
         SourceDataType = reader.ReadUInt16();
         SourceMsgSn = reader.ReadUInt32();
@@ -45,7 +46,8 @@ public class JT809_0x1600_0x1601 : IAccessor
     /// <returns></returns>
     public virtual Boolean Write(Stream stream, Object context)
     {
-        var writer = Helper.CreateWriter(stream);
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
         writer.Write(SourceDataType);
         writer.Write(SourceMsgSn);

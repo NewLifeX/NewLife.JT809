@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using NewLife.Data;
+using NewLife.JT809.Protocols;
 using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
@@ -36,14 +37,15 @@ public static class Helper
             IsLittleEndian = false,
             UseFieldSize = true,
             UseRef = false,
+            TrimZero = true,
         };
 
-        // 替换编码处理器，自定义序列化行为
-        for (var i = 0; i < reader.Handlers.Count; i++)
-        {
-            if (reader.Handlers[i] is BinaryGeneral)
-                reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
-        }
+        //// 替换编码处理器，自定义序列化行为
+        //for (var i = 0; i < reader.Handlers.Count; i++)
+        //{
+        //    if (reader.Handlers[i] is BinaryGeneral)
+        //        reader.Handlers[i] = new MyBinaryGeneral { Host = reader };
+        //}
 
         return reader;
     }
@@ -62,17 +64,51 @@ public static class Helper
             IsLittleEndian = false,
             UseFieldSize = true,
             UseRef = false,
+            TrimZero = true,
         };
 
-        // 替换编码处理器，自定义序列化行为
-        for (var i = 0; i < writer.Handlers.Count; i++)
-        {
-            if (writer.Handlers[i] is BinaryGeneral)
-                writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
-        }
+        //// 替换编码处理器，自定义序列化行为
+        //for (var i = 0; i < writer.Handlers.Count; i++)
+        //{
+        //    if (writer.Handlers[i] is BinaryGeneral)
+        //        writer.Handlers[i] = new MyBinaryGeneral { Host = writer };
+        //}
 
         return writer;
     }
+
+    /// <summary>
+    /// 创建读取器
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public static Binary CreateReader(Stream stream, JTMessage message) => new()
+    {
+        Stream = stream,
+        Encoding = Encoding,
+        IsLittleEndian = false,
+        UseFieldSize = true,
+        TrimZero = true,
+
+        Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
+    };
+
+    /// <summary>
+    /// 创建写入器
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public static Binary CreateWriter(Stream stream, JTMessage message) => new()
+    {
+        Stream = stream,
+        Encoding = Encoding,
+        IsLittleEndian = false,
+        UseFieldSize = true,
+
+        Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
+    };
 
     /// <summary>
     /// 快速读取

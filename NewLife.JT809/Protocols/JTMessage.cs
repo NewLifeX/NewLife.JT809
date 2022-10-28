@@ -364,7 +364,7 @@ public class JTMessage : IAccessor
         var pk = Payload;
         return pk == null || pk.Total <= 0 || (model is IAccessor accessor
             ? accessor.Read(pk.GetStream(), this)
-            : Helper.CreateReader(pk.GetStream()).TryRead(null, ref model));
+            : Helper.CreateReader(pk.GetStream(), this).TryRead(null, ref model));
     }
 
     /// <summary>从负载数据解析业务消息模型</summary>
@@ -384,7 +384,7 @@ public class JTMessage : IAccessor
     {
         var rs = false;
         var ms = new MemoryStream();
-        rs = model is IAccessor accessor ? accessor.Write(ms, this) : Helper.CreateWriter(ms).Write(model);
+        rs = model is IAccessor accessor ? accessor.Write(ms, this) : Helper.CreateWriter(ms, this).Write(model);
 
         ms.Position = 0;
         Payload = new Packet(ms);

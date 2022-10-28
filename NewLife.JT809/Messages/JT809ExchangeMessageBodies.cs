@@ -38,7 +38,8 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
     /// <returns></returns>
     public virtual Boolean Read(Stream stream, Object context)
     {
-        var reader = Helper.CreateReader(stream);
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
         VehicleNo = reader.ReadFixedString(21);
         VehicleColor = (JT809VehicleColorType)reader.ReadByte();
@@ -68,7 +69,8 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
     /// <returns></returns>
     public virtual Boolean Write(Stream stream, Object context)
     {
-        var writer = Helper.CreateWriter(stream);
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
         writer.WriteFixedString(VehicleNo, 21);
         writer.Write(VehicleColor);
@@ -98,7 +100,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
             //writer.Write(Body);
             // 必须先序列化后面，需要用到长度
             var ms = new MemoryStream();
-            var writer2 = Helper.CreateWriter(ms);
+            var writer2 = Helper.CreateWriter(ms, header);
             writer2.Write(Body);
 
             ms.Position = 0;

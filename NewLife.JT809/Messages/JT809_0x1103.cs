@@ -35,7 +35,8 @@ public class JT809_0x1103 : IAccessor
     /// <returns></returns>
     public Boolean Read(Stream stream, Object context)
     {
-        var reader = Helper.CreateReader(stream);
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
         DataType = reader.ReadUInt16();
         DataLength = reader.ReadUInt32();
@@ -58,14 +59,15 @@ public class JT809_0x1103 : IAccessor
     /// <returns></returns>
     public Boolean Write(Stream stream, Object context)
     {
-        var writer = Helper.CreateWriter(stream);
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
         writer.Write(DataType);
         //writer.Write(DataLength);
 
         // 必须先序列化后面，需要用到长度
         var ms = new MemoryStream();
-        var writer2 = Helper.CreateWriter(ms);
+        var writer2 = Helper.CreateWriter(ms, header);
 
         var count = Messages.Count;
         writer2.Write((Byte)count);

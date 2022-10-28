@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using NewLife.JT809.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.Models;
@@ -46,7 +47,9 @@ public class LocationMessage : IAccessor
     /// <returns></returns>
     public Boolean Read(Stream stream, Object context)
     {
-        var reader = context as Binary ?? Helper.CreateReader(stream);
+        //var reader = context as Binary ?? Helper.CreateReader(stream);
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
         Alarm = (LocationAlarms)reader.ReadUInt32();
         Status = (LocationStatus)reader.ReadUInt32();
@@ -85,7 +88,9 @@ public class LocationMessage : IAccessor
     /// <exception cref="Exception"></exception>
     public Boolean Write(Stream stream, Object context)
     {
-        var writer = context as Binary ?? Helper.CreateWriter(stream);
+        //var writer = context as Binary ?? Helper.CreateWriter(stream);
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
         writer.WriteUInt32((UInt32)Alarm);
         writer.WriteUInt32((UInt32)Status);

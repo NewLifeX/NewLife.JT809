@@ -63,10 +63,10 @@ public class JT809_0x9500_0x9504 : IAccessor
     /// <returns></returns>
     public Boolean Read(Stream stream, Object context)
     {
-        var jt2019 = context is JTMessage msg && msg.JTT2019;
-        var reader = Helper.CreateReader(stream);
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
-        if (jt2019)
+        if (header.JTT2019)
         {
             StartTime = reader.ReadBCDTime();
             EndTime = reader.ReadBCDTime();
@@ -112,18 +112,18 @@ public class JT809_0x9500_0x9504 : IAccessor
     /// <returns></returns>
     public Boolean Write(Stream stream, Object context)
     {
-        var jt2019 = context is JTMessage msg && msg.JTT2019;
-        var binary = Helper.CreateWriter(stream);
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
-        if (jt2019)
+        if (header.JTT2019)
         {
-            binary.WriteBCDTime(StartTime);
-            binary.WriteBCDTime(EndTime);
-            binary.Write(Command);
+            writer.WriteBCDTime(StartTime);
+            writer.WriteBCDTime(EndTime);
+            writer.Write(Command);
         }
         else
         {
-            binary.Write(Command);
+            writer.Write(Command);
             switch (Command)
             {
                 case JT809CommandType.记录仪标准版本:
@@ -143,9 +143,9 @@ public class JT809_0x9500_0x9504 : IAccessor
                 case JT809CommandType.采集记录仪外部供电记录:
                 case JT809CommandType.采集记录仪参数修改记录:
                 case JT809CommandType.采集记录仪速度状态日志:
-                    binary.WriteBCDTime(StartTime);
-                    binary.WriteBCDTime(EndTime);
-                    binary.WriteUInt16(Max);
+                    writer.WriteBCDTime(StartTime);
+                    writer.WriteBCDTime(EndTime);
+                    writer.WriteUInt16(Max);
                     break;
             }
         }
