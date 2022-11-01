@@ -199,11 +199,11 @@ namespace JT809Client
 
             _log.Info(model.ToJsonJT809(true));
 
-            if (model is JT809_0x1200 j1200 && j1200.Body is JT809_0x1200_0x1202 j1202)
-            {
-                _log.Info("定位数据：");
-                _log.Info(j1202.Location.ToJsonJT809(true));
-            }
+            //if (model is JT809_0x1200 j1200 && j1200.Body is JT809_0x1200_0x1202 j1202)
+            //{
+            //    _log.Info("定位数据：");
+            //    _log.Info(j1202.Location.ToJsonJT809(true));
+            //}
         }
 
         private void btnClear_Click(Object sender, EventArgs e) => rtbLog.Clear();

@@ -22,16 +22,16 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
     {
         if (!base.Read(stream, context)) return false;
 
-        // 解析卫星数据
-        if (Body is JT809_0x1200_0x1202 j1202)
-            j1202.Decode();
-        else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
-        {
-            foreach (var item in j1203.GNSS)
-            {
-                item?.Decode();
-            }
-        }
+        //// 解析卫星数据
+        //if (Body is JT809_0x1200_0x1202 j1202)
+        //    j1202.Decode();
+        //else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
+        //{
+        //    foreach (var item in j1203.GNSS)
+        //    {
+        //        item?.Decode();
+        //    }
+        //}
 
         return true;
     }
@@ -42,16 +42,16 @@ public class JT809_0x1200 : JT809ExchangeMessageBodies
     /// <returns></returns>
     public override Boolean Write(Stream stream, Object context)
     {
-        // 提前写入卫星数据
-        if (Body is JT809_0x1200_0x1202 j1202)
-            j1202.Encode();
-        else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
-        {
-            foreach (var item in j1203.GNSS)
-            {
-                item?.Encode();
-            }
-        }
+        //// 提前写入卫星数据
+        //if (Body is JT809_0x1200_0x1202 j1202)
+        //    j1202.Encode();
+        //else if (Body is JT809_0x1200_0x1203 j1203 && j1203.GNSS != null)
+        //{
+        //    foreach (var item in j1203.GNSS)
+        //    {
+        //        item?.Encode();
+        //    }
+        //}
 
         return base.Write(stream, context);
     }

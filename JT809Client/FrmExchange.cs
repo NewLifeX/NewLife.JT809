@@ -43,18 +43,32 @@ public partial class FrmExchange : Form
 
     private async void btnLocation_Click(Object sender, EventArgs e)
     {
-        var location = new LocationMessage
-        {
-            Latitude = (Int32)(31.162668 * 1_000_000),
-            Longitude = (Int32)(121.407858 * 1_000_000),
-            Altitude = 123,
-            Speed = 85 * 10,
-            Direction = 321,
-            GPSTime = DateTime.UtcNow,
-        };
+        //var location = new LocationMessage
+        //{
+        //    Latitude = (Int32)(31.162668 * 1_000_000),
+        //    Longitude = (Int32)(121.407858 * 1_000_000),
+        //    Altitude = 123,
+        //    Speed = 85 * 10,
+        //    Direction = 321,
+        //    GPSTime = DateTime.UtcNow,
+        //};
         var model = new JT809_0x1200_0x1202
         {
-            Location = location,
+            //Location = location,
+
+            Time = DateTime.Now,
+
+            Longitude = (Int32)(121.407858 * 1_000_000),
+            Latitude = (Int32)(31.162668 * 1_000_000),
+
+            Speed = 85,
+            Speed2 = 87,
+            Mileage = 12345,
+            Direction = 321,
+            Altitude = 789,
+
+            Status = LocationStatus.ACC | LocationStatus.Driving | LocationStatus.北斗,
+            Alarm = LocationAlarms.疲劳驾驶预警 | LocationAlarms.油量异常报警,
         };
 
         var plate = txtPlate.Text;
