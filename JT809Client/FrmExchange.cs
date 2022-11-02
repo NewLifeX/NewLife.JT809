@@ -41,7 +41,7 @@ public partial class FrmExchange : Form
         await Client.RegisterAsync(plate, color, model);
     }
 
-    private async void btnLocation_Click(Object sender, EventArgs e)
+    private void btnLocation_Click(Object sender, EventArgs e)
     {
         //var location = new LocationMessage
         //{
@@ -74,7 +74,7 @@ public partial class FrmExchange : Form
         var plate = txtPlate.Text;
         var color = cbColor.SelectedItem.ToInt();
 
-        await Client.LocationAsync(plate, color, model);
+        Client.LocationAsync(plate, color, model);
     }
 
     private void btnLocation2_Click(Object sender, EventArgs e)

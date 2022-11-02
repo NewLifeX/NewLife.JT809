@@ -67,6 +67,8 @@ public class JTClient : DisposeBase
         _client = client;
     }
 
+    /// <summary>发送不等待</summary>
+    /// <param name="body"></param>
     public void Send(Object body)
     {
         var msg = new JTMessage
@@ -86,6 +88,10 @@ public class JTClient : DisposeBase
         _client.SendMessage(msg);
     }
 
+    /// <summary>发送并等待响应</summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="body"></param>
+    /// <returns></returns>
     public async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
     {
         var msg = new JTMessage
@@ -281,7 +287,7 @@ public class JTClient : DisposeBase
     /// <param name="color"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<JT809_0x9200_0x9202> LocationAsync(String plate, Int32 color, JT809_0x1200_0x1202 model)
+    public void LocationAsync(String plate, Int32 color, JT809_0x1200_0x1202 model)
     {
         var req = new JT809_0x1200
         {
@@ -290,7 +296,7 @@ public class JTClient : DisposeBase
             VehicleColor = (JT809VehicleColorType)color,
             Body = model
         };
-        return await SendAsync<JT809_0x9200_0x9202>(req);
+        Send(req);
     }
 
     /// <summary>
