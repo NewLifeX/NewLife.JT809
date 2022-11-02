@@ -52,6 +52,7 @@ public class JTClient : DisposeBase
         var client = Server.CreateRemote();
         client.Name = Name;
         client.Add<JTCodec>();
+        client.Tracer = Tracer;
         client.Log = Log;
 
 #if DEBUG
@@ -82,6 +83,8 @@ public class JTClient : DisposeBase
 
         msg.SetResult(body);
 
+        using var span = Tracer?.NewSpan($"jt809:Send:{msg.Kind}", body);
+
         WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
 
@@ -104,6 +107,8 @@ public class JTClient : DisposeBase
         if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
 
         msg.SetResult(body);
+
+        using var span = Tracer?.NewSpan($"jt809:SendAsync:{msg.Kind}", body);
 
         WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
@@ -319,6 +324,9 @@ public class JTClient : DisposeBase
     #endregion
 
     #region 日志
+    /// <summary>性能追踪</summary>
+    public ITracer Tracer { get; set; }
+
     /// <summary>日志</summary>
     public ILog Log { get; set; }
 
