@@ -22,7 +22,7 @@ public class JT809_0x1600_0x1602 : IAccessor
     /// <returns></returns>
     public virtual Boolean Read(Stream stream, Object context)
     {
-        DRVLine = stream.ReadBytes();
+        DRVLine = stream.ReadBytes(-1);
 
         return true;
     }

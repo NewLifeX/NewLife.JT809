@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>JT809企业监管平台</AssemblyTitle>
     <Description></Description>
     <VersionPrefix>1.0</VersionPrefix>
