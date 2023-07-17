@@ -53,12 +53,17 @@ namespace JT809Client
                     Log = _log,
                 };
 
+                var config = _client.Config;
                 if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
-                    _client.Config.Version = version;
+                    config.Version = version;
+
+                config.M1 = (UInt32)txtM1.Text.ToInt();
+                config.IA1 = (UInt32)txtIA1.Text.ToInt();
+                config.IC1 = (UInt32)txtIC1.Text.ToInt();
 
                 _client.Open();
 
-                txtCode.Enabled = _client.Config.Version == JTVersion.JTT2019;
+                txtCode.Enabled = config.Version == JTVersion.JTT2019;
 
                 btn.Text = "断开";
                 gbConnect.Enabled = false;

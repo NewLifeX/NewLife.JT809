@@ -2,7 +2,6 @@
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Log;
-using NewLife.Messaging;
 using NewLife.Security;
 using NewLife.Serialization;
 
@@ -154,7 +153,13 @@ public class JTMessage : IAccessor
 
         // 负载数据
         len -= JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
-        if (len > 0) Payload = reader.ReadBytes(len);
+        if (len > 0)
+        {
+            var data = reader.ReadBytes(len);
+            if (EncryptFlag > 0 && config != null && config.M1 > 0)
+                Encrypt(data, EncryptKey, config);
+            Payload = data;
+        }
 
         //if (ms.Position + 2 < ms.Length)
         {
@@ -179,7 +184,8 @@ public class JTMessage : IAccessor
     {
         if (stream == null && context == null) return false;
 
-        if (context is JTConfig config)
+        var config = context as JTConfig;
+        if (config != null)
             JTT2019 = config.Version == JTVersion.JTT2019;
 
         // 使用内存流，后面可能需要转义
@@ -189,6 +195,16 @@ public class JTMessage : IAccessor
         var pk = Payload;
         var len = JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (pk != null) len += pk.Total;
+        var data = pk.ReadBytes();
+
+        // 加密数据
+        if (config != null && config.M1 > 0)
+        {
+            EncryptFlag = 1;
+            EncryptKey = (UInt32)Rand.Next();
+
+            Encrypt(data, EncryptKey, config);
+        }
 
         writer.Write(len);
         writer.Write(Sequence);
@@ -203,7 +219,8 @@ public class JTMessage : IAccessor
         // 2019新增
         if (JTT2019) writer.Write(Time.ToLong());
 
-        if (pk != null) pk.CopyTo(writer.Stream);
+        //pk?.CopyTo(writer.Stream);
+        writer.Write(data, 0, data.Length);
 
         // 计算校验和
         var checkSum = GetCheckSum(ms, 0, 0);
@@ -282,6 +299,16 @@ public class JTMessage : IAccessor
             crc = (UInt16)((crc << 8) ^ CrcTable[(crc >> 8 ^ buf[offset + i]) & 0xFF]);
         }
         return crc;
+    }
+
+    static void Encrypt(Byte[] data, UInt32 key, JTConfig config)
+    {
+        if (key == 0) key = 1;
+        for (var i = 0; i < data.Length; i++)
+        {
+            key = config.IA1 * (key % config.M1) + config.IC1;
+            data[i] ^= (Byte)((key >> 20) & 0xFF);
+        }
     }
 
     #region CRC16数据表
