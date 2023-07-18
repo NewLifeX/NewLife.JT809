@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using NewLife;
+using NewLife.Configuration;
 using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
@@ -57,10 +58,6 @@ namespace JT809Client
                 if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
                     config.Version = version;
 
-                config.M1 = (UInt32)txtM1.Text.ToInt();
-                config.IA1 = (UInt32)txtIA1.Text.ToInt();
-                config.IC1 = (UInt32)txtIC1.Text.ToInt();
-
                 _client.Open();
 
                 txtCode.Enabled = config.Version == JTVersion.JTT2019;
@@ -114,8 +111,12 @@ namespace JT809Client
 #endif
 
                 server.Start();
-
                 _slave = server;
+
+                var config = _client.Config;
+                config.M1 = (UInt32)txtM1.Text.ToInt();
+                config.IA1 = (UInt32)txtIA1.Text.ToInt();
+                config.IC1 = (UInt32)txtIC1.Text.ToInt();
 
                 var rs = await _client.LoginAsync(user, pass, code, ip, port);
                 _log.Info("授权码：{0}", rs);
@@ -159,12 +160,17 @@ namespace JT809Client
             var buf = hex.ToHex();
             _log.Info("报文长度[{0}]字节", buf.Length);
 
+            var config = new JTConfig();
+            config.M1 = (UInt32)txtM1.Text.ToInt();
+            config.IA1 = (UInt32)txtIA1.Text.ToInt();
+            config.IC1 = (UInt32)txtIC1.Text.ToInt();
+
             var msg = new JTMessage();
             //if (_client?.Config != null) msg.JTT2019 = _client.Config.Version == JTVersion.JTT2019;
             if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
                 msg.JTT2019 = version == JTVersion.JTT2019;
 
-            if (!msg.Read(hex.ToHex()))
+            if (!msg.Read(hex.ToHex(), config))
             {
                 _log.Info("解码失败！");
                 //return;

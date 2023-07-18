@@ -28,365 +28,404 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnDecode = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtCommand = new System.Windows.Forms.TextBox();
-            this.btnPing = new System.Windows.Forms.Button();
-            this.gbAuth = new System.Windows.Forms.GroupBox();
-            this.numMyPort = new System.Windows.Forms.NumericUpDown();
-            this.txtPass = new System.Windows.Forms.TextBox();
-            this.txtCode = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.btnLogin = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtUser = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtMyIP = new System.Windows.Forms.TextBox();
-            this.btnAlarm = new System.Windows.Forms.Button();
-            this.btnQuery = new System.Windows.Forms.Button();
-            this.btnPositionCount = new System.Windows.Forms.Button();
-            this.gbInfo = new System.Windows.Forms.GroupBox();
-            this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cbVersion = new System.Windows.Forms.ComboBox();
-            this.gbConnect = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numPort = new System.Windows.Forms.NumericUpDown();
-            this.btnOpen = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.gbAuth.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).BeginInit();
-            this.gbInfo.SuspendLayout();
-            this.gbConnect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
-            this.SuspendLayout();
+            btnClear = new Button();
+            btnDecode = new Button();
+            groupBox1 = new GroupBox();
+            txtCommand = new TextBox();
+            btnPing = new Button();
+            gbAuth = new GroupBox();
+            numMyPort = new NumericUpDown();
+            txtPass = new TextBox();
+            txtCode = new TextBox();
+            label5 = new Label();
+            btnLogin = new Button();
+            label4 = new Label();
+            txtUser = new TextBox();
+            label6 = new Label();
+            label3 = new Label();
+            label7 = new Label();
+            txtMyIP = new TextBox();
+            btnAlarm = new Button();
+            btnQuery = new Button();
+            btnPositionCount = new Button();
+            gbInfo = new GroupBox();
+            rtbLog = new RichTextBox();
+            label8 = new Label();
+            cbVersion = new ComboBox();
+            gbConnect = new GroupBox();
+            label2 = new Label();
+            numPort = new NumericUpDown();
+            btnOpen = new Button();
+            label11 = new Label();
+            txtIC1 = new TextBox();
+            label10 = new Label();
+            txtIA1 = new TextBox();
+            label9 = new Label();
+            txtM1 = new TextBox();
+            groupBox1.SuspendLayout();
+            gbAuth.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numMyPort).BeginInit();
+            gbInfo.SuspendLayout();
+            gbConnect.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
+            SuspendLayout();
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(1034, 29);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(100, 50);
-            this.btnClear.TabIndex = 23;
-            this.btnClear.Text = "清空";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            btnClear.Location = new Point(1034, 29);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(100, 50);
+            btnClear.TabIndex = 23;
+            btnClear.Text = "清空";
+            btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
             // 
             // btnDecode
             // 
-            this.btnDecode.Location = new System.Drawing.Point(910, 29);
-            this.btnDecode.Name = "btnDecode";
-            this.btnDecode.Size = new System.Drawing.Size(100, 50);
-            this.btnDecode.TabIndex = 21;
-            this.btnDecode.Text = "解码";
-            this.btnDecode.UseVisualStyleBackColor = true;
-            this.btnDecode.Click += new System.EventHandler(this.btnDecode_Click);
+            btnDecode.Location = new Point(910, 29);
+            btnDecode.Name = "btnDecode";
+            btnDecode.Size = new Size(100, 50);
+            btnDecode.TabIndex = 21;
+            btnDecode.Text = "解码";
+            btnDecode.UseVisualStyleBackColor = true;
+            btnDecode.Click += btnDecode_Click;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnClear);
-            this.groupBox1.Controls.Add(this.txtCommand);
-            this.groupBox1.Controls.Add(this.btnDecode);
-            this.groupBox1.Location = new System.Drawing.Point(12, 344);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1152, 96);
-            this.groupBox1.TabIndex = 28;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "辅助功能";
+            groupBox1.Controls.Add(btnClear);
+            groupBox1.Controls.Add(txtCommand);
+            groupBox1.Controls.Add(btnDecode);
+            groupBox1.Location = new Point(12, 407);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(1152, 96);
+            groupBox1.TabIndex = 28;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "辅助功能";
             // 
             // txtCommand
             // 
-            this.txtCommand.Location = new System.Drawing.Point(21, 39);
-            this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(852, 30);
-            this.txtCommand.TabIndex = 22;
+            txtCommand.Location = new Point(21, 39);
+            txtCommand.Name = "txtCommand";
+            txtCommand.Size = new Size(852, 30);
+            txtCommand.TabIndex = 22;
             // 
             // btnPing
             // 
-            this.btnPing.Enabled = false;
-            this.btnPing.Location = new System.Drawing.Point(1034, 47);
-            this.btnPing.Name = "btnPing";
-            this.btnPing.Size = new System.Drawing.Size(100, 50);
-            this.btnPing.TabIndex = 20;
-            this.btnPing.Text = "心跳";
-            this.btnPing.UseVisualStyleBackColor = true;
-            this.btnPing.Click += new System.EventHandler(this.btnPing_Click);
+            btnPing.Enabled = false;
+            btnPing.Location = new Point(1034, 47);
+            btnPing.Name = "btnPing";
+            btnPing.Size = new Size(100, 50);
+            btnPing.TabIndex = 20;
+            btnPing.Text = "心跳";
+            btnPing.UseVisualStyleBackColor = true;
+            btnPing.Click += btnPing_Click;
             // 
             // gbAuth
             // 
-            this.gbAuth.Controls.Add(this.btnPing);
-            this.gbAuth.Controls.Add(this.numMyPort);
-            this.gbAuth.Controls.Add(this.txtPass);
-            this.gbAuth.Controls.Add(this.txtCode);
-            this.gbAuth.Controls.Add(this.label5);
-            this.gbAuth.Controls.Add(this.btnLogin);
-            this.gbAuth.Controls.Add(this.label4);
-            this.gbAuth.Controls.Add(this.txtUser);
-            this.gbAuth.Controls.Add(this.label6);
-            this.gbAuth.Controls.Add(this.label3);
-            this.gbAuth.Controls.Add(this.label7);
-            this.gbAuth.Controls.Add(this.txtMyIP);
-            this.gbAuth.Enabled = false;
-            this.gbAuth.Location = new System.Drawing.Point(12, 104);
-            this.gbAuth.Name = "gbAuth";
-            this.gbAuth.Size = new System.Drawing.Size(1152, 132);
-            this.gbAuth.TabIndex = 27;
-            this.gbAuth.TabStop = false;
-            this.gbAuth.Text = "从链路信息";
+            gbAuth.Controls.Add(label11);
+            gbAuth.Controls.Add(txtIC1);
+            gbAuth.Controls.Add(label10);
+            gbAuth.Controls.Add(txtIA1);
+            gbAuth.Controls.Add(label9);
+            gbAuth.Controls.Add(txtM1);
+            gbAuth.Controls.Add(btnPing);
+            gbAuth.Controls.Add(numMyPort);
+            gbAuth.Controls.Add(txtPass);
+            gbAuth.Controls.Add(txtCode);
+            gbAuth.Controls.Add(label5);
+            gbAuth.Controls.Add(btnLogin);
+            gbAuth.Controls.Add(label4);
+            gbAuth.Controls.Add(txtUser);
+            gbAuth.Controls.Add(label6);
+            gbAuth.Controls.Add(label3);
+            gbAuth.Controls.Add(label7);
+            gbAuth.Controls.Add(txtMyIP);
+            gbAuth.Enabled = false;
+            gbAuth.Location = new Point(12, 104);
+            gbAuth.Name = "gbAuth";
+            gbAuth.Size = new Size(1152, 195);
+            gbAuth.TabIndex = 27;
+            gbAuth.TabStop = false;
+            gbAuth.Text = "从链路信息";
             // 
             // numMyPort
             // 
-            this.numMyPort.Location = new System.Drawing.Point(426, 87);
-            this.numMyPort.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.numMyPort.Name = "numMyPort";
-            this.numMyPort.Size = new System.Drawing.Size(108, 30);
-            this.numMyPort.TabIndex = 13;
-            this.numMyPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numMyPort.Value = new decimal(new int[] {
-            1809,
-            0,
-            0,
-            0});
+            numMyPort.Location = new Point(426, 87);
+            numMyPort.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
+            numMyPort.Name = "numMyPort";
+            numMyPort.Size = new Size(108, 30);
+            numMyPort.TabIndex = 13;
+            numMyPort.TextAlign = HorizontalAlignment.Right;
+            numMyPort.Value = new decimal(new int[] { 1809, 0, 0, 0 });
             // 
             // txtPass
             // 
-            this.txtPass.Location = new System.Drawing.Point(426, 31);
-            this.txtPass.Name = "txtPass";
-            this.txtPass.Size = new System.Drawing.Size(150, 30);
-            this.txtPass.TabIndex = 7;
-            this.txtPass.Text = "pass";
+            txtPass.Location = new Point(426, 31);
+            txtPass.Name = "txtPass";
+            txtPass.Size = new Size(150, 30);
+            txtPass.TabIndex = 7;
+            txtPass.Text = "pass";
             // 
             // txtCode
             // 
-            this.txtCode.Location = new System.Drawing.Point(723, 31);
-            this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(150, 30);
-            this.txtCode.TabIndex = 9;
-            this.txtCode.Text = "12345";
+            txtCode.Location = new Point(723, 31);
+            txtCode.Name = "txtCode";
+            txtCode.Size = new Size(150, 30);
+            txtCode.TabIndex = 9;
+            txtCode.Text = "12345";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(624, 34);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(82, 24);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "接入码：";
+            label5.AutoSize = true;
+            label5.Location = new Point(624, 34);
+            label5.Name = "label5";
+            label5.Size = new Size(82, 24);
+            label5.TabIndex = 8;
+            label5.Text = "接入码：";
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(910, 47);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(100, 50);
-            this.btnLogin.TabIndex = 15;
-            this.btnLogin.Text = "登录";
-            this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            btnLogin.Location = new Point(910, 47);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(100, 50);
+            btnLogin.TabIndex = 15;
+            btnLogin.Text = "登录";
+            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += btnLogin_Click;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(316, 34);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(64, 24);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "密码：";
+            label4.AutoSize = true;
+            label4.Location = new Point(316, 34);
+            label4.Name = "label4";
+            label4.Size = new Size(64, 24);
+            label4.TabIndex = 6;
+            label4.Text = "密码：";
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(128, 31);
-            this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(150, 30);
-            this.txtUser.TabIndex = 5;
-            this.txtUser.Text = "9527";
+            txtUser.Location = new Point(128, 31);
+            txtUser.Name = "txtUser";
+            txtUser.Size = new Size(150, 30);
+            txtUser.TabIndex = 5;
+            txtUser.Text = "9527";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(32, 90);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 24);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "下级IP：";
+            label6.AutoSize = true;
+            label6.Location = new Point(32, 90);
+            label6.Name = "label6";
+            label6.Size = new Size(80, 24);
+            label6.TabIndex = 10;
+            label6.Text = "下级IP：";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(32, 34);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 24);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "用户：";
+            label3.AutoSize = true;
+            label3.Location = new Point(32, 34);
+            label3.Name = "label3";
+            label3.Size = new Size(64, 24);
+            label3.TabIndex = 4;
+            label3.Text = "用户：";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(316, 90);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(100, 24);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "下级端口：";
+            label7.AutoSize = true;
+            label7.Location = new Point(316, 90);
+            label7.Name = "label7";
+            label7.Size = new Size(100, 24);
+            label7.TabIndex = 12;
+            label7.Text = "下级端口：";
             // 
             // txtMyIP
             // 
-            this.txtMyIP.Location = new System.Drawing.Point(128, 87);
-            this.txtMyIP.Name = "txtMyIP";
-            this.txtMyIP.Size = new System.Drawing.Size(150, 30);
-            this.txtMyIP.TabIndex = 11;
+            txtMyIP.Location = new Point(128, 87);
+            txtMyIP.Name = "txtMyIP";
+            txtMyIP.Size = new Size(150, 30);
+            txtMyIP.TabIndex = 11;
             // 
             // btnAlarm
             // 
-            this.btnAlarm.Location = new System.Drawing.Point(329, 29);
-            this.btnAlarm.Name = "btnAlarm";
-            this.btnAlarm.Size = new System.Drawing.Size(137, 50);
-            this.btnAlarm.TabIndex = 23;
-            this.btnAlarm.Text = "报警信息交换";
-            this.btnAlarm.UseVisualStyleBackColor = true;
+            btnAlarm.Location = new Point(329, 29);
+            btnAlarm.Name = "btnAlarm";
+            btnAlarm.Size = new Size(137, 50);
+            btnAlarm.TabIndex = 23;
+            btnAlarm.Text = "报警信息交换";
+            btnAlarm.UseVisualStyleBackColor = true;
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(175, 29);
-            this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(137, 50);
-            this.btnQuery.TabIndex = 22;
-            this.btnQuery.Text = "政府查岗";
-            this.btnQuery.UseVisualStyleBackColor = true;
-            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            btnQuery.Location = new Point(175, 29);
+            btnQuery.Name = "btnQuery";
+            btnQuery.Size = new Size(137, 50);
+            btnQuery.TabIndex = 22;
+            btnQuery.Text = "政府查岗";
+            btnQuery.UseVisualStyleBackColor = true;
+            btnQuery.Click += btnQuery_Click;
             // 
             // btnPositionCount
             // 
-            this.btnPositionCount.Location = new System.Drawing.Point(21, 29);
-            this.btnPositionCount.Name = "btnPositionCount";
-            this.btnPositionCount.Size = new System.Drawing.Size(137, 50);
-            this.btnPositionCount.TabIndex = 21;
-            this.btnPositionCount.Text = "定位数量通知";
-            this.btnPositionCount.UseVisualStyleBackColor = true;
+            btnPositionCount.Location = new Point(21, 29);
+            btnPositionCount.Name = "btnPositionCount";
+            btnPositionCount.Size = new Size(137, 50);
+            btnPositionCount.TabIndex = 21;
+            btnPositionCount.Text = "定位数量通知";
+            btnPositionCount.UseVisualStyleBackColor = true;
             // 
             // gbInfo
             // 
-            this.gbInfo.Controls.Add(this.btnAlarm);
-            this.gbInfo.Controls.Add(this.btnQuery);
-            this.gbInfo.Controls.Add(this.btnPositionCount);
-            this.gbInfo.Location = new System.Drawing.Point(12, 242);
-            this.gbInfo.Name = "gbInfo";
-            this.gbInfo.Size = new System.Drawing.Size(1152, 96);
-            this.gbInfo.TabIndex = 26;
-            this.gbInfo.TabStop = false;
-            this.gbInfo.Text = "链路业务";
+            gbInfo.Controls.Add(btnAlarm);
+            gbInfo.Controls.Add(btnQuery);
+            gbInfo.Controls.Add(btnPositionCount);
+            gbInfo.Location = new Point(12, 305);
+            gbInfo.Name = "gbInfo";
+            gbInfo.Size = new Size(1152, 96);
+            gbInfo.TabIndex = 26;
+            gbInfo.TabStop = false;
+            gbInfo.Text = "链路业务";
             // 
             // rtbLog
             // 
-            this.rtbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbLog.Location = new System.Drawing.Point(12, 446);
-            this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(1152, 552);
-            this.rtbLog.TabIndex = 25;
-            this.rtbLog.Text = "";
+            rtbLog.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rtbLog.Location = new Point(12, 509);
+            rtbLog.Name = "rtbLog";
+            rtbLog.Size = new Size(1152, 489);
+            rtbLog.TabIndex = 25;
+            rtbLog.Text = "";
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(327, 37);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 24);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "协议：";
+            label8.AutoSize = true;
+            label8.Location = new Point(327, 37);
+            label8.Name = "label8";
+            label8.Size = new Size(64, 24);
+            label8.TabIndex = 15;
+            label8.Text = "协议：";
             // 
             // cbVersion
             // 
-            this.cbVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbVersion.FormattingEnabled = true;
-            this.cbVersion.Items.AddRange(new object[] {
-            "JTT2011",
-            "JTT2019"});
-            this.cbVersion.Location = new System.Drawing.Point(426, 33);
-            this.cbVersion.Name = "cbVersion";
-            this.cbVersion.Size = new System.Drawing.Size(150, 32);
-            this.cbVersion.TabIndex = 14;
+            cbVersion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbVersion.FormattingEnabled = true;
+            cbVersion.Items.AddRange(new object[] { "JTT2011", "JTT2019" });
+            cbVersion.Location = new Point(426, 33);
+            cbVersion.Name = "cbVersion";
+            cbVersion.Size = new Size(150, 32);
+            cbVersion.TabIndex = 14;
             // 
             // gbConnect
             // 
-            this.gbConnect.Controls.Add(this.label8);
-            this.gbConnect.Controls.Add(this.cbVersion);
-            this.gbConnect.Controls.Add(this.label2);
-            this.gbConnect.Controls.Add(this.numPort);
-            this.gbConnect.Location = new System.Drawing.Point(12, 18);
-            this.gbConnect.Name = "gbConnect";
-            this.gbConnect.Size = new System.Drawing.Size(889, 80);
-            this.gbConnect.TabIndex = 24;
-            this.gbConnect.TabStop = false;
-            this.gbConnect.Text = "连接信息";
+            gbConnect.Controls.Add(label8);
+            gbConnect.Controls.Add(cbVersion);
+            gbConnect.Controls.Add(label2);
+            gbConnect.Controls.Add(numPort);
+            gbConnect.Location = new Point(12, 18);
+            gbConnect.Name = "gbConnect";
+            gbConnect.Size = new Size(889, 80);
+            gbConnect.TabIndex = 24;
+            gbConnect.TabStop = false;
+            gbConnect.Text = "连接信息";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 24);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "端口：";
+            label2.AutoSize = true;
+            label2.Location = new Point(19, 37);
+            label2.Name = "label2";
+            label2.Size = new Size(64, 24);
+            label2.TabIndex = 2;
+            label2.Text = "端口：";
             // 
             // numPort
             // 
-            this.numPort.Location = new System.Drawing.Point(129, 34);
-            this.numPort.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.numPort.Name = "numPort";
-            this.numPort.Size = new System.Drawing.Size(108, 30);
-            this.numPort.TabIndex = 3;
-            this.numPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numPort.Value = new decimal(new int[] {
-            809,
-            0,
-            0,
-            0});
+            numPort.Location = new Point(129, 34);
+            numPort.Maximum = new decimal(new int[] { 65535, 0, 0, 0 });
+            numPort.Name = "numPort";
+            numPort.Size = new Size(108, 30);
+            numPort.TabIndex = 3;
+            numPort.TextAlign = HorizontalAlignment.Right;
+            numPort.Value = new decimal(new int[] { 809, 0, 0, 0 });
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(955, 33);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(100, 50);
-            this.btnOpen.TabIndex = 23;
-            this.btnOpen.Text = "开始";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            btnOpen.Location = new Point(955, 33);
+            btnOpen.Name = "btnOpen";
+            btnOpen.Size = new Size(100, 50);
+            btnOpen.TabIndex = 23;
+            btnOpen.Text = "开始";
+            btnOpen.UseVisualStyleBackColor = true;
+            btnOpen.Click += btnOpen_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(627, 147);
+            label11.Name = "label11";
+            label11.Size = new Size(56, 24);
+            label11.TabIndex = 31;
+            label11.Text = "IC1：";
+            // 
+            // txtIC1
+            // 
+            txtIC1.Location = new Point(723, 144);
+            txtIC1.Name = "txtIC1";
+            txtIC1.Size = new Size(150, 30);
+            txtIC1.TabIndex = 32;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(330, 147);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 24);
+            label10.TabIndex = 29;
+            label10.Text = "IA1：";
+            // 
+            // txtIA1
+            // 
+            txtIA1.Location = new Point(426, 144);
+            txtIA1.Name = "txtIA1";
+            txtIA1.Size = new Size(150, 30);
+            txtIA1.TabIndex = 30;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(32, 150);
+            label9.Name = "label9";
+            label9.Size = new Size(57, 24);
+            label9.TabIndex = 27;
+            label9.Text = "M1：";
+            // 
+            // txtM1
+            // 
+            txtM1.Location = new Point(128, 147);
+            txtM1.Name = "txtM1";
+            txtM1.Size = new Size(150, 30);
+            txtM1.TabIndex = 28;
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1176, 1016);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.gbAuth);
-            this.Controls.Add(this.gbInfo);
-            this.Controls.Add(this.rtbLog);
-            this.Controls.Add(this.gbConnect);
-            this.Controls.Add(this.btnOpen);
-            this.Name = "FrmMain";
-            this.Text = "JT/T809政府监管平台";
-            this.Load += new System.EventHandler(this.FrmMain_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.gbAuth.ResumeLayout(false);
-            this.gbAuth.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMyPort)).EndInit();
-            this.gbInfo.ResumeLayout(false);
-            this.gbConnect.ResumeLayout(false);
-            this.gbConnect.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1176, 1016);
+            Controls.Add(groupBox1);
+            Controls.Add(gbAuth);
+            Controls.Add(gbInfo);
+            Controls.Add(rtbLog);
+            Controls.Add(gbConnect);
+            Controls.Add(btnOpen);
+            Name = "FrmMain";
+            Text = "JT/T809政府监管平台";
+            Load += FrmMain_Load;
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            gbAuth.ResumeLayout(false);
+            gbAuth.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numMyPort).EndInit();
+            gbInfo.ResumeLayout(false);
+            gbConnect.ResumeLayout(false);
+            gbConnect.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numPort).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -419,5 +458,11 @@
         private Label label2;
         private NumericUpDown numPort;
         private Button btnOpen;
+        private Label label11;
+        private TextBox txtIC1;
+        private Label label10;
+        private TextBox txtIA1;
+        private Label label9;
+        private TextBox txtM1;
     }
 }
