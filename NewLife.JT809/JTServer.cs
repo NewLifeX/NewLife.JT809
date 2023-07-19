@@ -10,8 +10,8 @@ namespace NewLife.JT809;
 /// <summary>JT809服务器</summary>
 public class JTServer : NetServer<JTSession>
 {
-    ///// <summary>配置信息</summary>
-    //public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
+    /// <summary>配置信息</summary>
+    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
 
     /// <summary>
     /// 消息处理器集合
@@ -66,7 +66,7 @@ public class JTServer : NetServer<JTSession>
 }
 
 /// <summary>JT809网络会话</summary>
-public class JTSession : NetSession
+public class JTSession : NetSession<JTServer>
 {
     /// <summary>配置信息。记录协议版本</summary>
     public JTConfig Config { get; set; }
@@ -90,10 +90,8 @@ public class JTSession : NetSession
             // 根据登录请求猜测协议版本，后续指令自适应
             if (Config == null)
             {
-                Config = new JTConfig
-                {
-                    Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011,
-                };
+                Config = Host.Config.Clone();
+                Config.Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
                 this["Config"] = Config;
 
                 WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);

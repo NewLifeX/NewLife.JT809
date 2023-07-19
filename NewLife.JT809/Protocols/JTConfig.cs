@@ -17,4 +17,8 @@ public class JTConfig
 
     /// <summary>加密密钥</summary>
     public UInt32 IC1 { get; set; }
+
+    /// <summary>克隆</summary>
+    /// <returns></returns>
+    public JTConfig Clone() => MemberwiseClone() as JTConfig;
 }
