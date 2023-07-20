@@ -1,5 +1,6 @@
 ﻿using NewLife.Data;
 using NewLife.JT809.Protocols;
+using NewLife.Log;
 using NewLife.Messaging;
 using NewLife.Model;
 using NewLife.Net;
@@ -29,7 +30,10 @@ public class JTCodec : MessageCodec<JTMessage>
         if (msg.Write(ms, config))
         {
             ms.Position = 0;
-            return new Packet(ms);
+            var pk = new Packet(ms);
+            DefaultSpan.Current?.AppendTag(pk);
+
+            return pk;
         }
 
         return null;

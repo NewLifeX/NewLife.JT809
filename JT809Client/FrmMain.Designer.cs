@@ -53,17 +53,17 @@
             btnExchange = new Button();
             btnPositionCount = new Button();
             gbAuth = new GroupBox();
+            label11 = new Label();
+            txtIC1 = new TextBox();
+            label10 = new Label();
+            txtIA1 = new TextBox();
+            label9 = new Label();
+            txtM1 = new TextBox();
             btnPing = new Button();
             groupBox1 = new GroupBox();
             btnClear = new Button();
             txtCommand = new TextBox();
             btnDecode = new Button();
-            label9 = new Label();
-            txtM1 = new TextBox();
-            label10 = new Label();
-            txtIA1 = new TextBox();
-            label11 = new Label();
-            txtIC1 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numPort).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMyPort).BeginInit();
             gbConnect.SuspendLayout();
@@ -216,15 +216,21 @@
             // 
             // gbConnect
             // 
+            gbConnect.Controls.Add(label11);
+            gbConnect.Controls.Add(txtIC1);
             gbConnect.Controls.Add(label8);
+            gbConnect.Controls.Add(label10);
             gbConnect.Controls.Add(cbVersion);
+            gbConnect.Controls.Add(txtIA1);
             gbConnect.Controls.Add(label1);
+            gbConnect.Controls.Add(label9);
             gbConnect.Controls.Add(txtServer);
+            gbConnect.Controls.Add(txtM1);
             gbConnect.Controls.Add(label2);
             gbConnect.Controls.Add(numPort);
             gbConnect.Location = new Point(12, 24);
             gbConnect.Name = "gbConnect";
-            gbConnect.Size = new Size(889, 80);
+            gbConnect.Size = new Size(889, 136);
             gbConnect.TabIndex = 16;
             gbConnect.TabStop = false;
             gbConnect.Text = "连接信息";
@@ -301,12 +307,6 @@
             // 
             // gbAuth
             // 
-            gbAuth.Controls.Add(label11);
-            gbAuth.Controls.Add(txtIC1);
-            gbAuth.Controls.Add(label10);
-            gbAuth.Controls.Add(txtIA1);
-            gbAuth.Controls.Add(label9);
-            gbAuth.Controls.Add(txtM1);
             gbAuth.Controls.Add(btnPing);
             gbAuth.Controls.Add(numMyPort);
             gbAuth.Controls.Add(txtPass);
@@ -320,12 +320,60 @@
             gbAuth.Controls.Add(label7);
             gbAuth.Controls.Add(txtMyIP);
             gbAuth.Enabled = false;
-            gbAuth.Location = new Point(12, 110);
+            gbAuth.Location = new Point(12, 166);
             gbAuth.Name = "gbAuth";
-            gbAuth.Size = new Size(1152, 189);
+            gbAuth.Size = new Size(1152, 133);
             gbAuth.TabIndex = 19;
             gbAuth.TabStop = false;
             gbAuth.Text = "基本信息";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(624, 89);
+            label11.Name = "label11";
+            label11.Size = new Size(56, 24);
+            label11.TabIndex = 25;
+            label11.Text = "IC1：";
+            // 
+            // txtIC1
+            // 
+            txtIC1.Location = new Point(723, 86);
+            txtIC1.Name = "txtIC1";
+            txtIC1.Size = new Size(150, 30);
+            txtIC1.TabIndex = 26;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(316, 89);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 24);
+            label10.TabIndex = 23;
+            label10.Text = "IA1：";
+            // 
+            // txtIA1
+            // 
+            txtIA1.Location = new Point(426, 86);
+            txtIA1.Name = "txtIA1";
+            txtIA1.Size = new Size(150, 30);
+            txtIA1.TabIndex = 24;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(32, 92);
+            label9.Name = "label9";
+            label9.Size = new Size(57, 24);
+            label9.TabIndex = 21;
+            label9.Text = "M1：";
+            // 
+            // txtM1
+            // 
+            txtM1.Location = new Point(128, 89);
+            txtM1.Name = "txtM1";
+            txtM1.Size = new Size(150, 30);
+            txtM1.TabIndex = 22;
             // 
             // btnPing
             // 
@@ -376,54 +424,6 @@
             btnDecode.Text = "解码";
             btnDecode.UseVisualStyleBackColor = true;
             btnDecode.Click += btnDecode_Click;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(32, 143);
-            label9.Name = "label9";
-            label9.Size = new Size(57, 24);
-            label9.TabIndex = 21;
-            label9.Text = "M1：";
-            // 
-            // txtM1
-            // 
-            txtM1.Location = new Point(128, 140);
-            txtM1.Name = "txtM1";
-            txtM1.Size = new Size(150, 30);
-            txtM1.TabIndex = 22;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(330, 140);
-            label10.Name = "label10";
-            label10.Size = new Size(57, 24);
-            label10.TabIndex = 23;
-            label10.Text = "IA1：";
-            // 
-            // txtIA1
-            // 
-            txtIA1.Location = new Point(426, 137);
-            txtIA1.Name = "txtIA1";
-            txtIA1.Size = new Size(150, 30);
-            txtIA1.TabIndex = 24;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(627, 140);
-            label11.Name = "label11";
-            label11.Size = new Size(56, 24);
-            label11.TabIndex = 25;
-            label11.Text = "IC1：";
-            // 
-            // txtIC1
-            // 
-            txtIC1.Location = new Point(723, 137);
-            txtIC1.Name = "txtIC1";
-            txtIC1.Size = new Size(150, 30);
-            txtIC1.TabIndex = 26;
             // 
             // FrmMain
             // 

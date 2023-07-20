@@ -23,7 +23,7 @@ public partial class FrmExchange : Form
         cbColor.DataSource = dic;
     }
 
-    private async void btnRegister_Click(Object sender, EventArgs e)
+    private void btnRegister_Click(Object sender, EventArgs e)
     {
         var model = new JT809_0x1200_0x1201
         {
@@ -38,7 +38,7 @@ public partial class FrmExchange : Form
         var plate = txtPlate.Text;
         var color = cbColor.SelectedItem.ToInt();
 
-        await Client.RegisterAsync(plate, color, model);
+        Client.RegisterAsync(plate, color, model);
     }
 
     private void btnLocation_Click(Object sender, EventArgs e)
