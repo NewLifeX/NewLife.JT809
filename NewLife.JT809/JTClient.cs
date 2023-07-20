@@ -279,7 +279,7 @@ public class JTClient : DisposeBase
     /// <param name="color"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<JT809_0x9200_0x9201> RegisterAsync(String plate, Int32 color, JT809_0x1200_0x1201 model)
+    public void RegisterAsync(String plate, Int32 color, JT809_0x1200_0x1201 model)
     {
         var req = new JT809_0x1200
         {
@@ -288,7 +288,8 @@ public class JTClient : DisposeBase
             VehicleColor = (JT809VehicleColorType)color,
             Body = model
         };
-        return await SendAsync<JT809_0x9200_0x9201>(req);
+        //return await SendAsync<JT809_0x9200_0x9201>(req);
+        Send(req);
     }
 
     /// <summary>提交定位信息</summary>
