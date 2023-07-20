@@ -60,7 +60,7 @@ namespace JT809Client
 
                 _client.Open();
 
-                txtCode.Enabled = config.Version == JTVersion.JTT2019;
+                //txtCode.Enabled = config.Version == JTVersion.JTT2019;
 
                 btn.Text = "断开";
                 gbConnect.Enabled = false;
