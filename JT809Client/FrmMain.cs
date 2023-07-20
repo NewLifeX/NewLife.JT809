@@ -168,7 +168,10 @@ namespace JT809Client
             var msg = new JTMessage();
             //if (_client?.Config != null) msg.JTT2019 = _client.Config.Version == JTVersion.JTT2019;
             if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
+            {
                 msg.Version = version;
+                config.Version = version;
+            }
 
             if (!msg.Read(hex.ToHex(), config))
             {

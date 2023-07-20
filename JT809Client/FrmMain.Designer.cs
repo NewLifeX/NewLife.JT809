@@ -273,7 +273,7 @@
             // 
             cbVersion.DropDownStyle = ComboBoxStyle.DropDownList;
             cbVersion.FormattingEnabled = true;
-            cbVersion.Items.AddRange(new object[] { "JTT2011", "JTT2019" });
+            cbVersion.Items.AddRange(new object[] { "JT2011", "JT2013", "JT2019" });
             cbVersion.Location = new Point(723, 32);
             cbVersion.Name = "cbVersion";
             cbVersion.Size = new Size(150, 32);

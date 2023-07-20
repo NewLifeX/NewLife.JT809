@@ -34,6 +34,12 @@
             txtCommand = new TextBox();
             btnPing = new Button();
             gbAuth = new GroupBox();
+            label11 = new Label();
+            txtIC1 = new TextBox();
+            label10 = new Label();
+            txtIA1 = new TextBox();
+            label9 = new Label();
+            txtM1 = new TextBox();
             numMyPort = new NumericUpDown();
             txtPass = new TextBox();
             txtCode = new TextBox();
@@ -56,12 +62,6 @@
             label2 = new Label();
             numPort = new NumericUpDown();
             btnOpen = new Button();
-            label11 = new Label();
-            txtIC1 = new TextBox();
-            label10 = new Label();
-            txtIA1 = new TextBox();
-            label9 = new Label();
-            txtM1 = new TextBox();
             groupBox1.SuspendLayout();
             gbAuth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numMyPort).BeginInit();
@@ -147,6 +147,54 @@
             gbAuth.TabIndex = 27;
             gbAuth.TabStop = false;
             gbAuth.Text = "从链路信息";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(627, 147);
+            label11.Name = "label11";
+            label11.Size = new Size(56, 24);
+            label11.TabIndex = 31;
+            label11.Text = "IC1：";
+            // 
+            // txtIC1
+            // 
+            txtIC1.Location = new Point(723, 144);
+            txtIC1.Name = "txtIC1";
+            txtIC1.Size = new Size(150, 30);
+            txtIC1.TabIndex = 32;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(330, 147);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 24);
+            label10.TabIndex = 29;
+            label10.Text = "IA1：";
+            // 
+            // txtIA1
+            // 
+            txtIA1.Location = new Point(426, 144);
+            txtIA1.Name = "txtIA1";
+            txtIA1.Size = new Size(150, 30);
+            txtIA1.TabIndex = 30;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(32, 150);
+            label9.Name = "label9";
+            label9.Size = new Size(57, 24);
+            label9.TabIndex = 27;
+            label9.Text = "M1：";
+            // 
+            // txtM1
+            // 
+            txtM1.Location = new Point(128, 147);
+            txtM1.Name = "txtM1";
+            txtM1.Size = new Size(150, 30);
+            txtM1.TabIndex = 28;
             // 
             // numMyPort
             // 
@@ -306,7 +354,7 @@
             // 
             cbVersion.DropDownStyle = ComboBoxStyle.DropDownList;
             cbVersion.FormattingEnabled = true;
-            cbVersion.Items.AddRange(new object[] { "JTT2011", "JTT2019" });
+            cbVersion.Items.AddRange(new object[] { "JT2011", "JT2013", "JT2019" });
             cbVersion.Location = new Point(426, 33);
             cbVersion.Name = "cbVersion";
             cbVersion.Size = new Size(150, 32);
@@ -353,54 +401,6 @@
             btnOpen.Text = "开始";
             btnOpen.UseVisualStyleBackColor = true;
             btnOpen.Click += btnOpen_Click;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(627, 147);
-            label11.Name = "label11";
-            label11.Size = new Size(56, 24);
-            label11.TabIndex = 31;
-            label11.Text = "IC1：";
-            // 
-            // txtIC1
-            // 
-            txtIC1.Location = new Point(723, 144);
-            txtIC1.Name = "txtIC1";
-            txtIC1.Size = new Size(150, 30);
-            txtIC1.TabIndex = 32;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(330, 147);
-            label10.Name = "label10";
-            label10.Size = new Size(57, 24);
-            label10.TabIndex = 29;
-            label10.Text = "IA1：";
-            // 
-            // txtIA1
-            // 
-            txtIA1.Location = new Point(426, 144);
-            txtIA1.Name = "txtIA1";
-            txtIA1.Size = new Size(150, 30);
-            txtIA1.TabIndex = 30;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(32, 150);
-            label9.Name = "label9";
-            label9.Size = new Size(57, 24);
-            label9.TabIndex = 27;
-            label9.Text = "M1：";
-            // 
-            // txtM1
-            // 
-            txtM1.Location = new Point(128, 147);
-            txtM1.Name = "txtM1";
-            txtM1.Size = new Size(150, 30);
-            txtM1.TabIndex = 28;
             // 
             // FrmMain
             // 

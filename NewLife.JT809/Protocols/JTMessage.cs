@@ -121,7 +121,7 @@ public class JTMessage : IAccessor
         ms.Position = 0;
 
         var config = context as JTConfig;
-        if (config != null) Version = config.Version;
+        if (config != null && config.Version > 0) Version = config.Version;
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
 
         //MsgLength = reader.Read<UInt32>();
@@ -193,7 +193,7 @@ public class JTMessage : IAccessor
         if (stream == null && context == null) return false;
 
         var config = context as JTConfig;
-        if (config != null) Version = config.Version;
+        if (config != null && config.Version > 0) Version = config.Version;
 
         // 使用内存流，后面可能需要转义
         var ms = Pool.MemoryStream.Get();
