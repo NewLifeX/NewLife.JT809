@@ -36,9 +36,9 @@ public class JTMessage : IAccessor
     /// <summary>发送消息时的系统UTC时间，长度为8个字节，Unix毫秒。2019新增</summary>
     public DateTime Time { get; set; }
 
-    /// <summary>协议配置，包括版本和密钥</summary>
-    [XmlIgnore, IgnoreDataMember]
-    public JTConfig Config { get; set; }
+    ///// <summary>协议配置，包括版本和密钥</summary>
+    //[XmlIgnore, IgnoreDataMember]
+    //public JTConfig Config { get; set; }
     #endregion
 
     #region 接口属性
@@ -50,8 +50,11 @@ public class JTMessage : IAccessor
     [IgnoreDataMember]
     public Packet Payload { get; set; }
 
-    /// <summary>是否2019版</summary>
-    public Boolean JTT2019 { get; set; }
+    ///// <summary>是否2019版</summary>
+    //public Boolean JTT2019 { get; set; }
+
+    /// <summary>协议版本</summary>
+    public JTVersion Version { get; set; } = JTVersion.JT2011;
     #endregion
 
     #region 构造
@@ -117,9 +120,8 @@ public class JTMessage : IAccessor
         }
         ms.Position = 0;
 
-        var config = Config ?? context as JTConfig;
-        if (config != null)
-            JTT2019 = config.Version == JTVersion.JTT2019;
+        var config = context as JTConfig;
+        if (config != null) Version = config.Version;
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
 
         //MsgLength = reader.Read<UInt32>();
@@ -139,17 +141,18 @@ public class JTMessage : IAccessor
 #endif
 
         // 根据登录请求，猜测协议版本
-        if (TryGuessVersion(Kind, len, out var jt2019))
+        var j9 = Version == JTVersion.JT2019;
+        if (!j9 && TryGuessVersion(Kind, len, out var jt2019) && jt2019)
         {
-            var ver = jt2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
-            if (JTT2019 != jt2019 && (config == null || config.Version != ver))
-                XTrace.WriteLine("指令[{0:X4}]配置协议版本：{1}，实际协议版本：{2}", (Int32)Kind, config?.Version, ver);
+            if (config == null || config.Version != JTVersion.JT2019)
+                XTrace.WriteLine("指令[{0:X4}]配置协议版本：{1}，实际协议版本：{2}", (Int32)Kind, config?.Version, JTVersion.JT2019);
 
-            JTT2019 = jt2019;
+            j9 = true;
+            Version = JTVersion.JT2019;
         }
 
         // 2019新增
-        if (JTT2019)
+        if (j9)
         {
             var t = reader.Read<Int64>();
             if (t < 9999L * 365 * 34 * 3600 * 1000)
@@ -157,7 +160,7 @@ public class JTMessage : IAccessor
         }
 
         // 负载数据
-        len -= JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
+        len -= j9 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (len > 0)
         {
             var data = reader.ReadBytes(len);
@@ -189,16 +192,15 @@ public class JTMessage : IAccessor
     {
         if (stream == null && context == null) return false;
 
-        var config = Config ?? context as JTConfig;
-        if (config != null)
-            JTT2019 = config.Version == JTVersion.JTT2019;
+        var config = context as JTConfig;
+        if (config != null) Version = config.Version;
 
         // 使用内存流，后面可能需要转义
         var ms = Pool.MemoryStream.Get();
         var writer = new Binary { Stream = ms, IsLittleEndian = false };
 
         var pk = Payload;
-        var len = JTT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
+        var len = Version == JTVersion.JT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (pk != null) len += pk.Total;
         var data = pk.ReadBytes();
 
@@ -222,7 +224,7 @@ public class JTMessage : IAccessor
         writer.Write(EncryptKey);
 
         // 2019新增
-        if (JTT2019) writer.Write(Time.ToLong());
+        if (Version == JTVersion.JT2019) writer.Write(Time.ToLong());
 
         //pk?.CopyTo(writer.Stream);
         writer.Write(data, 0, data.Length);
@@ -261,6 +263,11 @@ public class JTMessage : IAccessor
         return true;
     }
 
+    /// <summary>根据几个重要的固定长度的指令，去猜测协议版本</summary>
+    /// <param name="kind"></param>
+    /// <param name="len"></param>
+    /// <param name="jt2019"></param>
+    /// <returns></returns>
     private static Boolean TryGuessVersion(MessageKinds kind, Int32 len, out Boolean jt2019)
     {
         switch (kind)
@@ -448,7 +455,6 @@ public class JTMessage : IAccessor
         Kind = Kind,
         VersionFlag = VersionFlag,
         CenterId = CenterId,
-        Config = Config
     };
 
     //private static readonly ConcurrentDictionary<Type, MessageKinds> _cache = new();

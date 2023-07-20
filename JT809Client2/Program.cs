@@ -26,7 +26,7 @@ var client = new JTClient
     Log = log,
 };
 
-client.Config.Version = JTVersion.JTT2019;
+client.Config.Version = JTVersion.JT2019;
 client.Open();
 
 var ip = NetHelper.MyIP() + "";

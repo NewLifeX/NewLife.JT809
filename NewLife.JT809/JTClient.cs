@@ -18,7 +18,7 @@ public class JTClient : DisposeBase
     public NetUri Server { get; set; }
 
     /// <summary>配置信息</summary>
-    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
+    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JT2011 };
 
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
     public UInt32 CenterId { get; set; }
@@ -79,10 +79,9 @@ public class JTClient : DisposeBase
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
-            Config = Config,
         };
 
-        if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
+        if (Config != null) msg.Version = Config.Version;
 
         msg.SetResult(body);
 
@@ -105,10 +104,9 @@ public class JTClient : DisposeBase
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
-            Config = Config,
         };
 
-        if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
+        if (Config != null) msg.Version = Config.Version;
 
         msg.SetResult(body);
 

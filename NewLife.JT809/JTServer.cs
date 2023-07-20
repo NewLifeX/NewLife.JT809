@@ -11,7 +11,7 @@ namespace NewLife.JT809;
 public class JTServer : NetServer<JTSession>
 {
     /// <summary>配置信息</summary>
-    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JTT2019 };
+    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JT2011 };
 
     /// <summary>
     /// 消息处理器集合
@@ -91,7 +91,8 @@ public class JTSession : NetSession<JTServer>
             if (Config == null)
             {
                 Config = Host.Config.Clone();
-                Config.Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
+                //Config.Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
+                if (msg.Version >= JTVersion.JT2019) Config.Version = msg.Version;
                 this["Config"] = Config;
 
                 WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);

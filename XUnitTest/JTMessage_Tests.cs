@@ -32,7 +32,7 @@ namespace XUnitTest
                 "5D";
             var dt = str.ToHex();
 
-            var config = new JTConfig { Version = JTVersion.JTT2019 };
+            var config = new JTConfig { Version = JTVersion.JT2019 };
             var msg = new JTMessage();
             var rs = msg.Read(dt, config);
 
@@ -78,7 +78,7 @@ namespace XUnitTest
                 "5D";
             var dt = str.ToHex();
 
-            var config = new JTConfig { Version = JTVersion.JTT2011 };
+            var config = new JTConfig { Version = JTVersion.JT2011 };
             var msg = new JTMessage();
             var rs = msg.Read(dt, config);
 
@@ -143,7 +143,7 @@ namespace XUnitTest
             Assert.Equal(9999u, msg.EncryptKey);
             Assert.Equal("2022-06-12T11:31:23.6110000".ToDateTime(), msg.Time);
 
-            Assert.True(msg.JTT2019);
+            Assert.Equal(JTVersion.JT2019, msg.Version);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace XUnitTest
                 "5D";
             var dt = str.ToHex();
 
-            var msg = new JTMessage { JTT2019 = true };
+            var msg = new JTMessage { Version = JTVersion.JT2019 };
             var rs = msg.Read(dt);
 
             //Assert.True(rs);
@@ -54,7 +54,7 @@ namespace XUnitTest
             Assert.Equal(10000001u, msg.EncryptKey);
             Assert.Equal("2022-06-13T13:34:47".ToDateTime(), msg.Time);
 
-            Assert.True(msg.JTT2019);
+            Assert.Equal(JTVersion.JT2019, msg.Version);
 
             var body = msg.ReadModel<JT809_0x1200>();
         }

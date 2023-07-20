@@ -94,8 +94,18 @@ public static class Helper
             UseRef = false,
             TrimZero = true,
 
-            Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
+            //Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
         };
+        if (message != null)
+        {
+            reader.Version = message.Version switch
+            {
+                JTVersion.JT2011 => "2011",
+                JTVersion.JT2013 => "2013",
+                JTVersion.JT2019 => "2019",
+                _ => null,
+            };
+        }
 
         // 替换编码处理器，自定义序列化行为
         for (var i = 0; i < reader.Handlers.Count; i++)
@@ -124,8 +134,18 @@ public static class Helper
             UseRef = false,
             TrimZero = true,
 
-            Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
+            //Version = message == null ? null : (message.JTT2019 ? "2019" : "2011"),
         };
+        if (message != null)
+        {
+            writer.Version = message.Version switch
+            {
+                JTVersion.JT2011 => "2011",
+                JTVersion.JT2013 => "2013",
+                JTVersion.JT2019 => "2019",
+                _ => null,
+            };
+        }
 
         // 替换编码处理器，自定义序列化行为
         for (var i = 0; i < writer.Handlers.Count; i++)

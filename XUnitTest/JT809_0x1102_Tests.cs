@@ -38,7 +38,7 @@ namespace XUnitTest
                 "5D";
             var dt = str.ToHex();
 
-            var msg = new JTMessage { JTT2019 = false };
+            var msg = new JTMessage { Version = JTVersion.JT2011 };
             var rs = msg.Read(dt);
 
             Assert.True(rs);

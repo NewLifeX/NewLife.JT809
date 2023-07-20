@@ -35,7 +35,7 @@ namespace XUnitTest
 
             Assert.Equal(dt.Length, len);
 
-            var msg = new JTMessage { JTT2019 = true };
+            var msg = new JTMessage { Version = JTVersion.JT2019 };
             var rs = msg.Read(dt);
 
             Assert.True(rs);

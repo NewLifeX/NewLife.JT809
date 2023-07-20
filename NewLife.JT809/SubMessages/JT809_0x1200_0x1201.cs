@@ -25,7 +25,8 @@ public class JT809_0x1200_0x1201
     /// <summary>
     /// 车载终端型号，不是 8 位时以“\0”终结
     /// </summary>
-    [FieldSize(20, Version = "2011")]
+    [FieldSize(8, Version = "2011")]
+    [FieldSize(20, Version = "2013")]
     [FieldSize(30, Version = "2019")]
     public String TerminalModelType { get; set; }
     /// <summary>
@@ -40,12 +41,14 @@ public class JT809_0x1200_0x1201
     /// 车载终端编号，大写字母和数字组成
     /// </summary>
     [FieldSize(7, Version = "2011")]
+    [FieldSize(7, Version = "2013")]
     [FieldSize(30, Version = "2019")]
     public String TerminalId { get; set; }
     /// <summary>
     /// 车载终端 SIM 卡电话号码。号码不是12 位，则在前补充数字 0.
     /// </summary>
     [FieldSize(12, Version = "2011")]
+    [FieldSize(12, Version = "2013")]
     [FieldSize(13, Version = "2019")]
     public String TerminalSimCode { get; set; }
 

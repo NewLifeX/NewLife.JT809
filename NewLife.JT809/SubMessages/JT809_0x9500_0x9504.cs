@@ -66,7 +66,7 @@ public class JT809_0x9500_0x9504 : IAccessor
         var header = context as JTMessage;
         var reader = Helper.CreateReader(stream, header);
 
-        if (header.JTT2019)
+        if (header != null && header.Version == JTVersion.JT2019)
         {
             StartTime = reader.ReadBCDTime();
             EndTime = reader.ReadBCDTime();
@@ -115,7 +115,7 @@ public class JT809_0x9500_0x9504 : IAccessor
         var header = context as JTMessage;
         var writer = Helper.CreateWriter(stream, header);
 
-        if (header.JTT2019)
+        if (header != null && header.Version == JTVersion.JT2019)
         {
             writer.WriteBCDTime(StartTime);
             writer.WriteBCDTime(EndTime);
