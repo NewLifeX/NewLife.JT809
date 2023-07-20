@@ -24,6 +24,8 @@ public class JTClient : DisposeBase
     public UInt32 CenterId { get; set; }
 
     private ISocketClient _client;
+    /// <summary>网络连接</summary>
+    public ISocketClient Client => _client;
     #endregion
 
     #region 构造
