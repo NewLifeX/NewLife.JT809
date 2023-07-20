@@ -45,20 +45,20 @@
             btnConnect = new Button();
             btnLogin = new Button();
             gbConnect = new GroupBox();
+            label11 = new Label();
+            txtIC1 = new TextBox();
             label8 = new Label();
+            label10 = new Label();
             cbVersion = new ComboBox();
+            txtIA1 = new TextBox();
+            label9 = new Label();
+            txtM1 = new TextBox();
             rtbLog = new RichTextBox();
             gbInfo = new GroupBox();
             btnAlarm = new Button();
             btnExchange = new Button();
             btnPositionCount = new Button();
             gbAuth = new GroupBox();
-            label11 = new Label();
-            txtIC1 = new TextBox();
-            label10 = new Label();
-            txtIA1 = new TextBox();
-            label9 = new Label();
-            txtM1 = new TextBox();
             btnPing = new Button();
             groupBox1 = new GroupBox();
             btnClear = new Button();
@@ -235,6 +235,22 @@
             gbConnect.TabStop = false;
             gbConnect.Text = "连接信息";
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(624, 89);
+            label11.Name = "label11";
+            label11.Size = new Size(56, 24);
+            label11.TabIndex = 25;
+            label11.Text = "IC1：";
+            // 
+            // txtIC1
+            // 
+            txtIC1.Location = new Point(723, 86);
+            txtIC1.Name = "txtIC1";
+            txtIC1.Size = new Size(150, 30);
+            txtIC1.TabIndex = 26;
+            // 
             // label8
             // 
             label8.AutoSize = true;
@@ -243,6 +259,15 @@
             label8.Size = new Size(64, 24);
             label8.TabIndex = 15;
             label8.Text = "协议：";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(316, 89);
+            label10.Name = "label10";
+            label10.Size = new Size(57, 24);
+            label10.TabIndex = 23;
+            label10.Text = "IA1：";
             // 
             // cbVersion
             // 
@@ -253,6 +278,29 @@
             cbVersion.Name = "cbVersion";
             cbVersion.Size = new Size(150, 32);
             cbVersion.TabIndex = 14;
+            // 
+            // txtIA1
+            // 
+            txtIA1.Location = new Point(426, 86);
+            txtIA1.Name = "txtIA1";
+            txtIA1.Size = new Size(150, 30);
+            txtIA1.TabIndex = 24;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(32, 92);
+            label9.Name = "label9";
+            label9.Size = new Size(57, 24);
+            label9.TabIndex = 21;
+            label9.Text = "M1：";
+            // 
+            // txtM1
+            // 
+            txtM1.Location = new Point(128, 89);
+            txtM1.Name = "txtM1";
+            txtM1.Size = new Size(150, 30);
+            txtM1.TabIndex = 22;
             // 
             // rtbLog
             // 
@@ -327,54 +375,6 @@
             gbAuth.TabStop = false;
             gbAuth.Text = "基本信息";
             // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(624, 89);
-            label11.Name = "label11";
-            label11.Size = new Size(56, 24);
-            label11.TabIndex = 25;
-            label11.Text = "IC1：";
-            // 
-            // txtIC1
-            // 
-            txtIC1.Location = new Point(723, 86);
-            txtIC1.Name = "txtIC1";
-            txtIC1.Size = new Size(150, 30);
-            txtIC1.TabIndex = 26;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(316, 89);
-            label10.Name = "label10";
-            label10.Size = new Size(57, 24);
-            label10.TabIndex = 23;
-            label10.Text = "IA1：";
-            // 
-            // txtIA1
-            // 
-            txtIA1.Location = new Point(426, 86);
-            txtIA1.Name = "txtIA1";
-            txtIA1.Size = new Size(150, 30);
-            txtIA1.TabIndex = 24;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(32, 92);
-            label9.Name = "label9";
-            label9.Size = new Size(57, 24);
-            label9.TabIndex = 21;
-            label9.Text = "M1：";
-            // 
-            // txtM1
-            // 
-            txtM1.Location = new Point(128, 89);
-            txtM1.Name = "txtM1";
-            txtM1.Size = new Size(150, 30);
-            txtM1.TabIndex = 22;
-            // 
             // btnPing
             // 
             btnPing.Enabled = false;
@@ -437,6 +437,7 @@
             Controls.Add(gbConnect);
             Controls.Add(btnConnect);
             Name = "FrmMain";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "JT/T809企业平台";
             Load += FrmMain_Load;
             ((System.ComponentModel.ISupportInitialize)numPort).EndInit();

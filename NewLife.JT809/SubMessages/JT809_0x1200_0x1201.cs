@@ -25,16 +25,17 @@ public class JT809_0x1200_0x1201
     /// <summary>
     /// 车载终端型号，不是 8 位时以“\0”终结
     /// </summary>
-    [FieldSize(8, Version = "2011")]
+    [FieldSize(20, Version = "2011")]
     [FieldSize(30, Version = "2019")]
     public String TerminalModelType { get; set; }
     /// <summary>
     /// 车载终端通讯模块IMEI码
     /// 2019版本
     /// </summary>
-    [FieldSize(-1, Version = "2011")]
+    //[FieldSize(-1, Version = "2011")]
+    [JT2019]
     [FieldSize(15, Version = "2019")]
-    public String IMIEId { get; set; }
+    public String ImeiId { get; set; }
     /// <summary>
     /// 车载终端编号，大写字母和数字组成
     /// </summary>

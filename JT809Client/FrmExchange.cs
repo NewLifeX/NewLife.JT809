@@ -30,7 +30,7 @@ public partial class FrmExchange : Form
             PlateformId = Rand.NextString(11),
             ProducerId = Rand.NextString(11),
             TerminalModelType = Rand.NextString(30),
-            IMIEId = Rand.NextString(15),
+            ImeiId = Rand.NextString(15),
             TerminalId = Rand.NextString(30),
             TerminalSimCode = Rand.NextString(13),
         };
