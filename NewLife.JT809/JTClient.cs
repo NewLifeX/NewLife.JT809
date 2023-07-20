@@ -77,6 +77,7 @@ public class JTClient : DisposeBase
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
+            Config = Config,
         };
 
         if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;
@@ -102,6 +103,7 @@ public class JTClient : DisposeBase
             CenterId = CenterId,
             VersionFlag = Config.VersionFlag,
             Time = DateTime.Now,
+            Config = Config,
         };
 
         if (Config != null && Config.Version == JTVersion.JTT2019) msg.JTT2019 = true;

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Log;
@@ -34,6 +35,10 @@ public class JTMessage : IAccessor
 
     /// <summary>发送消息时的系统UTC时间，长度为8个字节，Unix毫秒。2019新增</summary>
     public DateTime Time { get; set; }
+
+    /// <summary>协议配置，包括版本和密钥</summary>
+    [XmlIgnore, IgnoreDataMember]
+    public JTConfig Config { get; set; }
     #endregion
 
     #region 接口属性
@@ -112,7 +117,7 @@ public class JTMessage : IAccessor
         }
         ms.Position = 0;
 
-        var config = context as JTConfig;
+        var config = Config ?? context as JTConfig;
         if (config != null)
             JTT2019 = config.Version == JTVersion.JTT2019;
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
@@ -184,7 +189,7 @@ public class JTMessage : IAccessor
     {
         if (stream == null && context == null) return false;
 
-        var config = context as JTConfig;
+        var config = Config ?? context as JTConfig;
         if (config != null)
             JTT2019 = config.Version == JTVersion.JTT2019;
 
@@ -436,7 +441,15 @@ public class JTMessage : IAccessor
     #region 辅助
     /// <summary>创建响应</summary>
     /// <returns></returns>
-    public JTMessage CreateReply() => new JTMessage { Reply = true, Sequence = Sequence, Kind = Kind, VersionFlag = VersionFlag, CenterId = CenterId };
+    public JTMessage CreateReply() => new JTMessage
+    {
+        Reply = true,
+        Sequence = Sequence,
+        Kind = Kind,
+        VersionFlag = VersionFlag,
+        CenterId = CenterId,
+        Config = Config
+    };
 
     //private static readonly ConcurrentDictionary<Type, MessageKinds> _cache = new();
 

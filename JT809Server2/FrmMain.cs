@@ -134,7 +134,10 @@ public partial class FrmMain : Form
         config.IA1 = (UInt32)txtIA1.Text.ToInt();
         config.IC1 = (UInt32)txtIC1.Text.ToInt();
 
-        var msg = new JTMessage();
+        var msg = new JTMessage
+        {
+            Config = config,
+        };
         //if (_client?.Config != null) msg.JTT2019 = _client.Config.Version == JTVersion.JTT2019;
         if (Enum.TryParse<JTVersion>(cbVersion.SelectedItem + "", true, out var version))
             msg.JTT2019 = version == JTVersion.JTT2019;
