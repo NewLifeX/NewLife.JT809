@@ -92,10 +92,14 @@ public class JTSession : NetSession<JTServer>
             {
                 Config = Host.Config.Clone();
                 //Config.Version = msg.JTT2019 ? JTVersion.JTT2019 : JTVersion.JTT2011;
-                if (msg.Version >= JTVersion.JT2019) Config.Version = msg.Version;
-                this["Config"] = Config;
+                if (msg.Version >= JTVersion.JT2019)
+                {
+                    Config.Version = msg.Version;
 
-                WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);
+                    WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);
+                }
+
+                this["Config"] = Config;
             }
 
             Object result = null;
