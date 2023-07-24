@@ -1,4 +1,5 @@
-﻿using NewLife.JT809.Messages;
+﻿using System.Reflection;
+using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
@@ -304,6 +305,48 @@ public class JTClient : DisposeBase
             VehicleColor = (JT809VehicleColorType)color,
             Body = model
         };
+        Send(req);
+    }
+
+    /// <summary>提交车辆动态信息</summary>
+    /// <param name="plate"></param>
+    /// <param name="color"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public void Send1200(String plate, Int32 color, Object model)
+    {
+        var req = new JT809_0x1200
+        {
+            //DataType = 0x1201,
+            VehicleNo = plate,
+            VehicleColor = (JT809VehicleColorType)color,
+            Body = model
+        };
+
+        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
+        req.DataType = (UInt16)att.Kind;
+
+        Send(req);
+    }
+
+    /// <summary>提交车辆静态信息</summary>
+    /// <param name="plate"></param>
+    /// <param name="color"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public void Send1600(String plate, Int32 color, Object model)
+    {
+        var req = new JT809_0x1600
+        {
+            //DataType = 0x1601,
+            VehicleNo = plate,
+            VehicleColor = (JT809VehicleColorType)color,
+            Body = model
+        };
+
+        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
+        req.DataType = (UInt16)att.Kind;
+
         Send(req);
     }
 
