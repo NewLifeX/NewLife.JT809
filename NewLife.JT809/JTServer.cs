@@ -103,7 +103,7 @@ public class JTSession : NetSession<JTServer>
             }
 
             Object result = null;
-            using var span = (this as INetSession).Host.Tracer?.NewSpan($"jt809:{msg.Kind}", e.Packet);
+            using var span = (this as INetSession).Host.Tracer?.NewSpan($"jt809:Receive:{msg.Kind}", e.Packet);
             try
             {
                 result = Process(msg);
