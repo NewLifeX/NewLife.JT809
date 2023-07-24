@@ -10,25 +10,25 @@ public class CarInfo
     public String Vin { get; set; }
 
     /// <summary>车辆颜色</summary>
-    public JT809VehicleColorType Vehicle_Color { get; set; }
+    public JT809VehicleColorType VehicleColor { get; set; }
 
     /// <summary>车辆类型</summary>
-    public Int32 Vehicle_Type { get; set; }
+    public Int32 VehicleType { get; set; }
 
     /// <summary>运输行业编码</summary>
-    public String Trans_Type { get; set; }
+    public String TransType { get; set; }
 
     /// <summary>车籍地</summary>
-    public String Vehicle_Nationality { get; set; }
+    public String VehicleNationality { get; set; }
 
     /// <summary>业户ID</summary>
-    public String Owners_Id { get; set; }
+    public String OwnersId { get; set; }
 
     /// <summary>业户名称</summary>
-    public String Owners_Name { get; set; }
+    public String OwnersName { get; set; }
 
     /// <summary>业户联系电话</summary>
-    public String Owners_Tel { get; set; }
+    public String OwnersTel { get; set; }
     #endregion
 
     #region 方法
@@ -36,13 +36,13 @@ public class CarInfo
     {
         var dic = value.SplitAsDictionary(":=", ";");
         if (dic.TryGetValue("VIN", out var str)) Vin = str;
-        if (dic.TryGetValue("Vehicle_Color", out str)) Vehicle_Color = (JT809VehicleColorType)str.ToInt();
-        if (dic.TryGetValue("Vehicle_Type", out str)) Vehicle_Type = str.ToInt();
-        if (dic.TryGetValue("Trans_Type", out str)) Trans_Type = str;
-        if (dic.TryGetValue("Vehicle_Nationality", out str)) Vehicle_Nationality = str;
-        if (dic.TryGetValue("Owers_Id", out str)) Owners_Id = str;
-        if (dic.TryGetValue("Owers_Name", out str)) Owners_Name = str;
-        if (dic.TryGetValue("Owers_Tel", out str)) Owners_Tel = str;
+        if (dic.TryGetValue("Vehicle_Color", out str)) VehicleColor = (JT809VehicleColorType)str.ToInt();
+        if (dic.TryGetValue("Vehicle_Type", out str)) VehicleType = str.ToInt();
+        if (dic.TryGetValue("Trans_Type", out str)) TransType = str;
+        if (dic.TryGetValue("Vehicle_Nationality", out str)) VehicleNationality = str;
+        if (dic.TryGetValue("Owers_Id", out str)) OwnersId = str;
+        if (dic.TryGetValue("Owers_Name", out str)) OwnersName = str;
+        if (dic.TryGetValue("Owers_Tel", out str)) OwnersTel = str;
     }
 
     public String ToStr()
@@ -50,13 +50,13 @@ public class CarInfo
         var sb = new StringBuilder();
 
         sb.AppendFormat("VIN:={0};", Vin);
-        sb.AppendFormat("VEHICLE_COLOR:={0};", (Int32)Vehicle_Color);
-        sb.AppendFormat("VEHICLE_TYPE:={0};", Vehicle_Type);
-        sb.AppendFormat("TRANS_TYPE:={0};", Trans_Type);
-        sb.AppendFormat("VEHICLE_NATIONALITY:={0};", Vehicle_Nationality);
-        sb.AppendFormat("OWERS_ID:={0};", Owners_Id);
-        sb.AppendFormat("OWERS_NAME:={0};", Owners_Name);
-        sb.AppendFormat("OWERS_TEL:={0}", Owners_Tel);
+        sb.AppendFormat("VEHICLE_COLOR:={0};", (Int32)VehicleColor);
+        sb.AppendFormat("VEHICLE_TYPE:={0};", VehicleType);
+        sb.AppendFormat("TRANS_TYPE:={0};", TransType);
+        sb.AppendFormat("VEHICLE_NATIONALITY:={0};", VehicleNationality);
+        sb.AppendFormat("OWERS_ID:={0};", OwnersId);
+        sb.AppendFormat("OWERS_NAME:={0};", OwnersName);
+        sb.AppendFormat("OWERS_TEL:={0}", OwnersTel);
 
         return sb.ToString();
     }

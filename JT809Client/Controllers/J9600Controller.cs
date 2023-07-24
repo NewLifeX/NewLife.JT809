@@ -22,8 +22,8 @@ internal class J9600Controller : IJT809Handler
 
         return new JT809_0x1600_0x1601
         {
-            SourceDataType = msg.DataType,
-            SourceMsgSn = message.Sequence,
+            //SourceDataType = msg.DataType,
+            //SourceMsgSn = message.Sequence,
         };
     }
 }

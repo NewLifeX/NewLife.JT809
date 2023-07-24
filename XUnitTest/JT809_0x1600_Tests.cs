@@ -71,12 +71,12 @@ public class JT809_0x1600_Tests
         var inf = body.Info;
         Assert.NotNull(inf);
         Assert.Equal("皖AT0011", inf.Vin);
-        Assert.Equal(JT809VehicleColorType.黄色, inf.Vehicle_Color);
-        Assert.Equal(21, inf.Vehicle_Type);
-        Assert.Equal("031", inf.Trans_Type);
-        Assert.Equal("340111", inf.Vehicle_Nationality);
-        Assert.Equal("3074", inf.Owners_Id);
-        Assert.Equal("合肥数车科技有限公司", inf.Owners_Name);
-        Assert.Empty(inf.Owners_Tel);
+        Assert.Equal(JT809VehicleColorType.黄色, inf.VehicleColor);
+        Assert.Equal(21, inf.VehicleType);
+        Assert.Equal("031", inf.TransType);
+        Assert.Equal("340111", inf.VehicleNationality);
+        Assert.Equal("3074", inf.OwnersId);
+        Assert.Equal("合肥数车科技有限公司", inf.OwnersName);
+        Assert.Empty(inf.OwnersTel);
     }
 }
