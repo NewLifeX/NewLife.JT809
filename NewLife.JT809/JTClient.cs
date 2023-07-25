@@ -1,15 +1,17 @@
 ﻿using System.Reflection;
+using NewLife.JT809.Handlers;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
 using NewLife.Log;
 using NewLife.Net;
+using NewLife.Reflection;
 
 namespace NewLife.JT809;
 
 /// <summary>JT809客户端</summary>
-public class JTClient : DisposeBase
+public class JTClient : DisposeBase, IJTSession
 {
     #region 属性
     /// <summary>名称</summary>
@@ -25,7 +27,12 @@ public class JTClient : DisposeBase
     public UInt32 CenterId { get; set; }
 
     /// <summary>接收事件</summary>
-    public EventHandler<ReceivedEventArgs> Received;
+    public event EventHandler<ReceivedEventArgs> Received;
+
+    /// <summary>
+    /// 消息处理器集合
+    /// </summary>
+    public Dictionary<MessageKinds, MessageHandler> Handlers { get; set; } = new();
 
     private ISocketClient _client;
     /// <summary>网络连接</summary>
@@ -45,7 +52,7 @@ public class JTClient : DisposeBase
 
         if (_client != null)
         {
-            _client.Received += OnReceive;
+            _client.Received -= OnReceive;
             _client.TryDispose();
         }
     }
@@ -88,6 +95,35 @@ public class JTClient : DisposeBase
         //WriteLog("<={0}", msg);
 
         Received?.Invoke(this, e);
+
+        // 找到处理器
+        if (Handlers.TryGetValue(msg.Kind, out var handler))
+            handler(this, msg);
+    }
+
+    /// <summary>注册类型处理器</summary>
+    /// <typeparam name="T"></typeparam>
+    public void AddHandler<T>(T handler)
+    {
+        var type = handler.GetType();
+        foreach (var item in type.GetMethods())
+        {
+            if (item.IsStatic) continue;
+            if (item.ReturnType != typeof(Object)) continue;
+
+            // 参数匹配
+            var pis = item.GetParameters();
+            if (pis.Length != 2) continue;
+
+            // 获取类型
+            var att = item.GetCustomAttribute<MessageKindAttribute>();
+            if (att != null)
+            {
+                Handlers[att.Kind] = item.As<MessageHandler>(handler);
+
+                WriteLog("注册[{0}]：{1}.{2}", att.Kind, item.DeclaringType.FullName, item.Name);
+            }
+        }
     }
 
     /// <summary>发送不等待</summary>
@@ -144,6 +180,9 @@ public class JTClient : DisposeBase
 
         return result;
     }
+
+    //Int32 IJTSession.SendMessage(Object message) => _client.SendMessage(message);
+    //Task<Object> IJTSession.SendMessageAsync(Object message) => _client.SendMessageAsync(message);
     #endregion
 
     #region 链路管理
@@ -324,48 +363,6 @@ public class JTClient : DisposeBase
             VehicleColor = (JT809VehicleColorType)color,
             Body = model
         };
-        Send(req);
-    }
-
-    /// <summary>提交车辆动态信息</summary>
-    /// <param name="plate"></param>
-    /// <param name="color"></param>
-    /// <param name="model"></param>
-    /// <returns></returns>
-    public void Send1200(String plate, Int32 color, Object model)
-    {
-        var req = new JT809_0x1200
-        {
-            //DataType = 0x1201,
-            VehicleNo = plate,
-            VehicleColor = (JT809VehicleColorType)color,
-            Body = model
-        };
-
-        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
-        req.DataType = (UInt16)att.Kind;
-
-        Send(req);
-    }
-
-    /// <summary>提交车辆静态信息</summary>
-    /// <param name="plate"></param>
-    /// <param name="color"></param>
-    /// <param name="model"></param>
-    /// <returns></returns>
-    public void Send1600(String plate, Int32 color, Object model)
-    {
-        var req = new JT809_0x1600
-        {
-            //DataType = 0x1601,
-            VehicleNo = plate,
-            VehicleColor = (JT809VehicleColorType)color,
-            Body = model
-        };
-
-        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
-        req.DataType = (UInt16)att.Kind;
-
         Send(req);
     }
 

@@ -16,7 +16,7 @@ public class JTServer : NetServer<JTSession>
     /// <summary>
     /// 消息处理器集合
     /// </summary>
-    public Dictionary<MessageKinds, MessageHandler> Handlers = new();
+    public Dictionary<MessageKinds, MessageHandler> Handlers { get; set; } = new();
 
     /// <summary>
     /// 实例化JT809服务器
@@ -66,8 +66,11 @@ public class JTServer : NetServer<JTSession>
 }
 
 /// <summary>JT809网络会话</summary>
-public class JTSession : NetSession<JTServer>
+public class JTSession : NetSession<JTServer>, IJTSession
 {
+    /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
+    public UInt32 CenterId { get; set; }
+
     /// <summary>配置信息。记录协议版本</summary>
     public JTConfig Config { get; set; }
 
@@ -85,6 +88,8 @@ public class JTSession : NetSession<JTServer>
 
         if (e.Message is JTMessage msg)
         {
+            if (msg.CenterId > 0) CenterId = msg.CenterId;
+
             if (debug && !_nologs.Contains(msg.Kind)) WriteLog("<= {0}", msg);
 
             // 根据登录请求猜测协议版本，后续指令自适应
@@ -165,4 +170,59 @@ public class JTSession : NetSession<JTServer>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     protected override void OnError(Object sender, ExceptionEventArgs e) => XTrace.WriteException(e.Exception);
+
+    #region 发送
+    /// <summary>发送不等待</summary>
+    /// <param name="body"></param>
+    public void Send(Object body)
+    {
+        var msg = new JTMessage
+        {
+            CenterId = CenterId,
+            VersionFlag = Config.VersionFlag,
+            Time = DateTime.Now,
+        };
+
+        if (Config != null) msg.Version = Config.Version;
+        msg.SetResult(body);
+
+        using var span = Host.Tracer?.NewSpan($"jt809:Send:{msg.Kind}", body);
+
+        WriteLog("=>{0}", body.ToJsonJT809());
+        WriteLog("=>{0}", msg);
+
+        SendMessage(msg);
+    }
+
+    /// <summary>发送并等待响应</summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="body"></param>
+    /// <returns></returns>
+    public async Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new()
+    {
+        var msg = new JTMessage
+        {
+            CenterId = CenterId,
+            VersionFlag = Config.VersionFlag,
+            Time = DateTime.Now,
+        };
+
+        if (Config != null) msg.Version = Config.Version;
+        msg.SetResult(body);
+
+        using var span = Host.Tracer?.NewSpan($"jt809:SendAsync:{msg.Kind}", body);
+
+        WriteLog("=>{0}", body.ToJsonJT809());
+        WriteLog("=>{0}", msg);
+
+        var rs = await SendMessageAsync(msg) as JTMessage;
+
+        WriteLog("<={0}", rs);
+
+        var result = rs.ReadModel<TResult>();
+        WriteLog("<={0}", result.ToJsonJT809());
+
+        return result;
+    }
+    #endregion
 }

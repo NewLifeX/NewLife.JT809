@@ -7,4 +7,4 @@ namespace NewLife.JT809.Handlers;
 /// <param name="session"></param>
 /// <param name="message"></param>
 /// <returns></returns>
-public delegate Object MessageHandler(INetSession session, JTMessage message);
+public delegate Object MessageHandler(IJTSession session, JTMessage message);

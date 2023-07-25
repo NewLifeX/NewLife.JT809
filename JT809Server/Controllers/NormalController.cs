@@ -11,7 +11,7 @@ namespace JT809Server.Controllers;
 internal class NormalController : IJT809Handler
 {
     [MessageKind(MessageKinds.主链路登录请求消息)]
-    public Object Login(INetSession session, JTMessage message)
+    public Object Login(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1001>();
         XTrace.WriteLine(msg.ToJsonJT809());
@@ -69,7 +69,7 @@ internal class NormalController : IJT809Handler
     }
 
     [MessageKind(MessageKinds.主链路注销请求消息)]
-    public Object Logout(INetSession session, JTMessage message)
+    public Object Logout(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1003>();
         XTrace.WriteLine(msg.ToJsonJT809());
@@ -78,7 +78,7 @@ internal class NormalController : IJT809Handler
     }
 
     [MessageKind(MessageKinds.主链路连接保持请求消息)]
-    public Object Ping(INetSession session, JTMessage message)
+    public Object Ping(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1005>();
         XTrace.WriteLine(msg.ToJsonJT809());

@@ -10,7 +10,7 @@ namespace JT809Client.Controllers;
 internal class InfoController : IJT809Handler
 {
     [MessageKind(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019)]
-    public Object Inf_9102(INetSession session, JTMessage message)
+    public Object Inf_9102(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9102>();
         XTrace.WriteLine(msg.ToJsonJT809());
@@ -30,7 +30,7 @@ internal class InfoController : IJT809Handler
     }
 
     [MessageKind(MessageKinds.下发平台间消息序列号通知消息_2019)]
-    public Object Info_9103(INetSession session, JTMessage message)
+    public Object Info_9103(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9103>();
         XTrace.WriteLine(msg.ToJsonJT809());

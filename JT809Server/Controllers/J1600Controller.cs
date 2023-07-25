@@ -10,7 +10,7 @@ namespace JT809Server.Controllers;
 internal class J1600Controller : IJT809Handler
 {
     [MessageKind(MessageKinds.主链路静态信息交换消息)]
-    public Object J1600(INetSession session, JTMessage message)
+    public Object J1600(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1600>();
         XTrace.WriteLine(msg.ToJsonJT809());

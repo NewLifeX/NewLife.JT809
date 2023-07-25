@@ -11,7 +11,7 @@ namespace JT809Server.Controllers;
 internal class J1200Controller : IJT809Handler
 {
     [MessageKind(MessageKinds.主链路车辆动态信息交换业务)]
-    public Object J1200(INetSession session, JTMessage message)
+    public Object J1200(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1200>();
         XTrace.WriteLine(msg.ToJsonJT809());

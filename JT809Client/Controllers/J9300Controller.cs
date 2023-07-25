@@ -11,7 +11,7 @@ namespace JT809Client.Controllers;
 internal class J9300Controller : IJT809Handler
 {
     [MessageKind(MessageKinds.从链路平台间信息交互业务)]
-    public Object J9300(INetSession session, JTMessage message)
+    public Object J9300(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9300>();
         XTrace.WriteLine(msg.ToJsonJT809());

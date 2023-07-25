@@ -10,7 +10,7 @@ namespace JT809Server.Controllers;
 internal class J1300Controller : IJT809Handler
 {
     [MessageKind(MessageKinds.主链路平台间信息交互消息)]
-    public Object J1300(INetSession session, JTMessage message)
+    public Object J1300(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x1300>();
         XTrace.WriteLine(msg.ToJsonJT809());
