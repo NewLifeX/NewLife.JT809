@@ -92,6 +92,7 @@ public class JTClient : DisposeBase, IJTSession
         if (e.Message is not JTMessage msg) return;
 
         using var span = Tracer?.NewSpan($"jt809:Receive:{msg.Kind}", msg);
+        span?.AppendTag(e.Packet);
         //WriteLog("<={0}", msg);
 
         Received?.Invoke(this, e);

@@ -10,7 +10,7 @@ namespace JT809Client.Controllers;
 
 internal class J9600Controller : IJT809Handler
 {
-    [MessageKind(MessageKinds.补报车辆静态信息请求消息)]
+    [MessageKind(MessageKinds.从链路静态信息交换消息)]
     public Object J9600(IJTSession session, JTMessage message)
     {
         var msg = message.ReadModel<JT809_0x9600>();
