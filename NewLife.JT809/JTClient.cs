@@ -24,6 +24,9 @@ public class JTClient : DisposeBase
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
     public UInt32 CenterId { get; set; }
 
+    /// <summary>接收事件</summary>
+    public EventHandler<ReceivedEventArgs> Received;
+
     private ISocketClient _client;
     /// <summary>网络连接</summary>
     public ISocketClient Client => _client;
@@ -40,7 +43,11 @@ public class JTClient : DisposeBase
     {
         base.Dispose(disposing);
 
-        _client.TryDispose();
+        if (_client != null)
+        {
+            _client.Received += OnReceive;
+            _client.TryDispose();
+        }
     }
     #endregion
 
@@ -58,6 +65,8 @@ public class JTClient : DisposeBase
         client.Tracer = Tracer;
         client.Log = Log;
 
+        client.Received += OnReceive;
+
 #if DEBUG
         client.LogSend = true;
         client.LogReceive = true;
@@ -69,6 +78,16 @@ public class JTClient : DisposeBase
         client.Open();
 
         _client = client;
+    }
+
+    void OnReceive(Object sender, ReceivedEventArgs e)
+    {
+        if (e.Message is not JTMessage msg) return;
+
+        using var span = Tracer?.NewSpan($"jt809:Receive:{msg.Kind}", msg);
+        //WriteLog("<={0}", msg);
+
+        Received?.Invoke(this, e);
     }
 
     /// <summary>发送不等待</summary>
