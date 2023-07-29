@@ -313,7 +313,11 @@ public class JTMessage : IAccessor
         return crc;
     }
 
-    static void Encrypt(Byte[] data, UInt32 key, JTConfig config)
+    /// <summary>加解密数据</summary>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <param name="config"></param>
+    public static void Encrypt(Byte[] data, UInt32 key, JTConfig config)
     {
         if (key == 0) key = 1;
         for (var i = 0; i < data.Length; i++)

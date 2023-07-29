@@ -11,6 +11,9 @@ public interface IJTSession
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
     UInt32 CenterId { get; set; }
 
+    /// <summary>配置信息</summary>
+    JTConfig Config { get; set; }
+
     /// <summary>发送不等待</summary>
     /// <param name="body"></param>
     void Send(Object body);
