@@ -66,13 +66,25 @@ public class JTClient : DisposeBase, IJTSession
     {
         MessageFactory.Instance.Init();
 
-        var client = Server.CreateRemote();
+        GetClient();
+    }
+
+    ISocketClient GetClient()
+    {
+        var client = _client;
+        if (client != null && !client.Disposed) return client;
+
+        if (client != null) client.Received -= OnReceive;
+
+        client = Server.CreateRemote();
         client.Name = Name;
         client.Add<JTCodec>();
         client.Tracer = Tracer;
         client.Log = Log;
 
         client.Received += OnReceive;
+
+        if (client is TcpSession tcp) tcp.DisconnectWhenEmptyData = false;
 
 #if DEBUG
         client.LogSend = true;
@@ -84,7 +96,7 @@ public class JTClient : DisposeBase, IJTSession
 
         client.Open();
 
-        _client = client;
+        return _client = client;
     }
 
     void OnReceive(Object sender, ReceivedEventArgs e)
@@ -147,7 +159,8 @@ public class JTClient : DisposeBase, IJTSession
         WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
 
-        _client.SendMessage(msg);
+        var client = GetClient();
+        client.SendMessage(msg);
     }
 
     /// <summary>发送并等待响应</summary>
@@ -172,7 +185,8 @@ public class JTClient : DisposeBase, IJTSession
         WriteLog("=>{0}", body.ToJsonJT809());
         WriteLog("=>{0}", msg);
 
-        var rs = await _client.SendMessageAsync(msg) as JTMessage;
+        var client = GetClient();
+        var rs = await client.SendMessageAsync(msg) as JTMessage;
 
         WriteLog("<={0}", rs);
 
