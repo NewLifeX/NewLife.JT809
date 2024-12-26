@@ -48,7 +48,7 @@ public class JTMessage : IAccessor
 
     /// <summary>负载数据</summary>
     [IgnoreDataMember]
-    public Packet Payload { get; set; }
+    public IPacket Payload { get; set; }
 
     ///// <summary>是否2019版</summary>
     //public Boolean JTT2019 { get; set; }
@@ -166,7 +166,7 @@ public class JTMessage : IAccessor
             var data = reader.ReadBytes(len);
             if (EncryptFlag > 0 && config != null && config.M1 > 0)
                 Encrypt(data, EncryptKey, config);
-            Payload = data;
+            Payload = (ArrayPacket)data;
         }
 
         //if (ms.Position + 2 < ms.Length)
@@ -370,17 +370,23 @@ public class JTMessage : IAccessor
     /// <summary>读取数据包</summary>
     /// <param name="pk"></param>
     /// <returns></returns>
-    public Boolean Read(Packet pk) => Read(pk.GetStream(), null);
+    public Boolean Read(IPacket pk) => Read(pk.GetStream(), null);
 
     /// <summary>读取数据包</summary>
     /// <param name="pk"></param>
     /// <param name="config"></param>
     /// <returns></returns>
-    public Boolean Read(Packet pk, JTConfig config) => Read(pk.GetStream(), config);
+    public Boolean Read(IPacket pk, JTConfig config) => Read(pk.GetStream(), config);
+
+    /// <summary>读取数据包</summary>
+    /// <param name="data"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    public Boolean Read(Byte[] data, JTConfig config = null) => Read(new MemoryStream(data), config);
 
     /// <summary>转数据包</summary>
     /// <returns></returns>
-    public Packet ToPacket()
+    public IPacket ToPacket()
     {
         try
         {

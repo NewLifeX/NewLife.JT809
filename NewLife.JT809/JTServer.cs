@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using NewLife.Data;
 using NewLife.JT809.Handlers;
 using NewLife.JT809.Protocols;
 using NewLife.Log;

@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyTitle>JT809政府监管平台</AssemblyTitle>
     <Description></Description>
     <Company>新生命开发团队</Company>
-    <Copyright>©2002-2022 NewLife</Copyright>
+    <Copyright>©2002-2025 NewLife</Copyright>
     <VersionPrefix>1.0</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />-->
-    <PackageReference Include="NewLife.Stardust.Extensions" Version="2.9.2023.711-beta0327" />
+    <PackageReference Include="NewLife.Stardust.Extensions" Version="3.2.2024.1211" />
   </ItemGroup>
 
   <ItemGroup>

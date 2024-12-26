@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NewLife;
+using NewLife.Data;
 using NewLife.JT809;
 using NewLife.JT809.Protocols;
 using Xunit;
@@ -31,7 +28,7 @@ namespace XUnitTest
             var dt = str.ToHex();
 
             var codec = new JTCodec();
-            var len = codec.GetLength(dt);
+            var len = codec.GetLength((ArrayPacket)dt);
 
             Assert.Equal(dt.Length, len);
 

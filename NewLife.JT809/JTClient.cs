@@ -84,7 +84,7 @@ public class JTClient : DisposeBase, IJTSession
 
         client.Received += OnReceive;
 
-        if (client is TcpSession tcp) tcp.DisconnectWhenEmptyData = false;
+        //if (client is TcpSession tcp) tcp.DisconnectWhenEmptyData = false;
 
 #if DEBUG
         client.LogSend = true;

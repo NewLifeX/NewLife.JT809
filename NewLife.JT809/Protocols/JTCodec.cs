@@ -80,7 +80,7 @@ public class JTCodec : MessageCodec<JTMessage>
     /// <param name="context"></param>
     /// <param name="pk">包</param>
     /// <returns></returns>
-    protected override IList<JTMessage> Decode(IHandlerContext context, Packet pk)
+    protected override IList<JTMessage> Decode(IHandlerContext context, IPacket pk)
     {
         var ss = context.Owner as IExtend;
         if (ss["Codec"] is not PacketCodec pc)
@@ -110,7 +110,7 @@ public class JTCodec : MessageCodec<JTMessage>
     /// </summary>
     /// <param name="pk"></param>
     /// <returns></returns>
-    public Int32 GetLength(Packet pk)
+    public Int32 GetLength(IPacket pk)
     {
         if (pk.Total < HEADER_LENGTH) return 0;
 

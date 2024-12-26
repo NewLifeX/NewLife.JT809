@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using NewLife.Data;
 using NewLife.JT809.Messages;
 using NewLife.JT809.SubMessages;
 using NewLife.Log;

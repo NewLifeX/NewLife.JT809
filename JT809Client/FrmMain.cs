@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using NewLife;
 using NewLife.Configuration;
+using NewLife.Data;
 using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;

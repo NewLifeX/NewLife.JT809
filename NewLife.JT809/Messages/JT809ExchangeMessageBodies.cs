@@ -83,7 +83,7 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
             writer.Write(buf.Length);
             writer.Write(buf, 0, buf.Length);
         }
-        else if (Body is Packet pk)
+        else if (Body is IPacket pk)
         {
             writer.Write(DataType);
 

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <AssemblyTitle>JT809政府监管平台</AssemblyTitle>
     <Description></Description>
     <VersionPrefix>1.0</VersionPrefix>
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Stardust" Version="2.9.2023.711-beta0327" />
+    <PackageReference Include="NewLife.Stardust" Version="3.2.2024.1211" />
   </ItemGroup>
 
   <ItemGroup>
