@@ -1,4 +1,5 @@
-﻿using NewLife.JT809;
+﻿using NewLife;
+using NewLife.JT809;
 using NewLife.JT809.Models;
 using NewLife.JT809.SubMessages;
 using NewLife.Log;

@@ -4,7 +4,13 @@ namespace NewLife.JT809.Serialization;
 
 internal class MyBinaryGeneral : BinaryGeneral
 {
-    public override String ReadString() => base.ReadString()?.TrimEnd('\0');
+    public override Boolean TryReadString(out String value)
+    {
+        if (!base.TryReadString(out value)) return false;
+
+        value = value?.TrimEnd('\0');
+        return true;
+    }
 
     public override Boolean TryRead(Type type, ref Object value)
     {
@@ -12,7 +18,8 @@ internal class MyBinaryGeneral : BinaryGeneral
 
         if (type == typeof(DateTime))
         {
-            value = ReadInt64().ToDateTime();
+            if (TryReadInt64(out var num))
+                value = num.ToDateTime();
             return true;
         }
 

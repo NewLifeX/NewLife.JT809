@@ -80,7 +80,7 @@ public class JTCodec : MessageCodec<JTMessage>
     /// <param name="context"></param>
     /// <param name="pk">包</param>
     /// <returns></returns>
-    protected override IList<JTMessage> Decode(IHandlerContext context, IPacket pk)
+    protected override IEnumerable<JTMessage> Decode(IHandlerContext context, IPacket pk)
     {
         var ss = context.Owner as IExtend;
         if (ss["Codec"] is not PacketCodec pc)
@@ -95,7 +95,7 @@ public class JTCodec : MessageCodec<JTMessage>
         var list = pks.Select(e =>
         {
             var msg = new JTMessage();
-            if (!msg.Read(e, ss["Config"] as JTConfig)) return null;
+            if (!msg.Read(e.GetStream(), ss["Config"] as JTConfig)) return null;
 
             return msg;
         }).ToList();
