@@ -24,6 +24,9 @@ public abstract class JT809WarnMessageBodies : JT809ExchangeMessageBodies
         // 2019起报警业务数据体不再携带车牌
         if (reader.Version != "2019")
         {
+            // 车牌(21)+颜色(1)都读不到时判定为无效数据体，避免在流末尾读取抛异常
+            if (stream.Length - stream.Position < 22) return false;
+
             VehicleNo = reader.ReadFixedString(21);
             VehicleColor = (JT809VehicleColorType)reader.ReadByte();
         }

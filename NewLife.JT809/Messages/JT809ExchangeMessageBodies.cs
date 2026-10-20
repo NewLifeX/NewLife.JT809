@@ -34,12 +34,15 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
     /// 读取
     /// </summary>
     /// <param name="stream"></param>
-    /// <param name="context"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
     /// <returns></returns>
     public virtual Boolean Read(Stream stream, Object context)
     {
         var header = context as JTMessage;
         var reader = Helper.CreateReader(stream, header);
+
+        // 车牌(21)+颜色(1)都读不到时判定为无效数据体，避免在流末尾读取抛异常
+        if (stream.Length - stream.Position < 22) return false;
 
         VehicleNo = reader.ReadFixedString(21);
         VehicleColor = (JT809VehicleColorType)reader.ReadByte();
@@ -54,6 +57,9 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
     /// <returns></returns>
     protected Boolean ReadBody(Stream stream, Binary reader, JTMessage header)
     {
+        // 子业务类型(2)+数据长度(4)不足时判定失败，避免在流末尾读取抛异常
+        if (stream.Length - stream.Position < 6) return false;
+
         DataType = reader.ReadUInt16();
 
         var len = reader.ReadInt32();

@@ -29,6 +29,9 @@ public abstract class JT809ExchangeMessage : IAccessor, ISubMessage
         var header = context as JTMessage;
         var reader = Helper.CreateReader(stream, header);
 
+        // 子业务类型(2)+数据长度(4)不足时判定失败，避免在流末尾读取抛异常
+        if (stream.Length - stream.Position < 6) return false;
+
         DataType = reader.ReadUInt16();
 
         var len = reader.ReadUInt32();

@@ -86,8 +86,8 @@ public class JT809_0x9500_0x9505 : IAccessor
         var header = context as JTMessage;
         var writer = Helper.CreateWriter(stream, header);
 
-        writer.WriteBCD(AuthenticationCode, 10);
-        writer.WriteFixedString(AccessPointName, 20);
+        // 未设置鉴权码时按规范写入10字节全零，避免空引用
+        writer.WriteBCD(AuthenticationCode ?? "0", 10);        writer.WriteFixedString(AccessPointName, 20);
         writer.WriteFixedString(UserName, 49);
         writer.WriteFixedString(Password, 22);
         writer.WriteFixedString(ServerIP, 32);
