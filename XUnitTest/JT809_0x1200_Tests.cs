@@ -3,6 +3,7 @@ using System.ComponentModel;
 using NewLife;
 using NewLife.Data;
 using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
 using Xunit;
@@ -77,5 +78,58 @@ public class JT809_0x1200_Tests
         // 重新写入后帧内容应与原始报文一致
         var pk = msg.ToPacket();
         Assert.Equal(dt.ToHex(), pk.ToHex(256));
+    }
+
+    /// <summary>0x1202 实时定位子消息的读写往返</summary>
+    [Fact]
+    [DisplayName("0x1202实时定位子消息读写往返")]
+    public void TestLocationBody()
+    {
+        var body = new JT809_0x1200_0x1202
+        {
+            Encrypt = JT809_VehiclePositionEncrypt.未加密,
+            Time = new DateTime(2024, 5, 6, 7, 8, 9),
+            Longitude = 117123456,
+            Latitude = 31876543,
+            Speed = 60,
+            Speed2 = 58,
+            Mileage = 123456,
+            Direction = 180,
+            Altitude = 50,
+            Status = (LocationStatus)0x00000003,
+            Alarm = (LocationAlarms)0x00000004,
+        };
+        var model = new JT809_0x1200
+        {
+            VehicleNo = "皖AT0011",
+            VehicleColor = JT809VehicleColorType.黄色,
+            Body = body,
+        };
+
+        var msg = new JTMessage
+        {
+            Sequence = 1,
+            Kind = MessageKinds.主链路车辆动态信息交换业务,
+            CenterId = 123456,
+        };
+        Assert.True(msg.WriteModel(model));
+
+        var read = msg.ReadModel<JT809_0x1200>();
+        Assert.Equal("皖AT0011", read.VehicleNo);
+        Assert.Equal(JT809VehicleColorType.黄色, read.VehicleColor);
+        Assert.Equal(0x1202, (Int32)read.DataType);
+
+        var rs = Assert.IsType<JT809_0x1200_0x1202>(read.Body);
+        Assert.Equal(JT809_VehiclePositionEncrypt.未加密, rs.Encrypt);
+        Assert.Equal(body.Time, rs.Time);
+        Assert.Equal(body.Longitude, rs.Longitude);
+        Assert.Equal(body.Latitude, rs.Latitude);
+        Assert.Equal(body.Speed, rs.Speed);
+        Assert.Equal(body.Speed2, rs.Speed2);
+        Assert.Equal(body.Mileage, rs.Mileage);
+        Assert.Equal(body.Direction, rs.Direction);
+        Assert.Equal(body.Altitude, rs.Altitude);
+        Assert.Equal(body.Status, rs.Status);
+        Assert.Equal(body.Alarm, rs.Alarm);
     }
 }

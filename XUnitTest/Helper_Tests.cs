@@ -63,6 +63,17 @@ public class Helper_Tests
     }
 
     [Fact]
+    [DisplayName("长度前缀字符串超过255字节时拒绝写入")]
+    public void WriteString_TooLong()
+    {
+        var ms = new MemoryStream();
+        var writer = Helper.CreateWriter(ms, null);
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => writer.WriteString(new String('A', 256)));
+        Assert.Equal(0L, ms.Length);
+    }
+
+    [Fact]
     [DisplayName("BCD时间写入后可原样读回")]
     public void BCDTime_Roundtrip()
     {

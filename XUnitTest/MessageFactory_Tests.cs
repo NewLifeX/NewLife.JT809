@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using NewLife;
 using NewLife.Data;
 using NewLife.JT809.Messages;
@@ -43,6 +45,26 @@ public class MessageFactory_Tests
         factory.Init();
 
         Assert.Equal(count, factory.Maps.Count);
+    }
+
+    [Fact]
+    [DisplayName("并发初始化返回时指令表已完整")]
+    public void Init_Concurrent()
+    {
+        var factory = new MessageFactory();
+        var errors = 0;
+
+        Parallel.For(0, 32, _ =>
+        {
+            factory.Init();
+
+            // Init 返回即代表整张表可用，不能容忍半注册状态
+            if (factory.Create(MessageKinds.主链路登录请求消息) == null) Interlocked.Increment(ref errors);
+            if (factory.Create(MessageKinds.补报车辆静态信息请求消息) == null) Interlocked.Increment(ref errors);
+            if (factory.Create(MessageKinds.实时上传车辆定位信息) == null) Interlocked.Increment(ref errors);
+        });
+
+        Assert.Equal(0, errors);
     }
 
     [Fact]

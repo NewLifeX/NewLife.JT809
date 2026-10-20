@@ -42,6 +42,7 @@ public class JTClient : DisposeBase, IJTSession
     public Dictionary<MessageKinds, MessageHandler> Handlers { get; set; } = new();
 
     private ISocketClient _client;
+    private readonly Object _lock = new();
     /// <summary>网络连接</summary>
     public ISocketClient Client => _client;
     #endregion
@@ -57,10 +58,14 @@ public class JTClient : DisposeBase, IJTSession
     {
         base.Dispose(disposing);
 
-        if (_client != null)
+        lock (_lock)
         {
-            _client.Received -= OnReceive;
-            _client.TryDispose();
+            if (_client != null)
+            {
+                _client.Received -= OnReceive;
+                _client.TryDispose();
+                _client = null;
+            }
         }
     }
     #endregion
@@ -81,28 +86,35 @@ public class JTClient : DisposeBase, IJTSession
         var client = _client;
         if (client != null && !client.Disposed) return client;
 
-        if (client != null) client.Received -= OnReceive;
+        // 并发发送时只建立一条连接，避免重复连接与句柄泄漏
+        lock (_lock)
+        {
+            client = _client;
+            if (client != null && !client.Disposed) return client;
 
-        client = Server.CreateRemote();
-        client.Name = Name;
-        if (client is SessionBase session) session.Protocol = _codec;
-        // 批量车辆数据可能超过默认1M定界缓存，放宽到4M，避免正常大帧被当作无法定界的残余而断链
-        if (client is TcpSession tcp) tcp.MaxCache = 4 * 1024 * 1024;
-        client.Tracer = Tracer;
-        client.Log = Log;
+            if (client != null) client.Received -= OnReceive;
 
-        client.Received += OnReceive;
+            client = Server.CreateRemote();
+            client.Name = Name;
+            if (client is SessionBase session) session.Protocol = _codec;
+            // 批量车辆数据可能超过默认1M定界缓存，放宽到4M，避免正常大帧被当作无法定界的残余而断链
+            if (client is TcpSession tcp) tcp.MaxCache = 4 * 1024 * 1024;
+            client.Tracer = Tracer;
+            client.Log = Log;
 
-        //if (client is TcpSession tcp) tcp.DisconnectWhenEmptyData = false;
+            client.Received += OnReceive;
+
+            //if (client is TcpSession tcp) tcp.DisconnectWhenEmptyData = false;
 
 #if DEBUG
-        client.LogSend = true;
-        client.LogReceive = true;
+            client.LogSend = true;
+            client.LogReceive = true;
 #endif
 
-        client.Open();
+            client.Open();
 
-        return _client = client;
+            return _client = client;
+        }
     }
 
     void OnReceive(Object sender, ReceivedEventArgs e)

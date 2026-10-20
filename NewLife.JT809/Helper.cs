@@ -180,9 +180,14 @@ public static class Helper
     /// <summary>写入GBK字符串</summary>
     /// <param name="binary"></param>
     /// <param name="value"></param>
+    /// <exception cref="ArgumentOutOfRangeException">字符串的 GBK 编码超过 255 字节，长度前缀溢出</exception>
     public static void WriteString(this Binary binary, String value)
     {
         var buf = Encoding.GetBytes(value);
+
+        // 长度前缀只有1字节，超长会被截断成错误长度
+        if (buf.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(value), "JT809 length-prefixed string cannot exceed 255 bytes.");
+
         binary.Write((Byte)buf.Length);
         binary.Write(buf, 0, buf.Length);
     }
