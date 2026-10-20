@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using NewLife.Data;
 using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
@@ -74,6 +75,62 @@ public class MessageFactory_RoundTrip_Tests
                 catch (Exception ex)
                 {
                     failures.Add($"{kind}({(Int32)kind:X4}) {version} 回读异常：{ex.GetType().Name} {ex.Message}");
+                }
+            }
+        }
+
+        Assert.True(failures.Count == 0, String.Join(Environment.NewLine, failures));
+    }
+
+    [Fact]
+    [DisplayName("经报文解析入口读到截断数据时不抛异常")]
+    public void TestTruncatedPayload()
+    {
+        var factory = MessageFactory.Instance;
+        factory.Init();
+
+        var failures = new List<String>();
+        foreach (var kind in (MessageKinds[])Enum.GetValues(typeof(MessageKinds)))
+        {
+            var model = factory.Create(kind);
+            if (model == null) continue;
+
+            // 交换类信封默认不带子消息，跳过
+            if (model is JT809ExchangeMessageBodies || model is JT809ExchangeMessage) continue;
+
+            // 构造一条合法负载
+            Byte[] data;
+            try
+            {
+                data = WriteModel(model, JTVersion.JT2019);
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+            if (data.Length == 0) continue;
+
+            // 逐个前缀长度截断，经 TryReadModel 解析必须不抛出异常
+            for (var len = 1; len < data.Length; len++)
+            {
+                var part = new Byte[len];
+                Array.Copy(data, part, len);
+
+                var target = factory.Create(kind);
+                var msg = new JTMessage
+                {
+                    Kind = kind,
+                    Version = JTVersion.JT2019,
+                    Payload = new ArrayPacket(part),
+                };
+                try
+                {
+                    msg.TryReadModel(target);
+                }
+                catch (Exception ex)
+                {
+                    failures.Add($"{kind}({(Int32)kind:X4}) 截断到{len}字节时抛出 {ex.GetType().Name}");
+                    break;
                 }
             }
         }

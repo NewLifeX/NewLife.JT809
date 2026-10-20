@@ -474,9 +474,21 @@ public class JTMessage : IAccessor, IMessage
     public Boolean TryReadModel(Object model)
     {
         var pk = Payload;
-        return pk == null || pk.Total <= 0 || (model is IAccessor accessor
-            ? accessor.Read(pk.GetStream(), this)
-            : Helper.CreateReader(pk.GetStream(), this).TryRead(null, ref model));
+        if (pk == null || pk.Total <= 0) return true;
+
+        // 负载被截断或与模型不符时，各指令读取器可能抛出越界/类型异常，这里统一按解析失败处理，避免畸形报文打断会话
+        try
+        {
+            return model is IAccessor accessor
+                ? accessor.Read(pk.GetStream(), this)
+                : Helper.CreateReader(pk.GetStream(), this).TryRead(null, ref model);
+        }
+        catch (Exception ex)
+        {
+            XTrace.WriteException(ex);
+
+            return false;
+        }
     }
 
     /// <summary>从负载数据解析业务消息模型</summary>
