@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "指令[{0:X4}]配置協議版本：{1}，實際協議版本：{2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "指令[{0:X4}]已註冊到{1}，重複註冊{2}"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "解析未完成，可用[{0}]位元組，實際解析僅使用[{1}]位元組"
+"Failed to parse the message body of command [{0}].": "解析指令[{0}]的訊息體失敗。"
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "指令[{0:X4}]已加密，但未設定金鑰，負載保持密文"

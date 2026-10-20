@@ -241,6 +241,7 @@ public class JTMessage_Tests
             Kind = MessageKinds.主链路登录请求消息,
             CenterId = 123456,
             VersionFlag = 0x01020F,
+            Version = JTVersion.JT2019,
         };
 
         var rs = msg.CreateReply();
@@ -249,6 +250,14 @@ public class JTMessage_Tests
         Assert.Equal(msg.Kind, rs.Kind);
         Assert.Equal(msg.CenterId, rs.CenterId);
         Assert.Equal(msg.VersionFlag, rs.VersionFlag);
+
+        // 2019 帧头需要写发送时间，应答必须继承协议版本并带当前时间
+        Assert.Equal(JTVersion.JT2019, rs.Version);
+        Assert.True(rs.Time > DateTime.Now.AddMinutes(-1));
+
+        // 2011 帧头不写时间字段，但接口语义保持一致
+        var msg2 = new JTMessage { Version = JTVersion.JT2011 };
+        Assert.True(msg2.CreateReply().Time > DateTime.Now.AddMinutes(-1));
     }
 
     [Fact]

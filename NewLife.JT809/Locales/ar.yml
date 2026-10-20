@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "تم تكوين إصدار البروتوكول للأمر [{0:X4}]: {1}، إصدار البروتوكول الفعلي: {2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "الأمر [{0:X4}] مسجل بالفعل في {1}؛ إعادة التسجيل في {2}"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "التحليل غير مكتمل: {0} بايت متاحة لكن تم استخدام {1} بايت فقط"
+"Failed to parse the message body of command [{0}].": "تعذر تحليل جسم رسالة الأمر [{0}]."
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "الأمر [{0:X4}] مشفر ولكن لم يتم تكوين مفتاح؛ تبقى الحمولة مشفرة"

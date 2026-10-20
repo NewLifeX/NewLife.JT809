@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "Для команды [{0:X4}] задана версия протокола: {1}, фактическая версия протокола: {2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "Команда [{0:X4}] уже зарегистрирована в {1}; повторная регистрация в {2}"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "Разбор не завершён: доступно {0} байт, но использовано только {1} байт"
+"Failed to parse the message body of command [{0}].": "Не удалось разобрать тело сообщения команды [{0}]."
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "Команда [{0:X4}] зашифрована, но ключ не настроен; полезная нагрузка остаётся зашифрованной"

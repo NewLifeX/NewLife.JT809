@@ -138,7 +138,7 @@ public class MessageFactory
     /// <summary>注册新类型</summary>
     /// <param name="kind">业务数据类型</param>
     /// <param name="type">消息模型类型</param>
-    /// <param name="factory">实例工厂，为空时使用无参构造反射创建</param>
+    /// <param name="factory">实例工厂，为空时使用无参构造反射创建；AOT 场景请显式传入工厂或改用 <see cref="Register{T}"/></param>
     public void Register(MessageKinds kind, Type type, Func<Object> factory = null)
     {
         if (_map1.TryGetValue(kind, out var t) && t != type)

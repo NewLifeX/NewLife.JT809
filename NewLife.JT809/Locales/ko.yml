@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "명령 [{0:X4}]에 설정된 프로토콜 버전: {1}, 실제 프로토콜 버전: {2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "명령 [{0:X4}]은(는) 이미 {1}에 등록되어 있습니다. {2}에 다시 등록합니다"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "구문 분석이 완료되지 않았습니다: {0}바이트를 사용할 수 있지만 {1}바이트만 사용되었습니다"
+"Failed to parse the message body of command [{0}].": "명령 [{0}]의 메시지 본문을 구문 분석하지 못했습니다."
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "명령 [{0:X4}]은(는) 암호화되었지만 키가 구성되지 않았습니다. 페이로드는 암호화된 상태로 유지됩니다"

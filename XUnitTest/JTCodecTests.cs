@@ -116,6 +116,27 @@ public class JTCodecTests
     }
 
     [Fact]
+    [DisplayName("定界解析：长度字段越界判定为损坏帧")]
+    public void TryParse_InvalidLength()
+    {
+        var codec = new JTCodec { Config = new JTConfig { Version = JTVersion.JT2019 } };
+
+        // 声明长度远大于实际帧长
+        var over = SampleFrame();
+        over[1] = 0x00; over[2] = 0x00; over[3] = 0xFF; over[4] = 0xFF;
+        var rs1 = codec.TryParse(new ReadOnlySequence<Byte>(over));
+        Assert.NotNull(rs1);
+        Assert.True(rs1.Value.Invalid);
+
+        // 声明长度小于头部
+        var under = SampleFrame();
+        under[1] = 0x00; under[2] = 0x00; under[3] = 0x00; under[4] = 0x10;
+        var rs2 = codec.TryParse(new ReadOnlySequence<Byte>(under));
+        Assert.NotNull(rs2);
+        Assert.True(rs2.Value.Invalid);
+    }
+
+    [Fact]
     [DisplayName("整帧构建：写入结果可被自身解析")]
     public void Build_Roundtrip()
     {

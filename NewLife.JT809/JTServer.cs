@@ -12,12 +12,12 @@ namespace NewLife.JT809;
 /// <summary>JT809服务器</summary>
 public class JTServer : NetServer<JTSession>
 {
-    private readonly JTCodec _codec = new();
+    private readonly JTCodec _codec = new() { Config = new JTConfig { Version = JTVersion.JT2011 } };
 
     /// <summary>配置信息</summary>
     public JTConfig Config
     {
-        get => _codec.Config ??= new JTConfig { Version = JTVersion.JT2011 };
+        get => _codec.Config;
         set => _codec.Config = value;
     }
 
@@ -32,12 +32,14 @@ public class JTServer : NetServer<JTSession>
     public JTServer()
     {
         Port = 809;
-        Config = new JTConfig { Version = JTVersion.JT2011 };
+
+        // 批量车辆数据可能超过默认1M定界缓存，放宽到4M，避免正常大帧被当作无法定界的残余而断链
+        MaxCache = 4 * 1024 * 1024;
         Protocol = _codec;
     }
 
     /// <summary>注册类型处理器</summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">处理器类型，需为具体类型（泛型推断即满足），AOT/裁剪下其公共方法才会被保留</typeparam>
     public void AddHandler<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
         Type type = typeof(T);

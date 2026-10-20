@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "コマンド [{0:X4}] の設定プロトコルバージョン: {1}、実際のプロトコルバージョン: {2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "コマンド [{0:X4}] は既に {1} に登録されています。{2} に再登録します"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "解析が完了していません: {0} バイト利用可能ですが、{1} バイトのみ使用されました"
+"Failed to parse the message body of command [{0}].": "コマンド [{0}] のメッセージ本体を解析できませんでした。"
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "コマンド [{0:X4}] は暗号化されていますが鍵が設定されていません。ペイロードは暗号化されたままです"

@@ -45,6 +45,13 @@
     <Compile Remove="Messages\JT809_2019_0x9101.cs" />
   </ItemGroup>
 
+  <!-- 反射序列化与消息工厂需要模型成员元数据，随包嵌入链接器保留清单 -->
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.402">
       <PrivateAssets>all</PrivateAssets>

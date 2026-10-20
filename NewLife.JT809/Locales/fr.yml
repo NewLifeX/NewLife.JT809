@@ -11,3 +11,5 @@
 "Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}": "La commande [{0:X4}] a configuré la version du protocole : {1}, version réelle du protocole : {2}"
 "Command [{0:X4}] is already registered to {1}; re-registering to {2}": "La commande [{0:X4}] est déjà enregistrée sur {1} ; réenregistrement sur {2}"
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "Analyse incomplète : {0} octets disponibles mais seulement {1} octets utilisés"
+"Failed to parse the message body of command [{0}].": "Impossible d'analyser le corps du message de la commande [{0}]."
+"Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "La commande [{0:X4}] est chiffrée mais aucune clé n'est configurée ; la charge utile reste chiffrée"

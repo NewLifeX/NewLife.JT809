@@ -32,6 +32,7 @@ public abstract class JT809ExchangeMessage : IAccessor, ISubMessage
         DataType = reader.ReadUInt16();
 
         var len = reader.ReadUInt32();
+        if (len > stream.Length - stream.Position) return false;
         if (len > 0)
         {
             var model = MessageFactory.Instance.Create((MessageKinds)DataType);

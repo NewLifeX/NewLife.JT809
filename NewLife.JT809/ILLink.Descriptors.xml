@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  链接器/AOT 保留清单。
+
+  JT809 的消息体依赖 NewLife.Serialization.Binary 的属性反射读写，消息工厂也按类型创建实例；
+  裁剪器无法从 object 参数推断出具体模型，会把未直接引用的属性访问器裁掉，
+  导致 AOT 下能收发帧但负载为空（静默失败）。这里保留本程序集全部类型及其成员。
+-->
+<linker>
+  <assembly fullname="NewLife.JT809">
+    <type fullname="NewLife.JT809.*" preserve="all" />
+  </assembly>
+</linker>

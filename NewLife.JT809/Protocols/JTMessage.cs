@@ -206,17 +206,26 @@ public class JTMessage : IAccessor, IMessage
         if (j9)
         {
             var t = reader.Read<Int64>();
-            if (t < 9999L * 365 * 34 * 3600 * 1000)
+            if (t > 0 && t < 9999L * 365 * 34 * 3600 * 1000)
                 Time = t.ToDateTime();
         }
 
+        // 长度边界校验：声明长度必须能容纳负载、CRC 与尾部标识，越界说明长度字段不合法，
+        // 直接判失败，避免按声明长度越界读取把协议错误变成异常
+        var payloadLength = len - (j9 ? HEADER_LENGTH_2019 : HEADER_LENGTH);
+        if (payloadLength < 0 || payloadLength + 3 > data.Length - ms.Position) return false;
+
         // 负载数据
-        len -= j9 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
-        if (len > 0)
+        if (payloadLength > 0)
         {
-            var buf = reader.ReadBytes(len);
-            if (EncryptFlag > 0 && config != null && config.M1 > 0)
-                Encrypt(buf, EncryptKey, config);
+            var buf = reader.ReadBytes(payloadLength);
+            if (EncryptFlag > 0)
+            {
+                if (config != null && config.M1 > 0)
+                    Encrypt(buf, EncryptKey, config);
+                else
+                    XTrace.WriteLine("Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted", (Int32)Kind);
+            }
             Payload = (ArrayPacket)buf;
         }
 
@@ -275,8 +284,8 @@ public class JTMessage : IAccessor, IMessage
 
         writer.Write(EncryptKey);
 
-        // 2019新增
-        if (Version == JTVersion.JT2019) writer.Write(Time.ToLong());
+        // 2019新增。未显式设置时间时取当前时间，避免写出 DateTime.MinValue 对应的无效时间戳
+        if (Version == JTVersion.JT2019) writer.Write((Time == DateTime.MinValue ? DateTime.Now : Time).ToLong());
 
         //pk?.CopyTo(writer.Stream);
         writer.Write(data, 0, data.Length);
@@ -471,11 +480,11 @@ public class JTMessage : IAccessor, IMessage
     /// <summary>从负载数据解析业务消息模型</summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    /// <exception cref="InvalidDataException"></exception>
+    /// <exception cref="InvalidDataException">负载数据不足或与模型不匹配</exception>
     public T ReadModel<T>() where T : new()
     {
         var msg = new T();
-        return !TryReadModel(msg) ? throw new InvalidDataException() : msg;
+        return !TryReadModel(msg) ? throw new InvalidDataException(L.T("Failed to parse the message body of command [{0}].", Kind)) : msg;
     }
 
     /// <summary>写入业务消息模型到负载数据</summary>
@@ -515,8 +524,12 @@ public class JTMessage : IAccessor, IMessage
         Reply = true,
         Sequence = Sequence,
         Kind = Kind,
+        Version = Version,
         VersionFlag = VersionFlag,
         CenterId = CenterId,
+
+        // 2019 帧头携带发送时间，应答必须写当前时间而不是默认值
+        Time = DateTime.Now,
     };
 
     //private static readonly ConcurrentDictionary<Type, MessageKinds> _cache = new();

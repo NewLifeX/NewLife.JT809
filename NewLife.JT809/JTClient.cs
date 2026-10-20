@@ -15,7 +15,7 @@ namespace NewLife.JT809;
 public class JTClient : DisposeBase, IJTSession
 {
     #region 属性
-    private readonly JTCodec _codec = new();
+    private readonly JTCodec _codec = new() { Config = new JTConfig { Version = JTVersion.JT2011 } };
 
     /// <summary>名称</summary>
     public String Name { get; set; }
@@ -26,7 +26,7 @@ public class JTClient : DisposeBase, IJTSession
     /// <summary>配置信息</summary>
     public JTConfig Config
     {
-        get => _codec.Config ??= new JTConfig { Version = JTVersion.JT2011 };
+        get => _codec.Config;
         set => _codec.Config = value;
     }
 
@@ -86,6 +86,8 @@ public class JTClient : DisposeBase, IJTSession
         client = Server.CreateRemote();
         client.Name = Name;
         if (client is SessionBase session) session.Protocol = _codec;
+        // 批量车辆数据可能超过默认1M定界缓存，放宽到4M，避免正常大帧被当作无法定界的残余而断链
+        if (client is TcpSession tcp) tcp.MaxCache = 4 * 1024 * 1024;
         client.Tracer = Tracer;
         client.Log = Log;
 
@@ -119,7 +121,7 @@ public class JTClient : DisposeBase, IJTSession
     }
 
     /// <summary>注册类型处理器</summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">处理器类型，需为具体类型（泛型推断即满足），AOT/裁剪下其公共方法才会被保留</typeparam>
     public void AddHandler<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
         Type type = typeof(T);

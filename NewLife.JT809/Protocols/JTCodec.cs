@@ -1,6 +1,7 @@
-﻿using System.Buffers;
+using System.Buffers;
 using System.Collections.Concurrent;
 using NewLife.Data;
+using NewLife.Log;
 using NewLife.Messaging;
 
 namespace NewLife.JT809.Protocols;
@@ -38,14 +39,26 @@ public class JTCodec : IMessageCodec, IMessageMatcher
         if (content == null) return new ParseResult { Invalid = true, HeaderSize = len };
 
         var msg = new JTMessage();
-        if (!msg.ReadContent(content, Resolve(msg, content)))
+        Boolean rs;
+        try
+        {
+            rs = msg.ReadContent(content, Resolve(msg, content));
+        }
+        catch (Exception ex) when (ex is IOException or ArgumentException or IndexOutOfRangeException)
+        {
+            // 单帧内容异常按损坏帧处置，不让异常穿透消息泵
+            XTrace.WriteLine("Command frame parse failed: {0}", ex.Message);
+            rs = false;
+        }
+
+        if (!rs)
         {
             msg.Dispose();
             return new ParseResult { Invalid = true, HeaderSize = len };
         }
 
         // 记录该接入码的协议版本，后续指令按登录时识别到的版本解析
-        if (msg.Version > 0) _versions[msg.CenterId] = msg.Version;
+        if (msg.Version > 0 && msg.CenterId > 0) _versions[msg.CenterId] = msg.Version;
 
         return new ParseResult { Message = msg, HeaderSize = len, BodyLength = 0 };
     }
