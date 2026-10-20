@@ -73,10 +73,14 @@ var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 280
 
 client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
 {
-    Time = DateTime.Now,
-    Longitude = 117123456,
-    Latitude = 31876543,
-    Speed = 600,
+    Location = new LocationMessage
+    {
+        Longitude = 117123456,
+        Latitude = 31876543,
+        Speed = 600,
+        GPSTime = DateTime.Now,
+    },
+    PlatformId1 = "34010000001",
 });
 
 class MyController
@@ -89,6 +93,8 @@ class MyController
     public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
 }
 ```
+
+`JT809_0x1200_0x1202` follows the JT/T 809-2019 table 90 layout: the position travels inside `GNSS_DATA` (`JT/T 808-2019` 8.12) and is exposed through `Location`, followed by the platform codes and alarm states. For JT/T 809-2011 frames set `Config.Version = JTVersion.JT2011` and fill the flat `Time` / `Longitude` / `Speed` properties instead.
 
 ## Documentation
 

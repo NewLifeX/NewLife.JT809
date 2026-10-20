@@ -39,7 +39,8 @@ public class JTMessage : IAccessor, IMessage
     /// <summary>数据加密的密钥</summary>
     public UInt32 EncryptKey { get; set; }
 
-    /// <summary>发送消息时的系统UTC时间，长度为8个字节，Unix毫秒。2019新增</summary>
+    /// <summary>发送消息时的系统UTC时间，长度为8个字节，Unix秒。2019新增</summary>
+    /// <remarks>809-2019 表7 注3：UTC值 1263085674 在协议中表示为 0x000000004B49286A，即8字节小端秒数</remarks>
     public DateTime Time { get; set; }
 
     ///// <summary>协议配置，包括版本和密钥</summary>
@@ -202,11 +203,11 @@ public class JTMessage : IAccessor, IMessage
             Version = JTVersion.JT2019;
         }
 
-        // 2019新增
+        // 2019新增。规范为8字节Unix秒（表7 注3），但存在按毫秒实现的平台，ToDateTime 按量级自动识别
         if (j9)
         {
             var t = reader.Read<Int64>();
-            if (t > 0 && t < 9999L * 365 * 34 * 3600 * 1000)
+            if (t > 0 && t < 253402300800000L)
                 Time = t.ToDateTime();
         }
 
@@ -285,7 +286,8 @@ public class JTMessage : IAccessor, IMessage
         writer.Write(EncryptKey);
 
         // 2019新增。未显式设置时间时取当前时间，避免写出 DateTime.MinValue 对应的无效时间戳
-        if (Version == JTVersion.JT2019) writer.Write((Time == DateTime.MinValue ? DateTime.Now : Time).ToLong());
+        // ToLong 为 Unix 毫秒，协议要求 Unix 秒（表7 注3），必须换算，否则对端会读到数万年后
+        if (Version == JTVersion.JT2019) writer.Write((Time == DateTime.MinValue ? DateTime.Now : Time).ToLong() / 1000);
 
         //pk?.CopyTo(writer.Stream);
         writer.Write(data, 0, data.Length);

@@ -71,10 +71,14 @@ var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 280
 
 client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
 {
-    Time = DateTime.Now,
-    Longitude = 117123456,
-    Latitude = 31876543,
-    Speed = 600,
+    Location = new LocationMessage
+    {
+        Longitude = 117123456,
+        Latitude = 31876543,
+        Speed = 600,
+        GPSTime = DateTime.Now,
+    },
+    PlatformId1 = "34010000001",
 });
 
 class MyController
@@ -87,6 +91,8 @@ class MyController
     public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
 }
 ```
+
+`JT809_0x1200_0x1202` 按 JT/T 809-2019 表90 布局：定位数据装在 `GNSS_DATA`（JT/T 808-2019 中8.12）里，通过 `Location` 访问，其后是三级平台编码与报警状态。若对端使用 JT/T 809-2011，把 `Config.Version` 设为 `JTVersion.JT2011`，改用 `Time`/`Longitude`/`Speed` 等定长属性填写。
 
 ## 文档
 

@@ -14,12 +14,27 @@ namespace XUnitTest;
 [DisplayName("服务端与客户端联调")]
 public class JTServerClient_Tests
 {
-    /// <summary>取一个空闲端口，避免与固定端口冲突</summary>
+    /// <summary>取一个 TCP 与 UDP 均可用的空闲端口，避开固定端口、临时端口区间与系统保留区间</summary>
     private static Int32 GetFreePort()
     {
-        using var listener = new TcpListener(IPAddress.Loopback, 0);
-        listener.Start();
-        return ((IPEndPoint)listener.LocalEndpoint).Port;
+        var rnd = new Random();
+        for (var i = 0; i < 50; i++)
+        {
+            var port = rnd.Next(20000, 40000);
+
+            // JTServer 同时监听 TCP 与 UDP，两者都必须可绑定
+            try
+            {
+                using var tcp = new TcpListener(IPAddress.Loopback, port);
+                tcp.Start();
+                using var udp = new UdpClient(new IPEndPoint(IPAddress.Any, port));
+
+                return port;
+            }
+            catch (SocketException) { }
+        }
+
+        throw new InvalidOperationException("No free TCP/UDP port is available.");
     }
 
     [Fact]

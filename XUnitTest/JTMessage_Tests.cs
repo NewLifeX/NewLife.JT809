@@ -48,9 +48,18 @@ public class JTMessage_Tests
         Assert.Equal(0u, msg.EncryptKey);
         Assert.Equal("2022-06-12T11:31:23.6110000".ToDateTime(), msg.Time);
 
-        // 校验写入
+        // 校验写入。帧头UTC时间按规范（表7 注3）以Unix秒写出，原始报文来自按毫秒实现的平台，
+        // 因此重新写入后仅时间字段的精度不同，其余字段必须保持一致
         var pk = msg.ToPacket();
-        Assert.Equal(dt.ToHex(), pk.ToHex(256));
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk.ToArray(), config));
+        Assert.Equal(msg.Sequence, msg2.Sequence);
+        Assert.Equal(msg.Kind, msg2.Kind);
+        Assert.Equal(msg.CenterId, msg2.CenterId);
+        Assert.Equal(msg.VersionFlag, msg2.VersionFlag);
+        Assert.Equal(msg.EncryptKey, msg2.EncryptKey);
+        Assert.Equal(msg.Payload.ToHex(), msg2.Payload.ToHex());
+        Assert.Equal(msg.Time.AddTicks(-(msg.Time.Ticks % TimeSpan.TicksPerSecond)), msg2.Time);
 
         //var rm = _factory.Parse(msg) as RegisterMessage;
         //Assert.NotNull(rm);
@@ -62,6 +71,32 @@ public class JTMessage_Tests
         //Assert.Equal("5976616", rm.DeviceId);
         //Assert.Equal(CarColors.黄色, rm.Color);
         //Assert.Equal("粤ABB280", rm.PlateNo);
+    }
+
+    /// <summary>809-2019 表7 注3：UTC值1263085674在协议中表示为0x000000004B49286A，即8字节Unix秒</summary>
+    [Fact]
+    [DisplayName("2019帧头UTC时间按8字节Unix秒写出")]
+    public void TestHeaderTimeSeconds()
+    {
+        var time = 1263085674L.ToDateTime();
+        var msg = new JTMessage
+        {
+            Sequence = 1,
+            Kind = MessageKinds.主链路连接保持请求消息,
+            CenterId = 100000,
+            VersionFlag = 0x010000,
+            Version = JTVersion.JT2019,
+            Time = time,
+        };
+
+        var frame = msg.ToPacket().ToArray();
+
+        // 帧头依次为：头标识(1) + 消息长度(4) + 序列号(4) + 业务类型(2) + 接入码(4) + 版本与加密标识(4) + 密钥(4)
+        Assert.Equal("000000004B49286A", frame[23..31].ToHex());
+
+        var rs = new JTMessage();
+        Assert.True(rs.Read(frame, new JTConfig { Version = JTVersion.JT2019 }));
+        Assert.Equal(time, rs.Time);
     }
 
     [Fact]

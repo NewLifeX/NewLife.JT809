@@ -73,10 +73,14 @@ var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 280
 
 client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
 {
-    Time = DateTime.Now,
-    Longitude = 117123456,
-    Latitude = 31876543,
-    Speed = 600,
+    Location = new LocationMessage
+    {
+        Longitude = 117123456,
+        Latitude = 31876543,
+        Speed = 600,
+        GPSTime = DateTime.Now,
+    },
+    PlatformId1 = "34010000001",
 });
 
 class MyController
