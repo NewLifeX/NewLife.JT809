@@ -10,6 +10,7 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台定量通知已经上传的车辆定位信息数量(如:每收到10,000 条车辆定位信息通知一次)</para>
 /// <para>本条消息不需下级平台应答。</para>
 /// </summary>
+/// <remarks>2019版的 0x9101 与 <see cref="JT809_0x9101"/> 数据体一致，实际收发请使用已注册的 <see cref="JT809_0x9101"/></remarks>
 [MessageKind(MessageKinds.发送车辆定位信息数据量通知消息_2019)]
 public class JT809_2019_0x9101
 {

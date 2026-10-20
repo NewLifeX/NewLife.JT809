@@ -1,4 +1,4 @@
-﻿using NewLife.JT809.Models;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.Serialization;
 
@@ -41,6 +41,7 @@ public class JT809_0x1103 : IAccessor
         DataType = reader.ReadUInt16();
         DataLength = reader.ReadUInt32();
 
+        Messages.Clear();
         var count = reader.ReadByte();
         for (var i = 0; i < count; i++)
         {
