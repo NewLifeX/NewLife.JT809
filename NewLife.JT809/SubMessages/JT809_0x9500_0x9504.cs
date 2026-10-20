@@ -1,5 +1,4 @@
 ﻿using NewLife.JT809.Protocols;
-using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
@@ -31,124 +30,58 @@ public enum JT809CommandType : Byte
 /// 上报车辆行驶记录请求消息
 /// <para>子业务类型标识:DOVJN_CTRL_MSG_TAKE_TRAVEL_REQ</para>
 /// <para>描述:上级平台向下级平台下发上报车辆行驶记录请求消息</para>
+/// <para>2011版数据体见JT/T 809-2011 表63，2019版数据体见JT/T 809-2019 表83，2019版新增命令字</para>
 /// </summary>
 [MessageKind(MessageKinds.上报车辆行驶记录请求消息)]
 public class JT809_0x9500_0x9504 : IAccessor
 {
     /// <summary>
-    /// 开始时间
+    /// 开始时间，用 UTC 时间表示
     /// </summary>
     public DateTime StartTime { get; set; }
 
     /// <summary>
-    /// 开始时间
+    /// 结束时间，用 UTC 时间表示
     /// </summary>
     public DateTime EndTime { get; set; }
 
     /// <summary>
-    /// 命令字ID
+    /// 命令字ID。2019版新增
     /// </summary>
     public JT809CommandType Command { get; set; }
 
-    /// <summary>
-    /// 最大数据数
-    /// </summary>
-    public UInt16 Max { get; set; }
-
-    /// <summary>
-    /// 读取
-    /// </summary>
+    /// <summary>读取</summary>
     /// <param name="stream"></param>
-    /// <param name="context"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
     /// <returns></returns>
     public Boolean Read(Stream stream, Object context)
     {
         var header = context as JTMessage;
         var reader = Helper.CreateReader(stream, header);
 
-        if (header != null && header.Version == JTVersion.JT2019)
-        {
-            StartTime = reader.ReadBCDTime();
-            EndTime = reader.ReadBCDTime();
+        StartTime = reader.Read<DateTime>();
+        EndTime = reader.Read<DateTime>();
+
+        // 2019版在时间之后追加命令字
+        if (reader.Version == "2019" && stream.Position < stream.Length)
             Command = (JT809CommandType)reader.ReadByte();
-        }
-        else
-        {
-            Command = (JT809CommandType)reader.ReadByte();
-            switch (Command)
-            {
-                case JT809CommandType.记录仪标准版本:
-                case JT809CommandType.当前驾驶人信息:
-                case JT809CommandType.记录仪时间:
-                case JT809CommandType.记录仪累计行驶里程:
-                case JT809CommandType.记录仪脉冲系数:
-                case JT809CommandType.车辆信息:
-                case JT809CommandType.记录仪状态信号配置信息:
-                case JT809CommandType.记录仪唯一性编号:
-                    break;
-                case JT809CommandType.采集记录仪行驶记录:
-                case JT809CommandType.采集记录仪位置信息记录:
-                case JT809CommandType.采集记录仪事故疑点记录:
-                case JT809CommandType.采集记录仪超时驾驶记录:
-                case JT809CommandType.采集记录仪驾驶人身份记录:
-                case JT809CommandType.采集记录仪外部供电记录:
-                case JT809CommandType.采集记录仪参数修改记录:
-                case JT809CommandType.采集记录仪速度状态日志:
-                    StartTime = reader.ReadBCDTime();
-                    EndTime = reader.ReadBCDTime();
-                    Max = reader.ReadUInt16();
-                    break;
-            }
-        }
 
         return true;
     }
 
-    /// <summary>
-    /// 写入
-    /// </summary>
+    /// <summary>写入</summary>
     /// <param name="stream"></param>
-    /// <param name="context"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
     /// <returns></returns>
     public Boolean Write(Stream stream, Object context)
     {
         var header = context as JTMessage;
         var writer = Helper.CreateWriter(stream, header);
 
-        if (header != null && header.Version == JTVersion.JT2019)
-        {
-            writer.WriteBCDTime(StartTime);
-            writer.WriteBCDTime(EndTime);
-            writer.Write(Command);
-        }
-        else
-        {
-            writer.Write(Command);
-            switch (Command)
-            {
-                case JT809CommandType.记录仪标准版本:
-                case JT809CommandType.当前驾驶人信息:
-                case JT809CommandType.记录仪时间:
-                case JT809CommandType.记录仪累计行驶里程:
-                case JT809CommandType.记录仪脉冲系数:
-                case JT809CommandType.车辆信息:
-                case JT809CommandType.记录仪状态信号配置信息:
-                case JT809CommandType.记录仪唯一性编号:
-                    break;
-                case JT809CommandType.采集记录仪行驶记录:
-                case JT809CommandType.采集记录仪位置信息记录:
-                case JT809CommandType.采集记录仪事故疑点记录:
-                case JT809CommandType.采集记录仪超时驾驶记录:
-                case JT809CommandType.采集记录仪驾驶人身份记录:
-                case JT809CommandType.采集记录仪外部供电记录:
-                case JT809CommandType.采集记录仪参数修改记录:
-                case JT809CommandType.采集记录仪速度状态日志:
-                    writer.WriteBCDTime(StartTime);
-                    writer.WriteBCDTime(EndTime);
-                    writer.WriteUInt16(Max);
-                    break;
-            }
-        }
+        writer.Write(StartTime);
+        writer.Write(EndTime);
+
+        if (writer.Version == "2019") writer.Write((Byte)Command);
 
         return true;
     }

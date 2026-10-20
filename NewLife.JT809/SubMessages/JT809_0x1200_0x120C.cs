@@ -8,9 +8,10 @@ namespace NewLife.JT809.SubMessages;
 /// 主动上报驾驶员身份信息消息
 /// <para>子业务类型标识:UP_EXG_MSG_REPORT_DRIVER_INFO</para>
 /// <para>下级平台在接收到车载终端上传的驾驶员身份信息后，主动向上级平台上报该消息</para>
+/// <para>2011版数据体见JT/T 809-2011 表27 的字段部分，2019版数据体见JT/T 809-2019 表36，2019版新增证件有效期</para>
 /// </summary>
 [MessageKind(MessageKinds.主动上报驾驶员身份信息消息)]
-public class JT809_0x1200_0x120C
+public class JT809_0x1200_0x120C : IAccessor
 {
     /// <summary>
     /// 驾驶员姓名
@@ -37,9 +38,47 @@ public class JT809_0x1200_0x120C
     public String OrgName { get; set; }
 
     /// <summary>
-    /// 证件有效期，时分秒均用0表示
+    /// 证件有效期，时分秒均用0表示。2019版新增
     /// </summary>
     public DateTime ValidDate { get; set; }
+
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
+
+        DriverName = reader.ReadFixedString(16);
+        DriverID = reader.ReadFixedString(20);
+        Licence = reader.ReadFixedString(40);
+        OrgName = reader.ReadFixedString(200);
+
+        if (reader.Version == "2019") ValidDate = reader.Read<DateTime>();
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
+
+        writer.WriteFixedString(DriverName, 16);
+        writer.WriteFixedString(DriverID, 20);
+        writer.WriteFixedString(Licence, 40);
+        writer.WriteFixedString(OrgName, 200);
+
+        if (writer.Version == "2019") writer.Write(ValidDate);
+
+        return true;
+    }
 
     //public JT809_0x1200_0x120C Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
     //{

@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -16,7 +17,7 @@ public enum JT809_0x1502_PhotoRspFlag : Byte
     车牌号码错误 = 0x09,
 }
 
-public enum JT809_0x9502_ImageType
+public enum JT809_0x9502_ImageType : Byte
 {
     jpg = 0x01,
     gif = 0x02,
@@ -28,87 +29,123 @@ public enum JT809_0x9502_ImageType
 /// 车辆拍照应答
 /// <para>子业务类型标识:UP_ CTRL_ MSG _TAKE_ PHOTO_ ACK</para>
 /// <para>描述:下级平台应答上级平台发送的车辆拍照请求消息，上传图片信息到上级平台</para>
+/// <para>2011版数据体见JT/T 809-2011 表55，2019版数据体见JT/T 809-2019 表75，两版的拍照位置数据体见JT/T 809-2011 表69 与 JT/T 809-2019 表90</para>
 /// </summary>
 [MessageKind(MessageKinds.车辆拍照应答)]
-public class JT809_0x1500_0x1502
+public class JT809_0x1500_0x1502 : IAccessor
 {
+    /// <summary>
+    /// 对应车辆拍照请求消息源子业务类型标识。2019版新增
+    /// </summary>
+    public UInt16 SourceDataType { get; set; }
+
+    /// <summary>
+    /// 对应车辆拍照请求消息源报文序列号。2019版新增
+    /// </summary>
+    public UInt32 SourceMsgSn { get; set; }
+
     /// <summary>
     /// 拍照应答标识
     /// </summary>
     public JT809_0x1502_PhotoRspFlag PhotoRspFlag { get; set; }
 
     /// <summary>
-    /// 是否使用国测局批准的地图保密插件进行加密 1 已加密 0未加密
+    /// 拍照位置地点，结构见 <see cref="JTGnssLocationBody"/>
     /// </summary>
-    public JT809_VehiclePositionEncrypt Encrypt { get; set; }
-    /// <summary>
-    /// 车辆定位信息数据长度
-    /// </summary>
-    public UInt32 DataLength { get; set; }
-    /// <summary>
-    /// 车辆定位信息内容，包括车辆位置基本信息和位置附加信息
-    /// 其数据格式安装 808-2019中8.12要求
-    /// </summary>
-    public Byte[] GnssData { get; set; }
-    /// <summary>
-    /// 监控平台唯一编码，由平台所在地行政区域代码和平台编码组成  11位
-    /// </summary>
-    public String PlatformId1 { get; set; }
-    /// <summary>
-    /// 报警状态，二进制标识 0 正常 1表示报警
-    /// 具体定义按照808-2019中表18的规定
-    /// </summary>
-    public UInt32 Alarm1 { get; set; }
-    /// <summary>
-    /// 市级监控平台唯一编码，由平台所在地行政区域代码和平台编码组成
-    /// 未填写时，全填0，无市级平台应由省级平台全填1  11位
-    /// </summary>
-    public String PlatformId2 { get; set; }
-    /// <summary>
-    /// 报警状态，二进制标识 0 正常 1表示报警
-    /// 具体定义按照808-2019中表18的规定
-    /// </summary>
-    public UInt32 Alarm2 { get; set; }
-    /// <summary>
-    /// 省级监控平台唯一编码，由平台所在地行政区域代码和平台编码组成
-    ///  未填写时，全填0  11位
-    /// </summary>
-    public String PlatformId3 { get; set; }
-    /// <summary>
-    /// 报警状态，二进制标识 0 正常 1表示报警
-    /// 具体定义按照808-2019中表18的规定
-    /// </summary>
-    public UInt32 Alarm3 { get; set; }
-
-    ///// <summary>
-    ///// 车辆定位信息 2011版本
-    ///// </summary>
-    //public JT809VehiclePositionProperties VehiclePosition { get; set; }
-    ///// <summary>
-    ///// 车辆定位信息 2019版本
-    ///// </summary>
-    //public JT809VehiclePositionProperties_2019 VehiclePosition_2019 { get; set; }
+    public JTGnssLocationBody Gnss { get; set; } = new JTGnssLocationBody();
 
     /// <summary>
     /// 镜头ID
     /// </summary>
     public Byte LensID { get; set; }
+
     /// <summary>
     /// 图片长度
     /// </summary>
     public UInt32 PhotoLen { get; set; }
+
     /// <summary>
     /// 图片大小
     /// </summary>
     public JT809_0x9502_SizeType SizeType { get; set; }
+
     /// <summary>
     /// 图像格式
     /// </summary>
     public JT809_0x9502_ImageType Type { get; set; }
+
     /// <summary>
     /// 图片内容
     /// </summary>
     public Byte[] Photo { get; set; }
+
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
+
+        if (reader.Version == "2019")
+        {
+            SourceDataType = reader.ReadUInt16();
+            SourceMsgSn = reader.ReadUInt32();
+        }
+
+        PhotoRspFlag = (JT809_0x1502_PhotoRspFlag)reader.ReadByte();
+
+        var gnss = new JTGnssLocationBody();
+        if (!gnss.Read(stream, context)) return false;
+        Gnss = gnss;
+
+        LensID = reader.ReadByte();
+
+        var len = reader.ReadInt32();
+        if (len < 0 || len > stream.Length - stream.Position) return false;
+
+        PhotoLen = (UInt32)len;
+
+        SizeType = (JT809_0x9502_SizeType)reader.ReadByte();
+        Type = (JT809_0x9502_ImageType)reader.ReadByte();
+        if (len > 0) Photo = reader.ReadBytes(len);
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
+
+        if (writer.Version == "2019")
+        {
+            writer.Write(SourceDataType);
+            writer.Write(SourceMsgSn);
+        }
+
+        writer.Write((Byte)PhotoRspFlag);
+
+        var gnss = Gnss ?? new JTGnssLocationBody();
+        if (!gnss.Write(stream, context)) return false;
+
+        writer.Write(LensID);
+
+        var buf = Photo ?? Array.Empty<Byte>();
+        PhotoLen = (UInt32)buf.Length;
+
+        writer.Write(buf.Length);
+        writer.Write((Byte)SizeType);
+        writer.Write((Byte)Type);
+        writer.Write(buf, 0, buf.Length);
+
+        return true;
+    }
 
     //public JT809_0x1500_0x1502 Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
     //{

@@ -9,19 +9,20 @@ namespace NewLife.JT809.SubMessages;
 /// 补报车辆静态信息应答
 /// <para>子业务类型标识:UP_BASE_MSG_VEHICLE_ADDED_ACK</para>
 /// <para>描述:上级平台应答下级平台发送的"补报车辆静态信息清求"消息</para>
+/// <para>2011版数据体见JT/T 809-2011 表66，2019版数据体见JT/T 809-2019 表87，2019版新增源子业务类型与源报文序列号</para>
 /// </summary>
 [MessageKind(MessageKinds.补报车辆静态信息应答)]
 public class JT809_0x1600_0x1601 : IAccessor
 {
-    ///// <summary>
-    ///// 对应补报车辆静态信息请求消息源子业务类型标识
-    ///// </summary>
-    //public UInt16 SourceDataType { get; set; }
+    /// <summary>
+    /// 对应补报车辆静态信息请求消息源子业务类型标识。2019版新增
+    /// </summary>
+    public UInt16 SourceDataType { get; set; }
 
-    ///// <summary>
-    /////  对应补报车辆静态信息请求消息源报文序列号
-    ///// </summary>
-    //public UInt32 SourceMsgSn { get; set; }
+    /// <summary>
+    ///  对应补报车辆静态信息请求消息源报文序列号。2019版新增
+    /// </summary>
+    public UInt32 SourceMsgSn { get; set; }
 
     /// <summary>
     /// 车辆信息
@@ -33,7 +34,7 @@ public class JT809_0x1600_0x1601 : IAccessor
 
     /// <summary>读取</summary>
     /// <param name="stream"></param>
-    /// <param name="context"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
     /// <returns></returns>
     public virtual Boolean Read(Stream stream, Object context)
     {
@@ -41,8 +42,12 @@ public class JT809_0x1600_0x1601 : IAccessor
         var reader = Helper.CreateReader(stream, header);
         //reader.Encoding = Encoding.GetEncoding("gb2313");
 
-        //SourceDataType = reader.ReadUInt16();
-        //SourceMsgSn = reader.ReadUInt32();
+        if (reader.Version == "2019")
+        {
+            SourceDataType = reader.ReadUInt16();
+            SourceMsgSn = reader.ReadUInt32();
+        }
+
         CarInfo = reader.ReadAllGBK();
 
         var inf = new CarInfo();
@@ -61,8 +66,11 @@ public class JT809_0x1600_0x1601 : IAccessor
         var header = context as JTMessage;
         var writer = Helper.CreateWriter(stream, header);
 
-        //writer.Write(SourceDataType);
-        //writer.Write(SourceMsgSn);
+        if (writer.Version == "2019")
+        {
+            writer.Write(SourceDataType);
+            writer.Write(SourceMsgSn);
+        }
 
         var inf = Info;
         if (inf != null) CarInfo = inf.ToStr();

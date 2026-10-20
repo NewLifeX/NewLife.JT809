@@ -1,4 +1,5 @@
 ﻿using NewLife.JT809.Protocols;
+using NewLife.JT809.Serialization;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.SubMessages;
@@ -7,20 +8,21 @@ namespace NewLife.JT809.SubMessages;
 /// 上报车辆行驶记录应答消息
 /// <para>子业务类型标识:UP_CTRL_MSG_TAKE_TRAVEL_ACK</para>
 /// <para>描述:下级平台应答上级平台下发的"上报车辆行驶记录请求"消息，将车辆行驶记录数据上传至上级平台</para>
+/// <para>2011版数据体见JT/T 809-2011 表57，2019版数据体见JT/T 809-2019 表77，2019版新增源子业务类型、源报文序列号与命令字</para>
 /// </summary>
 [MessageKind(MessageKinds.上报车辆行驶记录应答消息)]
-public class JT809_0x1500_0x1504
+public class JT809_0x1500_0x1504 : IAccessor
 {
     /// <summary>
-    /// 对应上报车辆行驶记录请求消息源子业务类型标识
+    /// 对应上报车辆行驶记录请求消息源子业务类型标识。2019版使用
     /// </summary>
     public UInt16 SourceDataType { get; set; }
     /// <summary>
-    ///  对应上报车辆行驶记录请求消息源报文序列号
+    ///  对应上报车辆行驶记录请求消息源报文序列号。2019版使用
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
     /// <summary>
-    /// 命令字
+    /// 命令字。2019版使用
     /// </summary>
     public JT809CommandType CommandType { get; set; }
     /// <summary>
@@ -33,6 +35,56 @@ public class JT809_0x1500_0x1504
     /// </summary>
     [FieldSize(nameof(TraveldataLength))]
     public Byte[] TraveldataInfo { get; set; }
+
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
+
+        if (reader.Version == "2019")
+        {
+            SourceDataType = reader.ReadUInt16();
+            SourceMsgSn = reader.ReadUInt32();
+            CommandType = (JT809CommandType)reader.ReadByte();
+        }
+
+        var len = reader.ReadInt32();
+        if (len < 0 || len > stream.Length - stream.Position) return false;
+
+        TraveldataLength = (UInt32)len;
+        if (len > 0) TraveldataInfo = reader.ReadBytes(len);
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
+
+        if (writer.Version == "2019")
+        {
+            writer.Write(SourceDataType);
+            writer.Write(SourceMsgSn);
+            writer.Write((Byte)CommandType);
+        }
+
+        var buf = TraveldataInfo ?? Array.Empty<Byte>();
+        TraveldataLength = (UInt32)buf.Length;
+
+        writer.Write(buf.Length);
+        writer.Write(buf, 0, buf.Length);
+
+        return true;
+    }
 
     //public JT809_0x1500_0x1504 Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
     //{

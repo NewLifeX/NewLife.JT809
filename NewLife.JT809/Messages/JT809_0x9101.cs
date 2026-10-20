@@ -11,6 +11,8 @@ namespace NewLife.JT809.Messages
     /// 业务类型标识: UP_MANAGE_TOTAL_RECV_BACK_MSG
     /// 下级平台向上级平台定量通知已经上传的车辆定位信息数量(如:每收到10,000 条车辆定位信息通知一次)
     /// 本条消息不需上级平台应答。
+    /// 2011版称“接收车辆定位信息数量通知消息”(DOWN_TOTAL_RECY_BACK_MSG)，2019版改称“发送车辆定位信息数量通知消息”，
+    /// 两版业务类型标识同为 0x9101，数据体均为 数量(4) + 开始时间(8) + 结束时间(8)。
     /// </remarks>
     [MessageKind(MessageKinds.接收车辆定位信息数量通知消息)]
     public class JT809_0x9101

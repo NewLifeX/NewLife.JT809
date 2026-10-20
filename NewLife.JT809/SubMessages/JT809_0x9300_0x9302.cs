@@ -24,25 +24,26 @@ public enum JT809_0x9302_ObjectType : Byte
 /// 下发平台间报文请求
 /// <para>子业务类型标识:DOWN_PLATFORM_MSG_INFO_REQ</para>
 /// <para>描述:上级平台不定期向下级平台下发平台间报文</para>
+/// <para>2011版数据体见JT/T 809-2011 表45，2019版数据体见JT/T 809-2019 表60，2019版新增下发报文对象类型与对象ID</para>
 /// </summary>
 [MessageKind(MessageKinds.下发平台间报文请求)]
-public class JT809_0x9300_0x9302
+public class JT809_0x9300_0x9302 : IAccessor
 {
     /// <summary>
-    /// 查岗对象的类型
+    /// 查岗对象的类型。2019版新增
     /// </summary>
     public JT809_0x9302_ObjectType ObjectType { get; set; }
 
     /// <summary>
-    /// 查岗对象的ID
+    /// 查岗对象的ID。2019版新增
     /// </summary>
     [FieldSize(20)]
     public String ObjectID { get; set; }
 
-    ///// <summary>
-    ///// 信息ID
-    ///// </summary>
-    //public UInt32 InfoID { get; set; }
+    /// <summary>
+    /// 信息ID
+    /// </summary>
+    public UInt32 InfoID { get; set; }
 
     /// <summary>
     /// 数据长度
@@ -54,4 +55,56 @@ public class JT809_0x9300_0x9302
     /// </summary>
     [FieldSize(nameof(InfoLength))]
     public String InfoContent { get; set; }
+
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
+
+        if (reader.Version == "2019")
+        {
+            ObjectType = (JT809_0x9302_ObjectType)reader.ReadByte();
+            ObjectID = reader.ReadFixedString(20);
+        }
+
+        InfoID = reader.ReadUInt32();
+
+        var len = reader.ReadInt32();
+        if (len < 0 || len > stream.Length - stream.Position) return false;
+
+        InfoLength = (UInt32)len;
+        if (len > 0) InfoContent = Helper.Encoding.GetString(reader.ReadBytes(len));
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
+
+        if (writer.Version == "2019")
+        {
+            writer.Write((Byte)ObjectType);
+            writer.WriteFixedString(ObjectID, 20);
+        }
+
+        writer.Write(InfoID);
+
+        var buf = InfoContent.IsNullOrEmpty() ? Array.Empty<Byte>() : Helper.Encoding.GetBytes(InfoContent);
+        InfoLength = (UInt32)buf.Length;
+
+        writer.Write(buf.Length);
+        writer.Write(buf, 0, buf.Length);
+
+        return true;
+    }
 }

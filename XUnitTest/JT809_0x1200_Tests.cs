@@ -9,6 +9,7 @@ using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
+using NewLife.Serialization;
 using Xunit;
 
 namespace XUnitTest;
@@ -394,5 +395,188 @@ public class JT809_0x1200_Tests
         Assert.Equal(4, rs.DataLength);
         Assert.Null(rs.PlatformId1);
         Assert.Equal((LocationAlarms)0, rs.Alarm1);
+    }
+
+    private static Byte[] WriteSub(Object body, JTVersion version)
+    {
+        var ms = new MemoryStream();
+        Assert.True(((IAccessor)body).Write(ms, new JTMessage { Version = version }));
+
+        return ms.ToArray();
+    }
+
+    private static T ReadSub<T>(Byte[] data, JTVersion version) where T : IAccessor, new()
+    {
+        var rs = new T();
+        Assert.True(rs.Read(new MemoryStream(data), new JTMessage { Version = version }));
+
+        return rs;
+    }
+
+    private static Byte[] WriteAuto(Object body, JTVersion version)
+    {
+        var ms = new MemoryStream();
+        Helper.CreateWriter(ms, new JTMessage { Version = version }).Write(body);
+
+        return ms.ToArray();
+    }
+
+    private static T ReadAuto<T>(Byte[] data, JTVersion version) where T : new()
+    {
+        Object obj = new T();
+        Assert.True(Helper.CreateReader(new MemoryStream(data), new JTMessage { Version = version }).TryRead(null, ref obj));
+
+        return (T)obj;
+    }
+
+    /// <summary>0x1205/0x1206 启动与结束交换应答：2011只有长度，2019增加源子业务与源序列号</summary>
+    [Fact]
+    [DisplayName("0x1205与0x1206 按版本读写")]
+    public void TestReturnAck()
+    {
+        // 2011：后续数据长度(4)=0
+        var buf = WriteSub(new JT809_0x1200_0x1205(), JTVersion.JT2011);
+        Assert.Equal(4, buf.Length);
+        Assert.Equal(0u, ReadSub<JT809_0x1200_0x1205>(buf, JTVersion.JT2011).DataLength);
+
+        // 2019：源子业务(2) + 源序列号(4) + 后续数据长度(4)
+        var buf9 = WriteSub(new JT809_0x1200_0x1205 { SourceDataType = 0x9205, SourceMsgSN = 77 }, JTVersion.JT2019);
+        Assert.Equal(10, buf9.Length);
+
+        var rs9 = ReadSub<JT809_0x1200_0x1205>(buf9, JTVersion.JT2019);
+        Assert.Equal((UInt16)0x9205, rs9.SourceDataType);
+        Assert.Equal(77u, rs9.SourceMsgSN);
+        Assert.Equal(0u, rs9.DataLength);
+
+        Assert.Equal(4, WriteSub(new JT809_0x1200_0x1206(), JTVersion.JT2011).Length);
+        Assert.Equal(10, WriteSub(new JT809_0x1200_0x1206 { SourceDataType = 0x9206, SourceMsgSN = 78 }, JTVersion.JT2019).Length);
+    }
+
+    /// <summary>0x1207/0x1208/0x1209 申请、取消、补发：两版结构一致</summary>
+    [Fact]
+    [DisplayName("0x1207/0x1208/0x1209 两版结构一致")]
+    public void TestApplyAndHistory()
+    {
+        var time = 1263085674L.ToDateTime();
+        var end = 1263089274L.ToDateTime();
+
+        var buf7 = WriteAuto(new JT809_0x1200_0x1207 { StartTime = time, EndTime = end }, JTVersion.JT2019);
+        Assert.Equal(16, buf7.Length);
+        Assert.Equal(time, ReadAuto<JT809_0x1200_0x1207>(buf7, JTVersion.JT2019).StartTime);
+
+        Assert.Empty(WriteAuto(new JT809_0x1200_0x1208(), JTVersion.JT2011));
+        Assert.Empty(WriteAuto(new JT809_0x1200_0x1208(), JTVersion.JT2019));
+
+        var buf9 = WriteAuto(new JT809_0x1200_0x1209 { StartTime = time, EndTime = end }, JTVersion.JT2019);
+        Assert.Equal(16, buf9.Length);
+        Assert.Equal(end, ReadAuto<JT809_0x1200_0x1209>(buf9, JTVersion.JT2019).EndTime);
+    }
+
+    /// <summary>0x120A 驾驶员身份应答：2011无源字段与有效期，2019两者都有</summary>
+    [Fact]
+    [DisplayName("0x120A 按版本读写")]
+    public void TestDriverInfoAck()
+    {
+        var valid = 1263085674L.ToDateTime();
+        var body = new JT809_0x1200_0x120A
+        {
+            SourceDataType = 0x920A,
+            SourceMsgSn = 5,
+            DriverName = "张三",
+            DriverID = "340101199001011234",
+            Licence = "L123",
+            OrgName = "运管处",
+            ValidDate = valid,
+        };
+
+        // 2011：16 + 20 + 40 + 200
+        var buf = WriteSub(body, JTVersion.JT2011);
+        Assert.Equal(276, buf.Length);
+
+        var rs = ReadSub<JT809_0x1200_0x120A>(buf, JTVersion.JT2011);
+        Assert.Equal("张三", rs.DriverName);
+        Assert.Equal("340101199001011234", rs.DriverID);
+        Assert.Equal("L123", rs.Licence);
+        Assert.Equal("运管处", rs.OrgName);
+        Assert.Equal(DateTime.MinValue, rs.ValidDate);
+
+        // 2019：源子业务(2) + 源序列号(4) + 276 + 有效期(8)
+        var buf9 = WriteSub(body, JTVersion.JT2019);
+        Assert.Equal(290, buf9.Length);
+
+        var rs9 = ReadSub<JT809_0x1200_0x120A>(buf9, JTVersion.JT2019);
+        Assert.Equal((UInt16)0x920A, rs9.SourceDataType);
+        Assert.Equal(5u, rs9.SourceMsgSn);
+        Assert.Equal("张三", rs9.DriverName);
+        Assert.Equal(valid, rs9.ValidDate);
+    }
+
+    /// <summary>0x120B 电子运单应答：2019增加源字段，长度由内容自动计算</summary>
+    [Fact]
+    [DisplayName("0x120B 按版本读写")]
+    public void TestEwaybillAck()
+    {
+        var content = "运单内容";
+
+        var buf = WriteSub(new JT809_0x1200_0x120B { EwaybillInfo = content }, JTVersion.JT2011);
+        Assert.Equal(4 + Helper.Encoding.GetByteCount(content), buf.Length);
+
+        var rs = ReadSub<JT809_0x1200_0x120B>(buf, JTVersion.JT2011);
+        Assert.Equal(content, rs.EwaybillInfo);
+        Assert.Equal((UInt32)Helper.Encoding.GetByteCount(content), rs.EwaybillLength);
+
+        var body9 = new JT809_0x1200_0x120B { SourceDataType = 0x920B, SourceMsgSn = 6, EwaybillInfo = content };
+        var buf9 = WriteSub(body9, JTVersion.JT2019);
+        Assert.Equal(6 + 4 + Helper.Encoding.GetByteCount(content), buf9.Length);
+
+        var rs9 = ReadSub<JT809_0x1200_0x120B>(buf9, JTVersion.JT2019);
+        Assert.Equal((UInt16)0x920B, rs9.SourceDataType);
+        Assert.Equal(content, rs9.EwaybillInfo);
+    }
+
+    /// <summary>0x120C 主动上报驾驶员身份：2019增加有效期</summary>
+    [Fact]
+    [DisplayName("0x120C 按版本读写")]
+    public void TestDriverInfoReport()
+    {
+        var valid = 1263085674L.ToDateTime();
+        var body = new JT809_0x1200_0x120C
+        {
+            DriverName = "李四",
+            DriverID = "340101199001015678",
+            Licence = "L456",
+            OrgName = "运管处",
+            ValidDate = valid,
+        };
+
+        var buf = WriteSub(body, JTVersion.JT2011);
+        Assert.Equal(276, buf.Length);
+        Assert.Equal(DateTime.MinValue, ReadSub<JT809_0x1200_0x120C>(buf, JTVersion.JT2011).ValidDate);
+
+        var buf9 = WriteSub(body, JTVersion.JT2019);
+        Assert.Equal(284, buf9.Length);
+
+        var rs9 = ReadSub<JT809_0x1200_0x120C>(buf9, JTVersion.JT2019);
+        Assert.Equal("李四", rs9.DriverName);
+        Assert.Equal(valid, rs9.ValidDate);
+    }
+
+    /// <summary>0x120D/0x120E 长度前缀由内容自动计算</summary>
+    [Fact]
+    [DisplayName("0x120D与0x120E 自动计算长度")]
+    public void TestEwaybillAndDrvLineReport()
+    {
+        var content = "运单";
+        var buf = WriteSub(new JT809_0x1200_0x120D { EwaybillInfo = content }, JTVersion.JT2019);
+        Assert.Equal(4 + Helper.Encoding.GetByteCount(content), buf.Length);
+        Assert.Equal(content, ReadSub<JT809_0x1200_0x120D>(buf, JTVersion.JT2019).EwaybillInfo);
+
+        var line = new Byte[] { 0x86, 0x06, 0x01, 0x02 };
+        var buf2 = WriteSub(new JT809_0x1200_0x120E { DRVLine = line }, JTVersion.JT2019);
+        Assert.Equal(4 + line.Length, buf2.Length);
+
+        var rs2 = ReadSub<JT809_0x1200_0x120E>(buf2, JTVersion.JT2019);
+        Assert.Equal(line, rs2.DRVLine);
+        Assert.Equal((UInt32)line.Length, rs2.DRVLineLength);
     }
 }

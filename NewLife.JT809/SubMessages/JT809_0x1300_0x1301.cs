@@ -18,49 +18,50 @@ public enum JT809_0x1301_ObjectType : Byte
 /// <para>子业务类型标识:UP_PLATFORM_MSG_POST_QUERY_ACK</para>
 /// <para>2011 描述:下级平台应答上级平台发送的不定期平台查岗消息</para>
 /// <para>2019 描述:下级平台根据查岗对象地类型将上级平台发送地不定期平台查岗消息发送到不同地查岗对象，并将不同地查岗对象地应答分别转发给上级平台</para>
+/// <para>2011版数据体见JT/T 809-2011 表41，2019版数据体见JT/T 809-2019 表55</para>
 /// </summary>
 [MessageKind(MessageKinds.平台查岗应答消息)]
-public class JT809_0x1300_0x1301
+public class JT809_0x1300_0x1301 : IAccessor
 {
     /// <summary>
-    /// 查岗对象的类型
+    /// 查岗对象的类型。2019版使用
     /// </summary>
     public JT809_0x1301_ObjectType ObjectType { get; set; }
 
     /// <summary>
-    /// 查岗应答人姓名
+    /// 查岗应答人姓名。2019版使用
     /// </summary>
     [FieldSize(16)]
     public String Responder { get; set; }
 
     /// <summary>
-    /// 查岗应答人联系电话
+    /// 查岗应答人联系电话。2019版使用
     /// </summary>
     [FieldSize(20)]
     public String ResponderTel { get; set; }
 
     /// <summary>
     /// 查岗对象的ID
-    /// 2013:12位
+    /// 2011:12位
     /// 2019:20位
     /// </summary>
     [FieldSize(20)]
     public String ObjectID { get; set; }
 
     /// <summary>
-    /// 对应平台查岗请求消息源子业务类型标识
+    /// 对应平台查岗请求消息源子业务类型标识。2019版使用
     /// </summary>
     public UInt16 SourceDataType { get; set; }
 
     /// <summary>
-    /// 对应平台查岗请求消息源报文序列号
+    /// 对应平台查岗请求消息源报文序列号。2019版使用
     /// </summary>
     public UInt32 SourceMsgSn { get; set; }
 
-    ///// <summary>
-    ///// 信息ID
-    ///// </summary>
-    //public UInt32 InfoID { get; set; }
+    /// <summary>
+    /// 信息ID。2011版使用
+    /// </summary>
+    public UInt32 InfoID { get; set; }
 
     /// <summary>
     /// 数据长度
@@ -72,6 +73,74 @@ public class JT809_0x1300_0x1301
     /// </summary>
     [FieldSize(nameof(InfoLength))]
     public String InfoContent { get; set; }
+
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
+
+        if (reader.Version == "2019")
+        {
+            ObjectType = (JT809_0x1301_ObjectType)reader.ReadByte();
+            Responder = reader.ReadFixedString(16);
+            ResponderTel = reader.ReadFixedString(20);
+            ObjectID = reader.ReadFixedString(20);
+            SourceDataType = reader.ReadUInt16();
+            SourceMsgSn = reader.ReadUInt32();
+        }
+        else
+        {
+            ObjectType = (JT809_0x1301_ObjectType)reader.ReadByte();
+            ObjectID = reader.ReadFixedString(12);
+            InfoID = reader.ReadUInt32();
+        }
+
+        var len = reader.ReadInt32();
+        if (len < 0 || len > stream.Length - stream.Position) return false;
+
+        InfoLength = (UInt32)len;
+        if (len > 0) InfoContent = Helper.Encoding.GetString(reader.ReadBytes(len));
+
+        return true;
+    }
+
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
+
+        if (writer.Version == "2019")
+        {
+            writer.Write((Byte)ObjectType);
+            writer.WriteFixedString(Responder, 16);
+            writer.WriteFixedString(ResponderTel, 20);
+            writer.WriteFixedString(ObjectID, 20);
+            writer.Write(SourceDataType);
+            writer.Write(SourceMsgSn);
+        }
+        else
+        {
+            writer.Write((Byte)ObjectType);
+            writer.WriteFixedString(ObjectID, 12);
+            writer.Write(InfoID);
+        }
+
+        var buf = InfoContent.IsNullOrEmpty() ? Array.Empty<Byte>() : Helper.Encoding.GetBytes(InfoContent);
+        InfoLength = (UInt32)buf.Length;
+
+        writer.Write(buf.Length);
+        writer.Write(buf, 0, buf.Length);
+
+        return true;
+    }
 
     //public JT809_0x1300_0x1301 Deserialize(ref JT809MessagePackReader reader, IJT809Config config)
     //{

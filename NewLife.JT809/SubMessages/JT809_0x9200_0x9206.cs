@@ -1,4 +1,4 @@
-﻿using NewLife.JT809.Protocols;
+using NewLife.JT809.Protocols;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -11,7 +11,9 @@ public enum JT809_0x9206_ReasonCode : Byte
     人工停止交换 = 0x01,
     紧急监控完成 = 0x02,
     车辆离线 = 0x03,
-    其它原因 = 0x04
+    其它原因 = 0x04,
+    /// <summary>其他。2019版取值</summary>
+    其他_2019 = 0xFF
 }
 
 /// <summary>

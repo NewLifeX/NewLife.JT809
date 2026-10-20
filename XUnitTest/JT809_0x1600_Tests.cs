@@ -3,10 +3,12 @@ using System.ComponentModel;
 using System.IO;
 using NewLife;
 using NewLife.Data;
+using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
+using NewLife.Serialization;
 using Xunit;
 
 namespace XUnitTest;
@@ -123,5 +125,75 @@ public class JT809_0x1600_Tests
         Assert.Equal(1, (Int32)rs.EncryptFlag);
         Assert.Equal(msg.EncryptKey, rs.EncryptKey);
         Assert.Equal(payload, rs.Payload.ReadBytes());
+    }
+
+    private static Byte[] WriteBody(Object body, JTVersion version)
+    {
+        var ms = new MemoryStream();
+        Assert.True(((IAccessor)body).Write(ms, new JTMessage { Version = version }));
+
+        return ms.ToArray();
+    }
+
+    private static T ReadBody<T>(Byte[] data, JTVersion version) where T : IAccessor, new()
+    {
+        var rs = new T();
+        Assert.True(rs.Read(new MemoryStream(data), new JTMessage { Version = version }));
+
+        return rs;
+    }
+
+    private static Byte[] WriteAuto(Object body, JTVersion version)
+    {
+        var ms = new MemoryStream();
+        Helper.CreateWriter(ms, new JTMessage { Version = version }).Write(body);
+
+        return ms.ToArray();
+    }
+
+    [Fact]
+    [DisplayName("0x1601 补报静态信息应答按版本读写")]
+    public void TestVehicleAddedAckVersion()
+    {
+        var content = "VIN:=京CJ6789;PLATE_COLOR:=2";
+
+        // 2011：车辆信息直接填满后续数据长度
+        var buf = WriteBody(new JT809_0x1600_0x1601 { CarInfo = content }, JTVersion.JT2011);
+        Assert.Equal(Helper.Encoding.GetByteCount(content), buf.Length);
+
+        var rs = ReadBody<JT809_0x1600_0x1601>(buf, JTVersion.JT2011);
+        Assert.Equal(content, rs.CarInfo);
+        Assert.NotNull(rs.Info);
+
+        // 2019：源子业务(2) + 源序列号(4) + 车辆信息
+        var buf9 = WriteBody(new JT809_0x1600_0x1601 { SourceDataType = 0x9601, SourceMsgSn = 8, CarInfo = content }, JTVersion.JT2019);
+        Assert.Equal(6 + Helper.Encoding.GetByteCount(content), buf9.Length);
+
+        var rs9 = ReadBody<JT809_0x1600_0x1601>(buf9, JTVersion.JT2019);
+        Assert.Equal((UInt16)0x9601, rs9.SourceDataType);
+        Assert.Equal(8u, rs9.SourceMsgSn);
+        Assert.Equal(content, rs9.CarInfo);
+    }
+
+    [Fact]
+    [DisplayName("0x1602 补报行驶路线应答直接携带路线字节")]
+    public void TestDrvLineAdded()
+    {
+        var line = new Byte[] { 0x86, 0x06, 0x01, 0x02, 0x03 };
+        var body = new JT809_0x1600_0x1602 { DRVLine = line };
+
+        var buf = WriteBody(body, JTVersion.JT2019);
+        Assert.Equal(line.Length, buf.Length);
+
+        var rs = ReadBody<JT809_0x1600_0x1602>(buf, JTVersion.JT2019);
+        Assert.Equal(line, rs.DRVLine);
+    }
+
+    [Fact]
+    [DisplayName("0x9601 补报静态信息请求无数据部分")]
+    public void TestVehicleAddedReq()
+    {
+        Assert.Empty(WriteAuto(new JT809_0x9600_0x9601(), JTVersion.JT2011));
+        Assert.Empty(WriteAuto(new JT809_0x9600_0x9601(), JTVersion.JT2019));
     }
 }

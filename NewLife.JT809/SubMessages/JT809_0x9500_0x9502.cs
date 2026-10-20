@@ -2,7 +2,7 @@
 
 namespace NewLife.JT809.SubMessages;
 
-public enum JT809_0x9502_SizeType
+public enum JT809_0x9502_SizeType : Byte
 {
     _320x240 = 0x01,
     _640x480 = 0x02,

@@ -1,4 +1,4 @@
-﻿using NewLife.JT809.Protocols;
+using NewLife.JT809.Protocols;
 
 namespace NewLife.JT809.SubMessages;
 
@@ -10,7 +10,9 @@ public enum JT809_0x9205_ReasonCode : Byte
     车辆进入指定区域 = 0x00,
     人工指定交换 = 0x01,
     应急状态下车辆定位信息回传 = 0x02,
-    其它原因 = 0x03
+    其它原因 = 0x03,
+    /// <summary>其他。2019版取值</summary>
+    其他_2019 = 0xFF
 }
 
 /// <summary>

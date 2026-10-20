@@ -11,9 +11,10 @@ namespace NewLife.JT809.Messages;
 /// 消息方向：上级平台往下级平台
 /// 业务类型标识：DOWN_MANAGE_MSG_REQ
 /// 上级平台向下级平台发送上报指定下级监控平台一段时间内链路连接情况与车辆定位消息传输情况请求
+/// 数据体见 JT/T 809-2019 表22：子业务类型(2) + 数据长度(4) + 平台编码(11) + 开始时间(8) + 结束时间(8)
 /// </remarks>
 [MessageKind(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019)]
-public class JT809_0x9102 //: IAccessor
+public class JT809_0x9102 : IAccessor
 {
     /// <summary>
     /// 子业务类型标识
@@ -43,47 +44,43 @@ public class JT809_0x9102 //: IAccessor
     /// </summary>
     public DateTime EndTime { get; set; }
 
-    ///// <summary>
-    ///// 读取
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public override Boolean Read(Stream stream, Object context)
-    //{
-    //    if (!base.Read(stream, context)) return false;
+    /// <summary>读取</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Read(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var reader = Helper.CreateReader(stream, header);
 
-    //    var pk = Payload;
-    //    if (pk == null) return false;
+        DataType = reader.ReadUInt16();
+        DataLength = reader.ReadUInt32();
+        PlatformId = reader.ReadFixedString(11);
+        StartTime = reader.Read<DateTime>();
+        EndTime = reader.Read<DateTime>();
 
-    //    var reader = Helper.CreateReader(pk.GetStream());
-    //    PlatformId = reader.ReadFixedString(11);
-    //    StartTime = reader.Read<Int64>().ToDateTime();
-    //    EndTime = reader.Read<Int64>().ToDateTime();
+        return true;
+    }
 
-    //    return true;
-    //}
+    /// <summary>写入</summary>
+    /// <param name="stream"></param>
+    /// <param name="context">报文头，用于取协议版本</param>
+    /// <returns></returns>
+    public Boolean Write(Stream stream, Object context)
+    {
+        var header = context as JTMessage;
+        var writer = Helper.CreateWriter(stream, header);
 
-    ///// <summary>
-    ///// 写入
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public override Boolean Write(Stream stream, Object context)
-    //{
-    //    //if (!base.Write(stream, context)) return false;
+        writer.Write(DataType);
 
-    //    var ms = new MemoryStream();
-    //    var writer = Helper.CreateWriter(ms);
+        // 数据长度为平台编码与两个时间字段共27字节
+        DataLength = 11 + 8 + 8;
 
-    //    writer.WriteFixedString(PlatformId, 11);
-    //    writer.Write(StartTime.ToLong());
-    //    writer.Write(EndTime.ToLong());
+        writer.Write(DataLength);
+        writer.WriteFixedString(PlatformId, 11);
+        writer.Write(StartTime);
+        writer.Write(EndTime);
 
-    //    Payload = ms.ToArray();
-
-    //    //return true;
-    //    return base.Write(stream, context);
-    //}
+        return true;
+    }
 }
