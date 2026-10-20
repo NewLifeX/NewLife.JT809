@@ -1,4 +1,4 @@
-﻿using NewLife.Data;
+using NewLife.Data;
 using NewLife.JT809.Protocols;
 using NewLife.Serialization;
 
@@ -13,6 +13,6 @@ namespace NewLife.JT809.Messages;
 /// <para>描述:下级平台向上级平台发送车辆报警信息业务</para>
 /// </summary>
 [MessageKind(MessageKinds.主链路报警信息交互消息)]
-public class JT809_0x1400 : JT809ExchangeMessage
+public class JT809_0x1400 : JT809WarnMessageBodies
 {
 }

@@ -43,6 +43,17 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
 
         VehicleNo = reader.ReadFixedString(21);
         VehicleColor = (JT809VehicleColorType)reader.ReadByte();
+
+        return ReadBody(stream, reader, header);
+    }
+
+    /// <summary>读取子业务类型标识、数据长度与子业务数据体</summary>
+    /// <param name="stream">数据流</param>
+    /// <param name="reader">读取器</param>
+    /// <param name="header">报文头</param>
+    /// <returns></returns>
+    protected Boolean ReadBody(Stream stream, Binary reader, JTMessage header)
+    {
         DataType = reader.ReadUInt16();
 
         var len = reader.ReadInt32();
@@ -83,6 +94,16 @@ public abstract class JT809ExchangeMessageBodies : IAccessor, ISubMessage
         writer.WriteFixedString(VehicleNo, 21);
         writer.Write(VehicleColor);
 
+        return WriteBody(stream, writer, header);
+    }
+
+    /// <summary>写入子业务类型标识、数据长度与子业务数据体</summary>
+    /// <param name="stream">数据流</param>
+    /// <param name="writer">写入器</param>
+    /// <param name="header">报文头</param>
+    /// <returns></returns>
+    protected Boolean WriteBody(Stream stream, Binary writer, JTMessage header)
+    {
         // 修正数据
         if (Body is Byte[] buf)
         {
