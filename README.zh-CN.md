@@ -27,7 +27,14 @@ NuGet：https://www.nuget.org/packages/NewLife.JT809
 - 帧编解码：0x5B/0x5D 定界、转义处理、CRC-16 校验与链路加密
 - 协议版本：支持 JT/T 809-2011、2013、2019，登录时自动识别版本
 - 指令覆盖：30+ 顶层业务指令、50+ 子业务消息，含车辆定位、报警与静态信息模型
-- 运行形态：基于 Core 消息泵的客户端/服务端会话、请求响应配对、AOT 兼容、10 种运行时语言
+- 接入方式：`[MessageKind]` 标注的处理器方法、请求响应配对、断线重连
+- 工程能力：Native AOT 兼容、11 种语言运行时消息（10 份译文 + 英文源文）
+
+## 环境要求
+
+- 目标框架 `netstandard2.0`、`net8.0`、`net10.0`，可在 Windows、Linux、macOS 运行
+- 依赖 NewLife.Core（随包还原）；源码编译需 .NET 8 SDK 及以上
+- 协议规范见 [Doc](Doc)：JT/T 809-2011 与 JT/T 809-2019
 
 ## 安装
 
@@ -40,12 +47,20 @@ dotnet add package NewLife.JT809
 ```csharp
 using NewLife.Net;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 
-// Register the built-in commands explicitly (AOT friendly)
+// Built-in commands register on first use; call Init() explicitly for clarity under AOT/trimming
 MessageFactory.Instance.Init();
 
-// Client: connect to the upper-level platform over the master link
+// Server: handle commands with methods marked by [MessageKind]
+var server = new JTServer { Port = 809 };
+server.AddHandler(new MyController());
+server.Start();
+
+// Client: log in over the master link, then push a real-time location (0x1200 / 0x1202)
 var client = new JTClient
 {
     Server = new NetUri("tcp://127.0.0.1:809"),
@@ -54,10 +69,23 @@ var client = new JTClient
 client.Open();
 var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 2809);
 
-// Server: host the lower-level platform and handle commands
-var server = new JTServer { Port = 809 };
-server.AddHandler(new MyController());
-server.Start();
+client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
+{
+    Time = DateTime.Now,
+    Longitude = 117123456,
+    Latitude = 31876543,
+    Speed = 600,
+});
+
+class MyController
+{
+    [MessageKind(MessageKinds.主链路登录请求消息)]
+    public Object Login(IJTSession session, JTMessage message)
+        => new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = 0x1234 };
+
+    [MessageKind(MessageKinds.主链路连接保持请求消息)]
+    public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
+}
 ```
 
 ## 文档

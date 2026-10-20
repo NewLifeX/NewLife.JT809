@@ -18,8 +18,9 @@ internal class MyBinaryGeneral : BinaryGeneral
 
         if (type == typeof(DateTime))
         {
+            // 协议中的 UTC 时间字段为 8 字节 Unix 秒；0 表示未设置
             if (TryReadInt64(out var num))
-                value = num.ToDateTime();
+                value = num > 0 ? num.ToDateTime() : default(DateTime);
             return true;
         }
 
@@ -32,7 +33,8 @@ internal class MyBinaryGeneral : BinaryGeneral
 
         if (type == typeof(DateTime) && value is DateTime dt)
         {
-            base.Write(dt.ToLong());
+            // ToLong 为 Unix 毫秒，协议时间字段为 Unix 秒，必须换算，否则对端会读到数万年后
+            base.Write(dt.ToLong() / 1000);
             return true;
         }
 

@@ -1,4 +1,3 @@
-﻿using System.Reflection;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
@@ -54,8 +53,11 @@ public static class JTSessionExtensions
             Body = model
         };
 
-        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
-        req.DataType = (UInt16)att.Kind;
+        // 指令表查找替代特性反射，AOT 下无需额外保留特性元数据
+        if (!MessageFactory.Instance.Types.TryGetValue(model.GetType(), out var kind))
+            throw new ArgumentException(L.T("Unsupported type [{0}]", model.GetType()), nameof(model));
+
+        req.DataType = (UInt16)kind;
 
         session.Send(req);
     }
@@ -76,8 +78,11 @@ public static class JTSessionExtensions
             Body = model
         };
 
-        var att = model.GetType().GetCustomAttribute<MessageKindAttribute>();
-        req.DataType = (UInt16)att.Kind;
+        // 指令表查找替代特性反射，AOT 下无需额外保留特性元数据
+        if (!MessageFactory.Instance.Types.TryGetValue(model.GetType(), out var kind))
+            throw new ArgumentException(L.T("Unsupported type [{0}]", model.GetType()), nameof(model));
+
+        req.DataType = (UInt16)kind;
 
         session.Send(req);
     }

@@ -17,6 +17,8 @@
 [![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
+> قد تتأخر هذه الترجمة عن [README بالإنجليزية](README.md).
+
 مكتبة بروتوكول JT/T 809 لترابط المنصات في النقل البري (الصين). توفر ترميز الإطارات ورسائل الإصدارات 2011/2013/2019 وجلسات العميل والخادم للرابط الرئيسي والتابع.
 
 المصدر: https://github.com/NewLifeX/NewLife.JT809  
@@ -27,7 +29,14 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - ترميز الإطارات: تحديد 0x5B/0x5D ومعالجة التهريب والتحقق CRC-16 وتشفير الرابط
 - إصدارات البروتوكول: JT/T 809-2011 و2013 و2019 مع اكتشاف تلقائي عند تسجيل الدخول
 - تغطية الأوامر: أكثر من 30 أمرًا رئيسيًا و50 رسالة فرعية تشمل نماذج الموقع والإنذار والمعلومات الثابتة
-- بيئة التشغيل: جلسات عميل/خادم على مضخة رسائل Core، ومطابقة الطلب/الرد، ومتوافقة مع AOT و10 لغات وقت التشغيل
+- التكامل: أساليب معالج موسومة بـ`[MessageKind]` ومطابقة الطلب/الرد وإعادة الاتصال
+- هندسيًا: متوافقة مع Native AOT ورسائل وقت التشغيل بـ11 لغة (10 جداول ترجمة والإنجليزية مصدرًا)
+
+## المتطلبات
+
+- أطر العمل المستهدفة `netstandard2.0` و`net8.0` و`net10.0`؛ تعمل على Windows وLinux وmacOS
+- تعتمد على NewLife.Core (تُستعاد مع الحزمة)؛ وبناء الشيفرة يتطلب .NET 8 SDK أو أحدث
+- مواصفات البروتوكول: [Doc](Doc) (JT/T 809-2011 وJT/T 809-2019)
 
 ## التثبيت
 
@@ -40,12 +49,20 @@ dotnet add package NewLife.JT809
 ```csharp
 using NewLife.Net;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 
-// Register the built-in commands explicitly (AOT friendly)
+// Built-in commands register on first use; call Init() explicitly for clarity under AOT/trimming
 MessageFactory.Instance.Init();
 
-// Client: connect to the upper-level platform over the master link
+// Server: handle commands with methods marked by [MessageKind]
+var server = new JTServer { Port = 809 };
+server.AddHandler(new MyController());
+server.Start();
+
+// Client: log in over the master link, then push a real-time location (0x1200 / 0x1202)
 var client = new JTClient
 {
     Server = new NetUri("tcp://127.0.0.1:809"),
@@ -54,10 +71,23 @@ var client = new JTClient
 client.Open();
 var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 2809);
 
-// Server: host the lower-level platform and handle commands
-var server = new JTServer { Port = 809 };
-server.AddHandler(new MyController());
-server.Start();
+client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
+{
+    Time = DateTime.Now,
+    Longitude = 117123456,
+    Latitude = 31876543,
+    Speed = 600,
+});
+
+class MyController
+{
+    [MessageKind(MessageKinds.主链路登录请求消息)]
+    public Object Login(IJTSession session, JTMessage message)
+        => new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = 0x1234 };
+
+    [MessageKind(MessageKinds.主链路连接保持请求消息)]
+    public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
+}
 ```
 
 ## التوثيق

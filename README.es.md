@@ -17,6 +17,8 @@
 [![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
+> Esta traducción puede estar desactualizada; consulta el [README en inglés](README.md).
+
 Biblioteca del protocolo JT/T 809 para la interconexión de plataformas en el transporte por carretera (China). Incluye códec de tramas, mensajes 2011/2013/2019 y sesiones cliente/servidor para enlaces maestro y esclavo.
 
 Origen: https://github.com/NewLifeX/NewLife.JT809  
@@ -27,7 +29,14 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Códec de tramas: delimitación 0x5B/0x5D, escape, CRC-16 y cifrado de enlace
 - Versiones del protocolo: JT/T 809-2011, 2013 y 2019, detectadas automáticamente al iniciar sesión
 - Cobertura: más de 30 comandos de nivel superior y 50 submensajes, con modelos de posición, alarma e información estática
-- Ejecución: sesiones cliente/servidor sobre el bombeo de mensajes de Core, emparejamiento solicitud/respuesta, compatible con AOT y 10 idiomas en tiempo de ejecución
+- Integración: métodos de controlador con `[MessageKind]`, emparejamiento solicitud/respuesta y reconexión
+- Ingeniería: compatible con Native AOT; mensajes en tiempo de ejecución en 11 idiomas (10 tablas de traducción y el inglés como origen)
+
+## Requisitos
+
+- Marcos objetivo `netstandard2.0`, `net8.0` y `net10.0`; funciona en Windows, Linux y macOS
+- Depende de NewLife.Core (se restaura con el paquete); compilar el código requiere .NET 8 SDK o superior
+- Especificaciones del protocolo: [Doc](Doc) (JT/T 809-2011 y JT/T 809-2019)
 
 ## Instalación
 
@@ -40,12 +49,20 @@ dotnet add package NewLife.JT809
 ```csharp
 using NewLife.Net;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 
-// Register the built-in commands explicitly (AOT friendly)
+// Built-in commands register on first use; call Init() explicitly for clarity under AOT/trimming
 MessageFactory.Instance.Init();
 
-// Client: connect to the upper-level platform over the master link
+// Server: handle commands with methods marked by [MessageKind]
+var server = new JTServer { Port = 809 };
+server.AddHandler(new MyController());
+server.Start();
+
+// Client: log in over the master link, then push a real-time location (0x1200 / 0x1202)
 var client = new JTClient
 {
     Server = new NetUri("tcp://127.0.0.1:809"),
@@ -54,10 +71,23 @@ var client = new JTClient
 client.Open();
 var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 2809);
 
-// Server: host the lower-level platform and handle commands
-var server = new JTServer { Port = 809 };
-server.AddHandler(new MyController());
-server.Start();
+client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
+{
+    Time = DateTime.Now,
+    Longitude = 117123456,
+    Latitude = 31876543,
+    Speed = 600,
+});
+
+class MyController
+{
+    [MessageKind(MessageKinds.主链路登录请求消息)]
+    public Object Login(IJTSession session, JTMessage message)
+        => new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = 0x1234 };
+
+    [MessageKind(MessageKinds.主链路连接保持请求消息)]
+    public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
+}
 ```
 
 ## Documentación

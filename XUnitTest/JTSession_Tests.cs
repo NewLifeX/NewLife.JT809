@@ -1,5 +1,10 @@
-﻿using System.ComponentModel;
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
+using NewLife.JT809.SubMessages;
 using NewLife.JT809.Protocols;
 using Xunit;
 
@@ -56,5 +61,50 @@ public class JTSession_Tests
         var asm = typeof(JTMessage).Assembly;
 
         Assert.Contains("ILLink.Descriptors.xml", asm.GetManifestResourceNames());
+    }
+
+    [Fact]
+    [DisplayName("发送位置消息按指令表回填子业务类型")]
+    public void Send1200_UsesRegistry()
+    {
+        var session = new FakeSession();
+        var body = new JT809_0x1200_0x1202
+        {
+            Time = new DateTime(2024, 5, 6, 7, 8, 9),
+            Longitude = 117123456,
+            Latitude = 31876543,
+            Speed = 600,
+        };
+
+        session.Send1200("皖AT0011", 2, body);
+
+        var msg = Assert.IsType<JT809_0x1200>(session.Sent);
+        Assert.Equal(0x1202, (Int32)msg.DataType);
+        Assert.Equal("皖AT0011", msg.VehicleNo);
+        Assert.Equal(2, (Int32)msg.VehicleColor);
+        Assert.Same(body, msg.Body);
+    }
+
+    [Fact]
+    [DisplayName("发送未注册类型的位置消息抛出参数异常")]
+    public void Send1200_Unregistered()
+    {
+        var session = new FakeSession();
+
+        Assert.Throws<ArgumentException>(() => session.Send1200("皖AT0011", 2, new Object()));
+    }
+
+    /// <summary>记录发送内容的会话替身</summary>
+    private class FakeSession : IJTSession
+    {
+        public UInt32 CenterId { get; set; }
+
+        public JTConfig Config { get; set; } = new JTConfig();
+
+        public Object Sent { get; private set; }
+
+        public void Send(Object body) => Sent = body;
+
+        public Task<TResult> SendAsync<TResult>(Object body) where TResult : class, new() => throw new NotSupportedException();
     }
 }

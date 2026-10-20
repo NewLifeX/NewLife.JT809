@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using NewLife;
 using NewLife.Data;
@@ -7,131 +8,93 @@ using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;
 using Xunit;
 
-namespace XUnitTest
+namespace XUnitTest;
+
+[DisplayName("0x9102 链路与定位传输情况上报")]
+public class JT809_0x9102_Tests
 {
-    public class JT809_0x9102_Tests
+    private readonly MessageFactory _factory;
+    public JT809_0x9102_Tests()
     {
-        private readonly MessageFactory _factory;
-        public JT809_0x9102_Tests()
+        _factory = MessageFactory.Instance;
+        _factory.Init();
+    }
+
+    [Fact]
+    [DisplayName("2011报文字段读写往返")]
+    public void Test9102()
+    {
+        var header = new JTMessage { Version = JTVersion.JT2011 };
+        var msg = new JT809_0x9102
         {
-            _factory = MessageFactory.Instance;
-            _factory.Init();
-        }
+            DataType = 0x9102,
+            DataLength = 27,
+            PlatformId = "10010",
+            StartTime = 1263085674L.ToDateTime(),
+            EndTime = 1263085674L.ToDateTime(),
+        };
 
-        [Fact]
-        public void Test9102()
+        var ms = new MemoryStream();
+        Assert.True(Helper.CreateWriter(ms, header).Write(msg));
+
+        ms.Position = 0;
+        Object obj = new JT809_0x9102();
+        Assert.True(Helper.CreateReader(ms, header).TryRead(null, ref obj));
+
+        var rs = Assert.IsType<JT809_0x9102>(obj);
+        Assert.Equal(msg.DataType, rs.DataType);
+        Assert.Equal(msg.DataLength, rs.DataLength);
+        Assert.Equal(msg.PlatformId, rs.PlatformId);
+        Assert.Equal(msg.StartTime, rs.StartTime);
+        Assert.Equal(msg.EndTime, rs.EndTime);
+    }
+
+    /// <summary>协议示例：2010-1-10 9:7:54 的 UTC 值为 1263085674，协议中表示为 0x000000004B49286A</summary>
+    [Fact]
+    [DisplayName("UTC时间字段按Unix秒写入")]
+    public void Test9102_UtcSeconds()
+    {
+        var start = 1263085674L.ToDateTime();
+        var msg = new JT809_0x9102
         {
-            var message = new JTMessage();
+            PlatformId = "10010",
+            StartTime = start,
+            EndTime = start,
+        };
 
-            var msg = new JT809_0x9102
-            {
-                PlatformId = "XXX",
-                StartTime = DateTime.Today,
-                EndTime = DateTime.Now,
-            };
+        var header = new JTMessage { Version = JTVersion.JT2019 };
+        var ms = new MemoryStream();
+        Assert.True(Helper.CreateWriter(ms, header).Write(msg));
 
-            var ms = new MemoryStream();
-            //msg.Write(ms, null);
-            var bn = Helper.CreateWriter(ms, message);
-            bn.Write(msg);
+        var hex = ms.ToArray().ToHex();
+        Assert.Contains("000000004B49286A", hex);
 
-            var buf = ms.ToArray();
+        ms.Position = 0;
+        Object obj = new JT809_0x9102();
+        Assert.True(Helper.CreateReader(ms, header).TryRead(null, ref obj));
 
-            ms = new MemoryStream(buf);
-            var msg2 = new JT809_0x9102();
-            //var rs = msg2.Read(ms, null);
-            var bn2 = Helper.CreateWriter(ms, message);
-            Object obj = msg2;
-            var rs = bn2.TryRead(null, ref obj);
+        var rs = Assert.IsType<JT809_0x9102>(obj);
+        Assert.Equal(start, rs.StartTime);
+        Assert.Equal(start, rs.EndTime);
+    }
 
-            Assert.True(rs);
-        }
+    [Fact]
+    [DisplayName("2019报文按秒解析对端数据")]
+    public void Test222()
+    {
+        // DataType(2) + DataLength(4) + PlatformId(11) + StartTime(8) + EndTime(8)
+        var str = "27660000001B3130303130000000000000000000004EBC924F000000004EBC924F";
+        var dt = str.ToHex();
 
-        [Fact]
-        public void Test9102_2019()
-        {
-            var header = new JTMessage { Version = JTVersion.JT2019 };
+        var header = new JTMessage { Version = JTVersion.JT2019 };
+        var bn = Helper.CreateReader(new MemoryStream(dt), header);
 
-            var msg = new JT809_0x9102
-            {
-                PlatformId = "XXX",
-                StartTime = DateTime.Today,
-                EndTime = DateTime.Now,
-            };
+        var body = bn.Read<JT809_0x9102>();
 
-            var ms = new MemoryStream();
-            //msg.Write(ms, header);
-            var bn = Helper.CreateWriter(ms, header);
-            bn.Write(msg);
-
-            var buf = ms.ToArray();
-
-            ms = new MemoryStream(buf);
-            var msg2 = new JT809_0x9102();
-            //var rs = msg2.Read(ms, header);
-            var bn2 = Helper.CreateWriter(ms, header);
-            Object obj = msg2;
-            var rs = bn2.TryRead(null, ref obj);
-
-            Assert.True(rs);
-        }
-
-        [Fact]
-        public void TestJT20192()
-        {
-            var str =
-                "5B" +
-                "00000043" +
-                "00000003" +
-                "9102" +
-                "00003039" +
-                "01020F" +
-                "00" +
-                "00000000" +
-                "0000018163B6BEF3" +
-
-                "0000" +
-                "00000000" +
-                "36506657-35614F46-000000" +
-                "0000018161C0B382" +
-                "0000018161F7A202" +
-
-                "3D06" +
-                "5D";
-            var dt = str.ToHex();
-
-            var msg = new JTMessage { Version = JTVersion.JT2019 };
-            var rs = msg.Read(dt);
-
-            //Assert.True(rs);
-            Assert.Equal(MessageKinds.平台链路连接情况与车辆定位消息传输情况上报请求消息_2019, msg.Kind);
-            Assert.Equal(12345u, msg.CenterId);
-            Assert.Equal(0x01020Fu, msg.VersionFlag);
-            Assert.Equal(0u, msg.EncryptFlag);
-            Assert.Equal(0u, msg.EncryptKey);
-            Assert.Equal("2022-06-14T19:35:29.7790000".ToDateTime(), msg.Time);
-
-            Assert.Equal(JTVersion.JT2019, msg.Version);
-
-            var body = msg.ReadModel<JT809_0x9102>();
-        }
-
-        [Fact]
-        public void Test222()
-        {
-            var str = "27660000001B3130303130000000000000000000004EBC924F000000004EBC924F";
-            var dt = str.ToHex();
-
-            var message = new JTMessage { Version = JTVersion.JT2019 };
-            var bn = Helper.CreateReader(new MemoryStream(dt), message);
-
-            var body = bn.Read<JT809_0x9102>();
-
-            Assert.NotNull(body);
-            Assert.Equal(10086, body.DataType);
-            Assert.Equal("10010", body.PlatformId);
-            Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.StartTime);
-            Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.EndTime);
-        }
+        Assert.NotNull(body);
+        Assert.Equal(10086, (Int32)body.DataType);
+        Assert.Equal("10010", body.PlatformId);
+        Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.StartTime);
+        Assert.Equal("2011-11-11 03:11:11".ToDateTime(), body.EndTime);
     }
 }

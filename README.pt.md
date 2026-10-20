@@ -17,6 +17,8 @@
 [![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
+> Esta tradução pode estar desatualizada; consulte o [README em inglês](README.md).
+
 Biblioteca do protocolo JT/T 809 para interconexão de plataformas no transporte rodoviário (China). Fornece codec de quadros, mensagens 2011/2013/2019 e sessões cliente/servidor dos enlaces mestre e escravo.
 
 Origem: https://github.com/NewLifeX/NewLife.JT809  
@@ -27,7 +29,14 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Codec de quadros: delimitação 0x5B/0x5D, escape, CRC-16 e criptografia de enlace
 - Versões do protocolo: JT/T 809-2011, 2013 e 2019, detectadas automaticamente no login
 - Cobertura: mais de 30 comandos de nível superior e 50 submensagens, com modelos de posição, alarme e informações estáticas
-- Execução: sessões cliente/servidor sobre a bomba de mensagens do Core, pareamento requisição/resposta, compatível com AOT e 10 idiomas em tempo de execução
+- Integração: métodos de manipulador com `[MessageKind]`, pareamento requisição/resposta e reconexão
+- Engenharia: compatível com Native AOT; mensagens em tempo de execução em 11 idiomas (10 tabelas de tradução e o inglês como origem)
+
+## Requisitos
+
+- Frameworks de destino `netstandard2.0`, `net8.0` e `net10.0`; roda em Windows, Linux e macOS
+- Depende do NewLife.Core (restaurado com o pacote); compilar do código-fonte exige .NET 8 SDK ou superior
+- Especificações do protocolo: [Doc](Doc) (JT/T 809-2011 e JT/T 809-2019)
 
 ## Instalação
 
@@ -40,12 +49,20 @@ dotnet add package NewLife.JT809
 ```csharp
 using NewLife.Net;
 using NewLife.JT809;
+using NewLife.JT809.Messages;
+using NewLife.JT809.Models;
 using NewLife.JT809.Protocols;
+using NewLife.JT809.SubMessages;
 
-// Register the built-in commands explicitly (AOT friendly)
+// Built-in commands register on first use; call Init() explicitly for clarity under AOT/trimming
 MessageFactory.Instance.Init();
 
-// Client: connect to the upper-level platform over the master link
+// Server: handle commands with methods marked by [MessageKind]
+var server = new JTServer { Port = 809 };
+server.AddHandler(new MyController());
+server.Start();
+
+// Client: log in over the master link, then push a real-time location (0x1200 / 0x1202)
 var client = new JTClient
 {
     Server = new NetUri("tcp://127.0.0.1:809"),
@@ -54,10 +71,23 @@ var client = new JTClient
 client.Open();
 var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 2809);
 
-// Server: host the lower-level platform and handle commands
-var server = new JTServer { Port = 809 };
-server.AddHandler(new MyController());
-server.Start();
+client.Send1200("皖AT0011", 2, new JT809_0x1200_0x1202
+{
+    Time = DateTime.Now,
+    Longitude = 117123456,
+    Latitude = 31876543,
+    Speed = 600,
+});
+
+class MyController
+{
+    [MessageKind(MessageKinds.主链路登录请求消息)]
+    public Object Login(IJTSession session, JTMessage message)
+        => new JT809_0x1002 { Result = JT809_0x1002_Result.成功, VerifyCode = 0x1234 };
+
+    [MessageKind(MessageKinds.主链路连接保持请求消息)]
+    public Object KeepAlive(IJTSession session, JTMessage message) => new JT809_0x1006();
+}
 ```
 
 ## Documentação
