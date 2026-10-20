@@ -40,7 +40,14 @@ public abstract class JT809ExchangeMessage : IAccessor, ISubMessage
                 Body = reader.ReadBytes((Int32)len);
             else
             {
-                if (!reader.TryRead(null, ref model)) return false;
+                // 子消息限定在自身长度内读取，且必须携带报文头，否则拿不到协议版本
+                var ms = new MemoryStream(reader.ReadBytes((Int32)len));
+                if (model is IAccessor accessor)
+                {
+                    if (!accessor.Read(ms, header)) return false;
+                }
+                else if (!Helper.CreateReader(ms, header).TryRead(null, ref model)) return false;
+
                 Body = model;
             }
         }
@@ -84,8 +91,15 @@ public abstract class JT809ExchangeMessage : IAccessor, ISubMessage
             //writer.Write(Body);
             // 必须先序列化后面，需要用到长度
             var ms = new MemoryStream();
-            var writer2 = Helper.CreateWriter(ms, header);
-            writer2.Write(Body);
+            if (Body is IAccessor accessor)
+            {
+                if (!accessor.Write(ms, header)) return false;
+            }
+            else
+            {
+                var writer2 = Helper.CreateWriter(ms, header);
+                writer2.Write(Body);
+            }
 
             ms.Position = 0;
             writer.Write((Int32)ms.Length);
