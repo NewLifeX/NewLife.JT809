@@ -7,8 +7,63 @@ on:
     branches: [ '*' ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  build:
+    name: build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.x
+          10.x
+    - name: Restore
+      run: dotnet restore NewLife.JT809/NewLife.JT809.csproj
+    - name: Build all target frameworks
+      # netstandard2.0 无运行时，只验证可编译；net8.0/net10.0 由 test 作业运行用例
+      run: dotnet build NewLife.JT809/NewLife.JT809.csproj -c Release --no-restore
+
   test:
+    name: test (${{ matrix.tfm }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        tfm: [net8.0, net10.0]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.x
+          10.x
+    - name: Restore
+      run: dotnet restore XUnitTest/XUnitTest.csproj
+    - name: Build
+      run: dotnet build XUnitTest/XUnitTest.csproj -c Release --no-restore -f ${{ matrix.tfm }}
+    - name: Test
+      # 用例涉及网络端口与全局本地化状态，串行执行避免相互干扰
+      env:
+        XUNIT_MAX_PARALLEL_THREADS: 1
+      run: dotnet test XUnitTest/XUnitTest.csproj -c Release --no-build -f ${{ matrix.tfm }}
+
+  pack:
+    name: pack
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -19,11 +74,40 @@ jobs:
       with:
         dotnet-version: |
           8.x
-          9.x
           10.x
-    - name: Restore
-      run: dotnet restore XUnitTest/XUnitTest.csproj
-    - name: Build
-      run: dotnet build XUnitTest/XUnitTest.csproj -c Release --no-restore
-    - name: Test
-      run: dotnet test XUnitTest/XUnitTest.csproj -c Release --no-build
+    - name: Pack
+      run: dotnet pack NewLife.JT809/NewLife.JT809.csproj -c Release -o out
+    - name: Verify package layout
+      shell: bash
+      run: |
+        set -euo pipefail
+        pkg=$(ls out/*.nupkg | head -n 1)
+        echo "package: $pkg"
+
+        listing=$(unzip -Z1 "$pkg")
+        for entry in \
+          "lib/netstandard2.0/NewLife.JT809.dll" \
+          "lib/net8.0/NewLife.JT809.dll" \
+          "lib/net10.0/NewLife.JT809.dll" \
+          "README.nuget.md" \
+          "leaf.png"; do
+          if ! grep -qxF "$entry" <<< "$listing"; then
+            echo "缺少打包项：$entry"
+            exit 1
+          fi
+        done
+
+        # 反射序列化的消息体依赖嵌入的链接器保留清单，缺失会在 AOT 下静默读不到字段
+        if ! unzip -p "$pkg" lib/net10.0/NewLife.JT809.dll | grep -aq "ILLink.Descriptors.xml"; then
+          echo "lib/net10.0 未嵌入 ILLink.Descriptors.xml"
+          exit 1
+        fi
+
+        ls out/*.snupkg > /dev/null
+        echo "打包布局校验通过"
+    - name: Upload package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nupkg
+        path: out/*
+        retention-days: 7

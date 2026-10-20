@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyTitle>JT809 协议 AOT 冒烟</AssemblyTitle>
+    <Description>NativeAOT 兼容冒烟：帧编解码、消息工厂、全部已注册指令模型往返、本地化与反射 JSON，任一失败以非 0 退出码反馈</Description>
+    <Deterministic>false</Deterministic>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NewLife.JT809\NewLife.JT809.csproj" />
+  </ItemGroup>
+
+  <!-- 此处刻意不配置 TrimmerRootAssembly：冒烟要验证协议库自带的 ILLink.Descriptors.xml 能否保住反射元数据 -->
+
+</Project>

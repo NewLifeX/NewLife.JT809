@@ -1,0 +1,77 @@
+name: aot
+
+# NativeAOT 兼容性验证：先做 IL 告警门禁，再在 win-x64 / linux-x64 / linux-arm64 原生发布并运行冒烟。
+# AotSmoke 覆盖帧编解码、消息工厂、全部已注册指令模型往返、本地化与反射 JSON，
+# 同时验证协议库自带的 ILLink.Descriptors.xml 在裁剪后仍能保住反射元数据。
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyzer:
+    name: aot analyzer check
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.x
+    - name: Install NativeAOT Prerequisites (Linux)
+      run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+    - name: Publish NativeAOT & Gate on IL Warnings
+      run: |
+        set -eo pipefail
+        dotnet publish AotSmoke/AotSmoke.csproj -c Release -r linux-x64 -o /tmp/aot-analyzer -p:TrimmerSingleWarn=false 2>&1 | tee publish.log
+        bad=$(grep -E 'warning IL[0-9]+' publish.log | grep -v -E 'warning IL2104' || true)
+        if [ -n "$bad" ]; then
+          echo "$bad"
+          echo "发现 AOT/裁剪告警，阻断"
+          exit 1
+        fi
+        echo "IL 告警门禁通过（0 条）"
+
+  aot:
+    name: aot (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: win-x64
+            os: windows-latest
+            bin: AotSmoke.exe
+          - rid: linux-x64
+            os: ubuntu-latest
+            bin: AotSmoke
+          - rid: linux-arm64
+            os: ubuntu-24.04-arm
+            bin: AotSmoke
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.x
+    - name: Install NativeAOT Prerequisites (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+    - name: JIT Baseline
+      run: dotnet run -c Release --project AotSmoke/AotSmoke.csproj
+    - name: Publish NativeAOT Smoke
+      run: dotnet publish AotSmoke/AotSmoke.csproj -c Release -r ${{ matrix.rid }} -o AotSmoke/bin/aot-out
+    - name: Run NativeAOT Smoke
+      shell: bash
+      run: ./AotSmoke/bin/aot-out/${{ matrix.bin }}
