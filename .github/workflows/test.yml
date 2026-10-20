@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
     - uses: actions/checkout@v4
@@ -17,17 +18,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.x
-          7.x
           8.x
           9.x
+          10.x
+    - name: Restore
+      run: dotnet restore XUnitTest/XUnitTest.csproj
     - name: Build
-      run: dotnet build -c Release
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
+      run: dotnet build XUnitTest/XUnitTest.csproj -c Release --no-restore
     - name: Test
-      run: dotnet test -c Release
+      run: dotnet test XUnitTest/XUnitTest.csproj -c Release --no-build

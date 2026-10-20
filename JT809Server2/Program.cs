@@ -1,4 +1,4 @@
-﻿using NewLife.JT809.Protocols;
+using NewLife.JT809.Protocols;
 using NewLife.Log;
 using Stardust;
 
@@ -15,7 +15,7 @@ internal static class Program
         XTrace.UseWinForm();
 
         // 加大网络HEX日志长度
-        var set = NewLife.Net.Setting.Current;
+        var set = NewLife.Net.SocketSetting.Current;
         if (set.LogDataLength <= 64)
         {
             set.LogDataLength = 1024;

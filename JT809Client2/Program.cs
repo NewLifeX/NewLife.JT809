@@ -1,4 +1,4 @@
-﻿using JT809Client;
+using JT809Client;
 using NewLife;
 using NewLife.JT809;
 using NewLife.JT809.Protocols;
@@ -8,7 +8,7 @@ using NewLife.Net;
 XTrace.UseConsole();
 
 // 加大网络HEX日志长度
-var set = NewLife.Net.Setting.Current;
+var set = NewLife.Net.SocketSetting.Current;
 if (set.LogDataLength <= 64)
 {
     set.LogDataLength = 1024;

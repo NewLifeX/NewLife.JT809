@@ -1,4 +1,4 @@
-﻿using NewLife.Serialization;
+using NewLife.Serialization;
 
 namespace NewLife.JT809.Models;
 
@@ -87,7 +87,7 @@ public static class LocationAdditional
                 //};
                 //writer.Write((Byte)item.Value.Length);
                 //writer.Write(item.Value, 0, item.Value.Length);
-                throw new Exception($"不支持的类型[{item.Value.GetType()}]");
+                throw new Exception(L.T("Unsupported type [{0}]", item.Value.GetType()));
         }
     }
 }

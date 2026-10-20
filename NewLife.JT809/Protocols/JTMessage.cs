@@ -3,13 +3,19 @@ using System.Xml.Serialization;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Log;
+using NewLife.Messaging;
 using NewLife.Security;
 using NewLife.Serialization;
 
 namespace NewLife.JT809.Protocols;
 
-/// <summary>JT808报文消息</summary>
-public class JTMessage : IAccessor
+/// <summary>JT809报文消息</summary>
+/// <remarks>
+/// 同时实现 <see cref="IAccessor"/>（承载业务消息体读写）与 <see cref="IMessage"/>（供 Core 消息泵按帧交付）。
+/// 由于本类型的 <see cref="Kind"/> 表示 JT809 业务数据类型，与 <see cref="IMessage.Kind"/> 的消息方向语义不同，
+/// 接口成员采用显式实现，方向由 <see cref="Reply"/> 决定。
+/// </remarks>
+public class JTMessage : IAccessor, IMessage
 {
     #region 属性
     ///// <summary>数据长度。包括头标识、数据头、数据体、CRC校验码和尾标识</summary>
@@ -57,6 +63,40 @@ public class JTMessage : IAccessor
     public JTVersion Version { get; set; } = JTVersion.JT2011;
     #endregion
 
+    #region 接口实现
+    /// <summary>消息方向。JT809 无方向位，由 <see cref="Reply"/> 映射为请求/响应</summary>
+    NewLife.Messaging.MessageKinds IMessage.Kind
+    {
+        get => Reply ? NewLife.Messaging.MessageKinds.Response : NewLife.Messaging.MessageKinds.Request;
+        set => Reply = value is NewLife.Messaging.MessageKinds.Response or NewLife.Messaging.MessageKinds.Error;
+    }
+
+    /// <summary>是否为应答消息</summary>
+    Boolean IMessage.Reply => Reply;
+
+    /// <summary>消息体。JT809 按整帧交付，负载统一经 <see cref="Payload"/> 读取</summary>
+    LimitedReader IMessage.Body => null;
+
+    /// <summary>根据请求创建配对的响应消息</summary>
+    /// <returns></returns>
+    IMessage IMessage.CreateReply() => CreateReply();
+
+    /// <summary>设置消息体，用于整帧/发送路径</summary>
+    /// <param name="packet">消息体数据包</param>
+    void IMessage.SetBody(IPacket packet) => Payload = packet;
+
+    /// <summary>绑定流式消息体。JT809 按整帧定界，帧层不会走流式体路径</summary>
+    /// <param name="body">限长读取器</param>
+    void IMessage.BindBody(LimitedReader body) { }
+
+    /// <summary>销毁。归还负载数据包</summary>
+    public void Dispose()
+    {
+        Payload.TryDispose();
+        Payload = null;
+    }
+    #endregion
+
     #region 构造
     #endregion
 
@@ -65,62 +105,73 @@ public class JTMessage : IAccessor
     const Int32 HEADER_LENGTH_2019 = 34; //1 + 4 + 4 + 2 + 4 + 3 + 1 + 4 + 8 + 2 + 1;
 
     /// <summary>解析数据流</summary>
-    /// <param name="stream"></param>
-    /// <param name="context"></param>
+    /// <param name="stream">完整帧数据（以0x5b开始、0x5d结束）</param>
+    /// <param name="context">JTConfig 上下文</param>
     /// <returns></returns>
     public Boolean Read(Stream stream, Object context)
     {
         if (stream == null && context == null) return false;
+        if (stream == null) return false;
 
+        var frame = stream.ReadBytes(-1);
+        var data = Unescape(frame);
+        if (data == null) return false;
+
+        return ReadContent(data, context as JTConfig);
+    }
+
+    /// <summary>解除转义。0x5b->0x5a01，0x5a->0x5a02，0x5d->0x5e01，0x5e->0x5e02</summary>
+    /// <param name="frame">完整帧数据（以0x5b开始）</param>
+    /// <returns>反转义后的帧内容（不含帧头标识），帧头不合法时返回 null</returns>
+    public static Byte[] Unescape(Byte[] frame)
+    {
         // 头部标识探测
-        if (stream.ReadByte() != 0x5b) return false;
+        if (frame == null || frame.Length == 0 || frame[0] != 0x5b) return null;
 
-        // 转义处理，0x5b->0x5a01，0x5a->0x5a02
-        // 转义处理，0x5d->0x5e01，0x5e->0x5e02
-        var ms = new MemoryStream();
-        while (true)
+        var ms = new MemoryStream(frame.Length);
+        for (var i = 1; i < frame.Length; i++)
         {
-            var b = stream.ReadByte();
-            if (b < 0) break;
-
-            if (b == 0x5a)
+            var b = frame[i];
+            if (b == 0x5a || b == 0x5e)
             {
-                var b2 = stream.ReadByte();
-                if (b2 < 0)
+                if (i + 1 >= frame.Length)
                 {
-                    ms.WriteByte((Byte)b);
+                    ms.WriteByte(b);
                     break;
                 }
 
-                if (b2 == 0x01)
-                    ms.Write(0x5b);
-                else if (b2 == 0x02)
-                    ms.Write(0x5a);
+                var b2 = frame[++i];
+                if (b == 0x5a && b2 == 0x01)
+                    ms.WriteByte(0x5b);
+                else if (b == 0x5a && b2 == 0x02)
+                    ms.WriteByte(0x5a);
+                else if (b == 0x5e && b2 == 0x01)
+                    ms.WriteByte(0x5d);
+                else if (b == 0x5e && b2 == 0x02)
+                    ms.WriteByte(0x5e);
                 else
-                    ms.Write((Byte)b, (Byte)b2);
-            }
-            else if (b == 0x5e)
-            {
-                var b2 = stream.ReadByte();
-                if (b2 < 0)
                 {
-                    ms.WriteByte((Byte)b);
-                    break;
+                    ms.WriteByte(b);
+                    ms.WriteByte(b2);
                 }
-
-                if (b2 == 0x01)
-                    ms.Write(0x5d);
-                else if (b2 == 0x02)
-                    ms.Write(0x5e);
-                else
-                    ms.Write((Byte)b, (Byte)b2);
             }
             else
-                ms.WriteByte((Byte)b);
+                ms.WriteByte(b);
         }
-        ms.Position = 0;
 
-        var config = context as JTConfig;
+        return ms.ToArray();
+    }
+
+    /// <summary>解析已反转义的帧内容</summary>
+    /// <param name="data">帧内容（0x5b之后、含0x5d）</param>
+    /// <param name="config">协议配置</param>
+    /// <returns></returns>
+    public Boolean ReadContent(Byte[] data, JTConfig config)
+    {
+        if (data == null || data.Length < HEADER_LENGTH - 1) return false;
+
+        var ms = new MemoryStream(data);
+
         if (config != null && config.Version > 0) Version = config.Version;
         var reader = new Binary { Stream = ms, IsLittleEndian = false };
 
@@ -136,8 +187,8 @@ public class JTMessage : IAccessor
         EncryptKey = reader.Read<UInt32>();
 
 #if DEBUG
-        var len2 = ms.Length + 1;
-        if (len != len2) XTrace.WriteLine("指令[{0:X4}]标称有{1}字节，而实际有{2}字节（未转义）", (Int32)Kind, len, len2);
+        var len2 = data.Length + 1;
+        if (len != len2) XTrace.WriteLine("Command [{0:X4}] declares {1} bytes but actually has {2} bytes (unescaped)", (Int32)Kind, len, len2);
 #endif
 
         // 根据登录请求，猜测协议版本
@@ -145,7 +196,7 @@ public class JTMessage : IAccessor
         if (!j9 && TryGuessVersion(Kind, len, out var jt2019) && jt2019)
         {
             if (config == null || config.Version != JTVersion.JT2019)
-                XTrace.WriteLine("指令[{0:X4}]配置协议版本：{1}，实际协议版本：{2}", (Int32)Kind, config?.Version, JTVersion.JT2019);
+                XTrace.WriteLine("Command [{0:X4}] configured protocol version: {1}, actual protocol version: {2}", (Int32)Kind, config?.Version, JTVersion.JT2019);
 
             j9 = true;
             Version = JTVersion.JT2019;
@@ -163,10 +214,10 @@ public class JTMessage : IAccessor
         len -= j9 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (len > 0)
         {
-            var data = reader.ReadBytes(len);
+            var buf = reader.ReadBytes(len);
             if (EncryptFlag > 0 && config != null && config.M1 > 0)
-                Encrypt(data, EncryptKey, config);
-            Payload = (ArrayPacket)data;
+                Encrypt(buf, EncryptKey, config);
+            Payload = (ArrayPacket)buf;
         }
 
         //if (ms.Position + 2 < ms.Length)
@@ -202,14 +253,15 @@ public class JTMessage : IAccessor
         var pk = Payload;
         var len = Version == JTVersion.JT2019 ? HEADER_LENGTH_2019 : HEADER_LENGTH;
         if (pk != null) len += pk.Total;
-        var data = pk.ReadBytes();
+        var data = pk == null ? [] : pk.ReadBytes();
 
-        // 加密数据
+        // 加密数据。避免就地修改调用方负载缓冲，先拷贝再加密
         if (config != null && config.M1 > 0)
         {
             EncryptFlag = 1;
             EncryptKey = (UInt32)Rand.Next();
 
+            data = (Byte[])data.Clone();
             Encrypt(data, EncryptKey, config);
         }
 
@@ -394,7 +446,7 @@ public class JTMessage : IAccessor
             if (!Write(ms, null)) return null;
 
             ms.Position = 0;
-            return new Packet(ms);
+            return new OwnerPacket(ms, 0);
         }
         catch (Exception ex)
         {
@@ -436,7 +488,7 @@ public class JTMessage : IAccessor
         rs = model is IAccessor accessor ? accessor.Write(ms, this) : Helper.CreateWriter(ms, this).Write(model);
 
         ms.Position = 0;
-        Payload = new Packet(ms);
+        Payload = new OwnerPacket(ms, 0);
 
         return rs;
     }

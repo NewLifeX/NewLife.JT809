@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NewLife.JT809.Messages;
-using NewLife.JT809.Protocols;
+using System;
+using System.ComponentModel;
+using System.IO;
 using NewLife;
-using Xunit;
+using NewLife.Data;
+using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
+using NewLife.JT809.Protocols;
 using NewLife.JT809.SubMessages;
+using Xunit;
 
 namespace XUnitTest;
 
+[DisplayName("0x1600 车辆静态信息交换")]
 public class JT809_0x1600_Tests
 {
-    MessageFactory _factory;
+    private readonly MessageFactory _factory;
     public JT809_0x1600_Tests()
     {
         _factory = MessageFactory.Instance;
@@ -22,6 +22,7 @@ public class JT809_0x1600_Tests
     }
 
     [Fact]
+    [DisplayName("解析2013版0x1600并读取0x1601车辆静态信息")]
     public void Test1601()
     {
         var str =
@@ -51,7 +52,6 @@ public class JT809_0x1600_Tests
         Assert.Equal(0x3672u, msg.Sequence);
         Assert.Equal(MessageKinds.主链路静态信息交换消息, msg.Kind);
         Assert.Equal(2022020901u, msg.CenterId);
-        Assert.Equal(0x78859725u, msg.CenterId);
         Assert.Equal(0x02010Fu, msg.VersionFlag);
         Assert.Equal(0u, msg.EncryptFlag);
         Assert.Equal(0u, msg.EncryptKey);
@@ -80,55 +80,48 @@ public class JT809_0x1600_Tests
         Assert.Empty(inf.OwnersTel);
     }
 
+    /// <summary>加密后的负载在转义、CRC 与解密链路中保持不变</summary>
     [Fact]
-    public void Test1601_2()
+    [DisplayName("加密帧写入后可用相同密钥解出原始负载")]
+    public void TestEncrypted()
     {
-        var str =
-            "5B" +
-            "000000BE" +
-            "0000000A" +
-            "1601" +
-            "78959A5E" +
-            "010102" +
-            "0F" +
-            "01754FDB" +
-            "5465DDD97A001B49B93B3CE336435E024492402543078DD6E269EB9F3B8B58411326BEE94D69CB83B12B5E01D9D5561784DB292230D9900F3EA5B816E896DC4BFAF48BA2F1D027497CD2366104906D3E715856DD23923C7AE9B5E032DD31090EAC11F1E76ACAC9B2A719BD88B281045500746081E2B00404E6C374C67BAF3490BDC88098A42FB4AB3495E35537E3EA3EAF871699267452347833D13839DEBAF1CB8D88BCB865240C22" +
-            "5D";
-        var dt = str.ToHex();
+        var config = new JTConfig
+        {
+            Version = JTVersion.JT2011,
+            M1 = 10000001,
+            IA1 = 20000001,
+            IC1 = 30000001,
+        };
 
-        var msg = new JTMessage { Version = JTVersion.JT2013 };
-        var rs = msg.Read(dt);
+        // 负载刻意包含全部转义字符，覆盖加密后再转义的组合场景
+        var payload = new Byte[] { 0x01, 0x5B, 0x5A, 0x5D, 0x5E, 0x5B, 0x5D, 0x00, 0xFF, 0x7F };
+        var msg = new JTMessage
+        {
+            Sequence = 0x3672,
+            Kind = MessageKinds.主链路静态信息交换消息,
+            CenterId = 2022020901,
+            VersionFlag = 0x02010F,
+            Version = JTVersion.JT2011,
+            Payload = new ArrayPacket(payload),
+        };
 
-        Assert.True(rs);
-        Assert.Equal(0x3672u, msg.Sequence);
-        Assert.Equal(MessageKinds.主链路静态信息交换消息, msg.Kind);
-        Assert.Equal(2022020901u, msg.CenterId);
-        Assert.Equal(0x78859725u, msg.CenterId);
-        Assert.Equal(0x02010Fu, msg.VersionFlag);
-        Assert.Equal(0u, msg.EncryptFlag);
-        Assert.Equal(0u, msg.EncryptKey);
-        Assert.Equal(DateTime.MinValue, msg.Time);
+        var ms = new MemoryStream();
+        Assert.True(msg.Write(ms, config));
+        Assert.Equal(1, (Int32)msg.EncryptFlag);
+        Assert.NotEqual(0u, msg.EncryptKey);
 
-        Assert.Equal(JTVersion.JT2013, msg.Version);
+        var frame = ms.ToArray();
+        Assert.Equal(0x5B, (Int32)frame[0]);
+        Assert.Equal(0x5D, (Int32)frame[^1]);
 
-        var model = msg.ReadModel<JT809_0x1600>();
-        Assert.NotNull(model);
-        Assert.Equal("皖AT0011", model.VehicleNo);
-        Assert.Equal(JT809VehicleColorType.黄色, model.VehicleColor);
-
-        var body = model.Body as JT809_0x1600_0x1601;
-        Assert.NotNull(body);
-        Assert.Equal("VIN:=皖AT0011;VEHICLE_COLOR:=2;VEHICLE_TYPE:=21;TRANS_TYPE:=031;VEHICLE_NATIONALITY:=340111;OWERS_ID:=3074;OWERS_NAME:=合肥数车科技有限公司;OWERS_TEL:=", body.CarInfo);
-
-        var inf = body.Info;
-        Assert.NotNull(inf);
-        Assert.Equal("皖AT0011", inf.Vin);
-        Assert.Equal(JT809VehicleColorType.黄色, inf.VehicleColor);
-        Assert.Equal(21, inf.VehicleType);
-        Assert.Equal("031", inf.TransType);
-        Assert.Equal("340111", inf.VehicleNationality);
-        Assert.Equal("3074", inf.OwnersId);
-        Assert.Equal("合肥数车科技有限公司", inf.OwnersName);
-        Assert.Empty(inf.OwnersTel);
+        var rs = new JTMessage();
+        Assert.True(rs.Read(frame, config));
+        Assert.Equal(0x3672u, rs.Sequence);
+        Assert.Equal(MessageKinds.主链路静态信息交换消息, rs.Kind);
+        Assert.Equal(2022020901u, rs.CenterId);
+        Assert.Equal(0x02010Fu, rs.VersionFlag);
+        Assert.Equal(1, (Int32)rs.EncryptFlag);
+        Assert.Equal(msg.EncryptKey, rs.EncryptKey);
+        Assert.Equal(payload, rs.Payload.ReadBytes());
     }
 }

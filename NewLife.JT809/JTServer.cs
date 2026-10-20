@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using NewLife.Data;
 using NewLife.JT809.Handlers;
 using NewLife.JT809.Protocols;
@@ -11,8 +12,14 @@ namespace NewLife.JT809;
 /// <summary>JT809服务器</summary>
 public class JTServer : NetServer<JTSession>
 {
+    private readonly JTCodec _codec = new();
+
     /// <summary>配置信息</summary>
-    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JT2011 };
+    public JTConfig Config
+    {
+        get => _codec.Config ??= new JTConfig { Version = JTVersion.JT2011 };
+        set => _codec.Config = value;
+    }
 
     /// <summary>
     /// 消息处理器集合
@@ -25,14 +32,15 @@ public class JTServer : NetServer<JTSession>
     public JTServer()
     {
         Port = 809;
-        Add<JTCodec>();
+        Config = new JTConfig { Version = JTVersion.JT2011 };
+        Protocol = _codec;
     }
 
     /// <summary>注册类型处理器</summary>
     /// <typeparam name="T"></typeparam>
-    public void AddHandler<T>(T handler)
+    public void AddHandler<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
-        var type = handler.GetType();
+        Type type = typeof(T);
         foreach (var item in type.GetMethods())
         {
             if (item.IsStatic) continue;
@@ -46,9 +54,9 @@ public class JTServer : NetServer<JTSession>
             var att = item.GetCustomAttribute<MessageKindAttribute>();
             if (att != null)
             {
-                Handlers[att.Kind] = item.As<MessageHandler>(handler);
+                Handlers[att.Kind] = (MessageHandler)Delegate.CreateDelegate(typeof(MessageHandler), handler, item);
 
-                WriteLog("注册[{0}]：{1}.{2}", att.Kind, item.DeclaringType.FullName, item.Name);
+                WriteLog("Registered [{0}]: {1}.{2}", att.Kind, item.DeclaringType.FullName, item.Name);
             }
         }
     }
@@ -58,7 +66,7 @@ public class JTServer : NetServer<JTSession>
     /// </summary>
     protected override void OnStart()
     {
-        WriteLog("支持根据登录请求识别协议版本 JTT809-2011/2019");
+        WriteLog("Supports protocol version detection (JTT809-2011/2019) from the login request");
 
         MessageFactory.Instance.Init();
 
@@ -102,7 +110,7 @@ public class JTSession : NetSession<JTServer>, IJTSession
                 {
                     Config.Version = msg.Version;
 
-                    WriteLog("自动识别[{0}]协议版本：{1}", msg.CenterId, Config.Version);
+                    WriteLog("Detected protocol version {1} of center [{0}]", msg.CenterId, Config.Version);
                 }
 
                 this["Config"] = Config;
@@ -121,16 +129,16 @@ public class JTSession : NetSession<JTServer>, IJTSession
                 var hex = e.Packet?.ToHex(1024);
                 span?.SetError(ex, hex);
 
-                XTrace.WriteLine(hex);
+                XTrace.WriteLine("{0}", hex);
             }
 
             // 处理响应
             if (result != null)
             {
-                if (debug) WriteLog("响应 {0}", result.ToJsonJT809());
+                if (debug) WriteLog("Reply {0}", result.ToJsonJT809());
 
                 var rs = msg.CreateReply();
-                rs.Sequence = (UInt16)Interlocked.Increment(ref _gid);
+                rs.Sequence = (UInt32)Interlocked.Increment(ref _gid);
                 rs.SetResult(result);
                 if (Config != null) rs.VersionFlag = Config.VersionFlag;
 
@@ -156,7 +164,7 @@ public class JTSession : NetSession<JTServer>, IJTSession
         {
             // 找到处理器
             if (!js.Handlers.TryGetValue(message.Kind, out var handler))
-                throw new NotSupportedException($"未支持指令[{message.Kind}]");
+                throw new NotSupportedException(L.T("Unsupported command [{0}]", message.Kind));
 
             // 执行处理器
             return handler(this, message);

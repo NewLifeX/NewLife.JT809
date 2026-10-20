@@ -1,4 +1,4 @@
-﻿using JT809Server.Controllers;
+using JT809Server.Controllers;
 using NewLife;
 using NewLife.JT809.Handlers;
 using NewLife.Log;
@@ -20,7 +20,7 @@ namespace JT809Server
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // 加大网络HEX日志长度
-            var net = NewLife.Net.Setting.Current;
+            var net = NewLife.Net.SocketSetting.Current;
             if (net.LogDataLength <= 64)
             {
                 net.LogDataLength = 1024;

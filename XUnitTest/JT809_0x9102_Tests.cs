@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 using NewLife;
+using NewLife.Data;
 using NewLife.JT809;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Protocols;

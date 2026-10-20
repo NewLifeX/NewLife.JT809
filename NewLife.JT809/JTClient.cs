@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using NewLife.JT809.Handlers;
 using NewLife.JT809.Messages;
 using NewLife.JT809.Models;
@@ -14,6 +15,8 @@ namespace NewLife.JT809;
 public class JTClient : DisposeBase, IJTSession
 {
     #region 属性
+    private readonly JTCodec _codec = new();
+
     /// <summary>名称</summary>
     public String Name { get; set; }
 
@@ -21,7 +24,11 @@ public class JTClient : DisposeBase, IJTSession
     public NetUri Server { get; set; }
 
     /// <summary>配置信息</summary>
-    public JTConfig Config { get; set; } = new JTConfig { Version = JTVersion.JT2011 };
+    public JTConfig Config
+    {
+        get => _codec.Config ??= new JTConfig { Version = JTVersion.JT2011 };
+        set => _codec.Config = value;
+    }
 
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>
     public UInt32 CenterId { get; set; }
@@ -78,7 +85,7 @@ public class JTClient : DisposeBase, IJTSession
 
         client = Server.CreateRemote();
         client.Name = Name;
-        client.Add<JTCodec>();
+        if (client is SessionBase session) session.Protocol = _codec;
         client.Tracer = Tracer;
         client.Log = Log;
 
@@ -90,9 +97,6 @@ public class JTClient : DisposeBase, IJTSession
         client.LogSend = true;
         client.LogReceive = true;
 #endif
-
-        // 指定协议配置，包括协议版本等信息
-        client["Config"] = Config;
 
         client.Open();
 
@@ -116,9 +120,9 @@ public class JTClient : DisposeBase, IJTSession
 
     /// <summary>注册类型处理器</summary>
     /// <typeparam name="T"></typeparam>
-    public void AddHandler<T>(T handler)
+    public void AddHandler<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
-        var type = handler.GetType();
+        Type type = typeof(T);
         foreach (var item in type.GetMethods())
         {
             if (item.IsStatic) continue;
@@ -132,9 +136,9 @@ public class JTClient : DisposeBase, IJTSession
             var att = item.GetCustomAttribute<MessageKindAttribute>();
             if (att != null)
             {
-                Handlers[att.Kind] = item.As<MessageHandler>(handler);
+                Handlers[att.Kind] = (MessageHandler)Delegate.CreateDelegate(typeof(MessageHandler), handler, item);
 
-                WriteLog("注册[{0}]：{1}.{2}", att.Kind, item.DeclaringType.FullName, item.Name);
+                WriteLog("Registered [{0}]: {1}.{2}", att.Kind, item.DeclaringType.FullName, item.Name);
             }
         }
     }
@@ -224,7 +228,7 @@ public class JTClient : DisposeBase, IJTSession
         CenterId = model.MsgGNSSCENTERID;
 
         var rs = await SendAsync<JT809_0x1002>(model);
-        if (rs == null || rs.Result != JT809_0x1002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
+        if (rs == null || rs.Result != JT809_0x1002_Result.成功) throw new Exception(L.T("Login failed! {0}", rs?.Result));
 
         return rs.VerifyCode;
     }
@@ -265,7 +269,7 @@ public class JTClient : DisposeBase, IJTSession
         };
 
         var rs = await SendAsync<JT809_0x9002>(model);
-        if (rs == null || rs.Result != JT809_0x9002_Result.成功) throw new Exception($"登录失败！{rs?.Result}");
+        if (rs == null || rs.Result != JT809_0x9002_Result.成功) throw new Exception(L.T("Login failed! {0}", rs?.Result));
 
         return rs;
     }
