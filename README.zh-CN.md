@@ -1,16 +1,69 @@
-# NewLife.JT809 - JT/T809协议
+# NewLife.JT809 - JT/T 809 部标协议
 
-![GitHub top language](https://img.shields.io/github/languages/top/newlifex/newlife.jt809?logo=github)
-![GitHub License](https://img.shields.io/github/license/newlifex/newlife.jt809?logo=github)
-![Nuget Downloads](https://img.shields.io/nuget/dt/newlife.jt809?logo=nuget)
-![Nuget](https://img.shields.io/nuget/v/newlife.jt809?logo=nuget)
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/newlife.jt809?label=dev%20nuget&logo=nuget)
+![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT809?logo=github)
+![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT809?logo=nuget)
+![NuGet](https://img.shields.io/nuget/v/NewLife.JT809?logo=nuget)
+![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT809?label=dev%20nuget&logo=nuget)
+[![test](https://github.com/NewLifeX/NewLife.JT809/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT809/actions/workflows/test.yml)
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+[![contributors](https://img.shields.io/github/contributors/NewLifeX/NewLife.JT809?logo=github)](https://github.com/NewLifeX/NewLife.JT809/graphs/contributors)
 
-JT809部标协议。  
+<!-- lang:start -->
+🌐 [English](README.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
+<!-- lang:end -->
+
+<!-- metrics:start -->
+[![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
+[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+<!-- metrics:end -->
+
+JT809 部标协议。面向道路运输监管的上下级平台互联协议库，提供帧编解码、2011/2013/2019 各版本消息与主从链路客户端服务端。
 
 源码： https://github.com/NewLifeX/NewLife.JT809  
-Nuget：NewLife.JT809  
+NuGet：https://www.nuget.org/packages/NewLife.JT809  
 
+## 主要特性
+
+- 帧编解码：0x5B/0x5D 定界、转义处理、CRC-16 校验与链路加密
+- 协议版本：支持 JT/T 809-2011、2013、2019，登录时自动识别版本
+- 指令覆盖：30+ 顶层业务指令、50+ 子业务消息，含车辆定位、报警与静态信息模型
+- 运行形态：基于 Core 消息泵的客户端/服务端会话、请求响应配对、AOT 兼容、10 种运行时语言
+
+## 安装
+
+```bash
+dotnet add package NewLife.JT809
+```
+
+## 快速开始
+
+```csharp
+using NewLife.Net;
+using NewLife.JT809;
+using NewLife.JT809.Protocols;
+
+// Register the built-in commands explicitly (AOT friendly)
+MessageFactory.Instance.Init();
+
+// Client: connect to the upper-level platform over the master link
+var client = new JTClient
+{
+    Server = new NetUri("tcp://127.0.0.1:809"),
+    Config = new JTConfig { Version = JTVersion.JT2019 },
+};
+client.Open();
+var verifyCode = await client.LoginAsync(9528, "stone", 123654, "127.0.0.1", 2809);
+
+// Server: host the lower-level platform and handle commands
+var server = new JTServer { Port = 809 };
+server.AddHandler(new MyController());
+server.Start();
+```
+
+## 文档
+
+- 运行时多语言：[Doc/多语言本地化.md](Doc/多语言本地化.md)
+- 生态版图见下方，完整组件见 [NewLifeX 组织](https://github.com/NewLifeX)
 
 ## 生态版图
 
@@ -68,7 +121,7 @@ NewLife 生态按依赖分层，各项目独立版本、独立发版。下面的
 
 新生命团队成立于 2002 年，二十余年专注 .NET 与物联网技术生态，主导开源项目近百个（生态版图收录 34 个主干项目），为电力、物流、医疗、工控、互联网等行业提供软硬件一体化解决方案；以“学无先后达者为师”为信条。
 
-开源组件在 NuGet 累计下载 <!--nuget-total:start-->6.48M<!--nuget-total:end--> 次（全生态口径，截至 2026-10）。
+开源组件在 NuGet 累计下载 数百万 次（全生态口径，截至 2026-10）。
 
 网站：https://newlifex.com · 开源组织：https://github.com/NewLifeX
 
@@ -78,3 +131,8 @@ NewLife 生态按依赖分层，各项目独立版本、独立发版。下面的
 ![智能大石头](https://newlifex.com/stone.jpg)
 
 </details>
+
+## 许可证
+
+MIT License © 2002-2026 新生命开发团队
+

@@ -28,6 +28,7 @@
     <PackageTags>物联网;IoT;边缘计算;Edge;新生命团队;NewLife;JT809;JT/T809;$(AssemblyName)</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.nuget.md</PackageReadmeFile>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -55,6 +56,7 @@
 
   <ItemGroup>
     <Content Include="..\Doc\leaf.png" Link="leaf.png" PackagePath="\" />
+    <None Include="..\README.nuget.md" Link="README.nuget.md" Pack="true" PackagePath="\" Condition="Exists('..\README.nuget.md')" />
   </ItemGroup>
 
 </Project>
