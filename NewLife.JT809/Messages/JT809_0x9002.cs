@@ -17,7 +17,10 @@ public enum JT809_0x9002_Result : byte
     资源紧张_稍后再连接_已经占用 = 0x02,
 
     /// <summary>其他</summary>
-    其他 = 0x03
+    其他 = 0x03,
+
+    /// <summary>其他。2019版取值</summary>
+    其他_2019 = 0xFF
 }
 
 /// <summary>

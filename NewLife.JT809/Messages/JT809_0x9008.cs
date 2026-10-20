@@ -11,7 +11,10 @@ public enum JT809_0x9008_ReasonCode : Byte
     网关重启 = 0x00,
 
     /// <summary>其他原因</summary>
-    其它原因 = 0x01
+    其它原因 = 0x01,
+
+    /// <summary>其他原因。2019版取值</summary>
+    其它原因2019 = 0xFF
 }
 
 /// <summary>

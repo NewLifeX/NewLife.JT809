@@ -14,7 +14,10 @@ public enum JT809_0x9007_ReasonCode : Byte
     上级平台客户端与下级平台服务端断开 = 0x01,
 
     /// <summary>其他原因</summary>
-    其他原因 = 0x02
+    其他原因 = 0x02,
+
+    /// <summary>其他原因。2019版取值</summary>
+    其他原因2019 = 0xFF
 }
 
 /// <summary>
