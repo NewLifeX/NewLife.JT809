@@ -83,6 +83,31 @@ public class MessageFactory_RoundTrip_Tests
     }
 
     [Fact]
+    [DisplayName("所有标注 MessageKind 的消息类都已在工厂注册")]
+    public void TestAllMessageKindsRegistered()
+    {
+        var factory = MessageFactory.Instance;
+        factory.Init();
+
+        var failures = new List<String>();
+        var asm = typeof(JTMessage).Assembly;
+        foreach (var type in asm.GetTypes())
+        {
+            if (type.IsAbstract) continue;
+
+            var att = (MessageKindAttribute)Attribute.GetCustomAttribute(type, typeof(MessageKindAttribute));
+            if (att == null) continue;
+
+            if (!factory.Maps.TryGetValue(att.Kind, out var mapped))
+                failures.Add($"{type.Name} 声明 {att.Kind} 但未注册");
+            else if (mapped != type)
+                failures.Add($"{type.Name} 声明 {att.Kind}，工厂却映射到 {mapped.Name}");
+        }
+
+        Assert.True(failures.Count == 0, String.Join(Environment.NewLine, failures));
+    }
+
+    [Fact]
     [DisplayName("经报文解析入口读到截断数据时不抛异常")]
     public void TestTruncatedPayload()
     {
