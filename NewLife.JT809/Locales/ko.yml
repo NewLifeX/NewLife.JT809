@@ -13,3 +13,4 @@
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "구문 분석이 완료되지 않았습니다: {0}바이트를 사용할 수 있지만 {1}바이트만 사용되었습니다"
 "Failed to parse the message body of command [{0}].": "명령 [{0}]의 메시지 본문을 구문 분석하지 못했습니다."
 "Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "명령 [{0:X4}]은(는) 암호화되었지만 키가 구성되지 않았습니다. 페이로드는 암호화된 상태로 유지됩니다"
+"A maximum of 5 location records can be carried in one message; split the rest into additional messages.": "메시지 하나에 포함할 수 있는 위치 기록은 최대 5건입니다. 초과분은 별도 메시지로 나누어 전송하세요."

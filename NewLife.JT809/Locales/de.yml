@@ -13,3 +13,4 @@
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "Analyse unvollständig: {0} Bytes verfügbar, aber nur {1} Bytes verwendet"
 "Failed to parse the message body of command [{0}].": "Der Nachrichtenkörper des Befehls [{0}] konnte nicht analysiert werden."
 "Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "Befehl [{0:X4}] ist verschlüsselt, aber es ist kein Schlüssel konfiguriert; die Nutzlast bleibt verschlüsselt"
+"A maximum of 5 location records can be carried in one message; split the rest into additional messages.": "Eine Nachricht darf höchstens 5 Positionsdatensätze enthalten. Teilen Sie den Rest auf weitere Nachrichten auf."

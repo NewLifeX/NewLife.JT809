@@ -13,3 +13,4 @@
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "Разбор не завершён: доступно {0} байт, но использовано только {1} байт"
 "Failed to parse the message body of command [{0}].": "Не удалось разобрать тело сообщения команды [{0}]."
 "Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "Команда [{0:X4}] зашифрована, но ключ не настроен; полезная нагрузка остаётся зашифрованной"
+"A maximum of 5 location records can be carried in one message; split the rest into additional messages.": "Одно сообщение может содержать не более 5 записей о местоположении. Остальные следует передать отдельными сообщениями."

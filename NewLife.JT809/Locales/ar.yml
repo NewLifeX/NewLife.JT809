@@ -13,3 +13,4 @@
 "Parsing incomplete: {0} bytes available but only {1} bytes were used": "التحليل غير مكتمل: {0} بايت متاحة لكن تم استخدام {1} بايت فقط"
 "Failed to parse the message body of command [{0}].": "تعذر تحليل جسم رسالة الأمر [{0}]."
 "Command [{0:X4}] is encrypted but no key is configured; the payload stays encrypted": "الأمر [{0:X4}] مشفر ولكن لم يتم تكوين مفتاح؛ تبقى الحمولة مشفرة"
+"A maximum of 5 location records can be carried in one message; split the rest into additional messages.": "يمكن أن تحتوي الرسالة على 5 سجلات موقع كحد أقصى. قسّم الباقي إلى رسائل إضافية."

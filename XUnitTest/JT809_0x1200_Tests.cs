@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using NewLife;
@@ -258,6 +259,92 @@ public class JT809_0x1200_Tests
         Assert.Equal((LocationAlarms)0x01, rs.Alarm1);
         Assert.Equal("", rs.PlatformId2 + "");
         Assert.Equal((LocationAlarms)0, rs.Alarm2);
+    }
+
+    /// <summary>0x1203 自动补报：逐个定位数据体顺序排列，2011/2019 两种长度</summary>
+    [Fact]
+    [DisplayName("0x1203 自动补报定位数据读写往返")]
+    public void TestHistoryLocation()
+    {
+        var items = new List<JT809_0x1200_0x1202>
+        {
+            new()
+            {
+                Encrypt = JT809_VehiclePositionEncrypt.未加密,
+                Time = new DateTime(2024, 5, 6, 7, 8, 9),
+                Longitude = 117123456,
+                Latitude = 31876543,
+                Speed = 60,
+            },
+            new()
+            {
+                Encrypt = JT809_VehiclePositionEncrypt.未加密,
+                Time = new DateTime(2024, 5, 6, 7, 8, 59),
+                Longitude = 117123457,
+                Latitude = 31876544,
+                Speed = 61,
+            },
+        };
+        var body = new JT809_0x1200_0x1203 { GNSS = items };
+
+        // 2011版：个数(1) + 2 * 定长定位数据体(36)
+        var header2011 = new JTMessage { Version = JTVersion.JT2011 };
+        var ms = new MemoryStream();
+        Assert.True(body.Write(ms, header2011));
+        Assert.Equal(73L, ms.Length);
+
+        ms.Position = 0;
+        var rs = new JT809_0x1200_0x1203();
+        Assert.True(rs.Read(ms, header2011));
+        Assert.Equal((Byte)2, rs.Count);
+        Assert.Equal(items[0].Time, rs.GNSS[0].Time);
+        Assert.Equal(items[0].Longitude, rs.GNSS[0].Longitude);
+        Assert.Equal(items[1].Latitude, rs.GNSS[1].Latitude);
+        Assert.Equal(items[1].Speed, rs.GNSS[1].Speed);
+
+        // 2019版：个数(1) + 2 * 自描述长度定位数据体(78)
+        var items2019 = new List<JT809_0x1200_0x1202>
+        {
+            new()
+            {
+                Encrypt = JT809_VehiclePositionEncrypt.未加密,
+                Location = new LocationMessage { Longitude = 117123456, Latitude = 31876543, Speed = 600 },
+                PlatformId1 = "34010000001",
+                Alarm1 = (LocationAlarms)0x01,
+            },
+            new()
+            {
+                Encrypt = JT809_VehiclePositionEncrypt.未加密,
+                Location = new LocationMessage { Longitude = 117123457, Latitude = 31876544, Speed = 610 },
+            },
+        };
+        var body2019 = new JT809_0x1200_0x1203 { GNSS = items2019 };
+
+        var header2019 = new JTMessage { Version = JTVersion.JT2019 };
+        var ms2 = new MemoryStream();
+        Assert.True(body2019.Write(ms2, header2019));
+        Assert.Equal(157L, ms2.Length);
+
+        ms2.Position = 0;
+        var rs2 = new JT809_0x1200_0x1203();
+        Assert.True(rs2.Read(ms2, header2019));
+        Assert.Equal((Byte)2, rs2.Count);
+        Assert.Equal(117123456, rs2.GNSS[0].Location.Longitude);
+        Assert.Equal("34010000001", rs2.GNSS[0].PlatformId1);
+        Assert.Equal((LocationAlarms)0x01, rs2.GNSS[0].Alarm1);
+        Assert.Equal(117123457, rs2.GNSS[1].Location.Longitude);
+    }
+
+    /// <summary>规范要求单条消息最多携带5条定位记录</summary>
+    [Fact]
+    [DisplayName("0x1203 超过5条定位记录时拒绝写入")]
+    public void TestHistoryLocationTooMany()
+    {
+        var items = new List<JT809_0x1200_0x1202>();
+        for (var i = 0; i < 6; i++) items.Add(new JT809_0x1200_0x1202());
+
+        var body = new JT809_0x1200_0x1203 { GNSS = items };
+        Assert.Throws<ArgumentOutOfRangeException>(() => body.Write(new MemoryStream(), new JTMessage { Version = JTVersion.JT2019 }));
     }
 
     /// <summary>加密的定位数据不解析，原样保留密文</summary>
