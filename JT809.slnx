@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/aot.yml" />
+    <File Path=".github/workflows/publish-beta.yml" />
+    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/readme.yml" />
+    <File Path=".github/workflows/test.yml" />
+    <File Path="readme-languages.json" />
+    <File Path="README.md" />
+    <File Path="README.zh-CN.md" />
+    <File Path="sync-readme-languages.ps1" />
+    <File Path="sync-readme-metrics.ps1" />
+    <File Path="sync-readme-package.ps1" />
+  </Folder>
+  <Project Path="AotSmoke/AotSmoke.csproj" />
+  <Project Path="JT809Client/JT809Client.csproj" />
+  <Project Path="JT809Client2/JT809Client2.csproj" />
+  <Project Path="JT809Server/JT809Server.csproj" />
+  <Project Path="JT809Server2/JT809Server2.csproj" />
+  <Project Path="NewLife.JT809/NewLife.JT809.csproj" />
+  <Project Path="Test/Test.csproj" />
+  <Project Path="XUnitTest/XUnitTest.csproj" />
+</Solution>
