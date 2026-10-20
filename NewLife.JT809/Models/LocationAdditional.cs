@@ -15,7 +15,13 @@ public static class LocationAdditional
         while (stream.Position < stream.Length)
         {
             var kind = (AdditionalKinds)reader.ReadByte();
+
+            // 长度字节缺失或声明长度越界说明负载被截断，保留已解析项
+            if (stream.Position >= stream.Length) break;
+
             var len = reader.ReadByte();
+            if (len > stream.Length - stream.Position) break;
+
             var data = reader.ReadBytes(len);
 
             dic[kind] = len switch
@@ -51,6 +57,8 @@ public static class LocationAdditional
                 writer.Write(0);
             else if (item.Value is Byte[] dt)
             {
+                if (dt.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(dic), "JT809 additional information cannot exceed 255 bytes.");
+
                 writer.Write((Byte)dt.Length);
                 writer.Write(dt, 0, dt.Length);
             }

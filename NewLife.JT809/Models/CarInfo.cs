@@ -32,8 +32,12 @@ public class CarInfo
     #endregion
 
     #region 方法
+    /// <summary>解析静态信息文本。空文本不改变任何字段</summary>
+    /// <param name="value">形如 VIN:=xxx;VEHICLE_COLOR:=2; 的键值文本</param>
     public void Parse(String value)
     {
+        if (value.IsNullOrEmpty()) return;
+
         var dic = value.SplitAsDictionary(":=", ";");
         if (dic.TryGetValue("VIN", out var str)) Vin = str;
         if (dic.TryGetValue("Vehicle_Color", out str)) VehicleColor = (JT809VehicleColorType)str.ToInt();

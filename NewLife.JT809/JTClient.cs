@@ -27,7 +27,7 @@ public class JTClient : DisposeBase, IJTSession
     public JTConfig Config
     {
         get => _codec.Config;
-        set => _codec.Config = value;
+        set => _codec.Config = value ?? new JTConfig { Version = JTVersion.JT2011 };
     }
 
     /// <summary>下级平台接入码。上级平台给下级平台分配的唯一标识号</summary>

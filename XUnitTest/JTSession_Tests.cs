@@ -25,6 +25,10 @@ public class JTSession_Tests
         var config = new JTConfig { Version = JTVersion.JT2019 };
         server.Config = config;
         Assert.Same(config, server.Config);
+
+        // 置空时回落到默认配置，保持非空不变式
+        server.Config = null;
+        Assert.NotNull(server.Config);
     }
 
     [Fact]
@@ -40,6 +44,9 @@ public class JTSession_Tests
         var config = new JTConfig { Version = JTVersion.JT2019 };
         client.Config = config;
         Assert.Same(config, client.Config);
+
+        client.Config = null;
+        Assert.NotNull(client.Config);
     }
 
     [Fact]

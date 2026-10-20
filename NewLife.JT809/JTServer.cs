@@ -18,7 +18,7 @@ public class JTServer : NetServer<JTSession>
     public JTConfig Config
     {
         get => _codec.Config;
-        set => _codec.Config = value;
+        set => _codec.Config = value ?? new JTConfig { Version = JTVersion.JT2011 };
     }
 
     /// <summary>
