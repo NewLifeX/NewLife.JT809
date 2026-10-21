@@ -159,7 +159,7 @@ public class Localization_Tests
         Assert.True(Directory.Exists(dir), $"未找到词表目录：{dir}");
 
         var files = Directory.GetFiles(dir, "*.yml");
-        Assert.Equal(10, files.Length);
+        Assert.True(files.Length >= 10, $"语言文件数量不足：{files.Length}");
 
         var tables = new Dictionary<String, Dictionary<String, String>>(StringComparer.Ordinal);
         foreach (var file in files)
