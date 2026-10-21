@@ -186,7 +186,7 @@ public static class Helper
         var buf = Encoding.GetBytes(value);
 
         // 长度前缀只有1字节，超长会被截断成错误长度
-        if (buf.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(value), "JT809 length-prefixed string cannot exceed 255 bytes.");
+        if (buf.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(value), L.T("JT809 length-prefixed string cannot exceed 255 bytes."));
 
         binary.Write((Byte)buf.Length);
         binary.Write(buf, 0, buf.Length);

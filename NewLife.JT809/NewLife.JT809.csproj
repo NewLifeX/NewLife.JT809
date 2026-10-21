@@ -2,8 +2,9 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0;net10.0</TargetFrameworks>
     <RootNamespace>NewLife.JT809</RootNamespace>
-    <AssemblyTitle>JT809协议</AssemblyTitle>
-    <Description>JT/T 809 protocol library for platform interconnection in road transport: frame codec, 2011/2013/2019 messages, sub-messages and client/server sessions. 部标 JT809 平台互联协议库，提供帧编解码、2011/2013/2019 各版本消息与主从链路客户端服务端。</Description>
+    <AssemblyTitle>JT809 Protocol Library</AssemblyTitle>
+    <Description>JT/T 809 protocol library for platform interconnection in road transport: frame codec, 2011/2013/2019 messages, sub-messages and client/server sessions.</Description>
+    <PackageDescription>JT/T 809 protocol library for platform interconnection in road transport: frame codec, 2011/2013/2019 messages, sub-messages and client/server sessions. 部标 JT809 平台互联协议库，提供帧编解码、2011/2013/2019 各版本消息、子消息与主从链路客户端服务端。</PackageDescription>
     <Company>新生命开发团队</Company>
     <Copyright>©2002-2026 新生命开发团队</Copyright>
     <VersionPrefix>1.1</VersionPrefix>

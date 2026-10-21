@@ -57,7 +57,7 @@ public static class LocationAdditional
                 writer.Write(0);
             else if (item.Value is Byte[] dt)
             {
-                if (dt.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(dic), "JT809 additional information cannot exceed 255 bytes.");
+                if (dt.Length > 0xFF) throw new ArgumentOutOfRangeException(nameof(dic), L.T("JT809 additional information cannot exceed 255 bytes."));
 
                 writer.Write((Byte)dt.Length);
                 writer.Write(dt, 0, dt.Length);

@@ -21,4 +21,9 @@
     <ProjectReference Include="..\NewLife.JT809\NewLife.JT809.csproj" />
   </ItemGroup>
 
+  <!-- 词表完整性测试直接读取源码词表，确保每种语言都覆盖全部键 -->
+  <ItemGroup>
+    <None Include="..\NewLife.JT809\Locales\*.yml" Link="Locales\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
