@@ -7,16 +7,22 @@
 #   pwsh -File tools/verify-localization.ps1                          # 校验并输出摘要
 #   pwsh -File tools/verify-localization.ps1 -Check                   # 校验，失败退出码 1（CI 使用）
 #   pwsh -File tools/verify-localization.ps1 -Culture zh-CN -Sample 20 # 抽样查看译文
+#   pwsh -File tools/verify-localization.ps1 -LocaleDir C:\X\NewLife.Redis\NewLife.Redis\Locales # 审计其它仓库
+#
+# 说明：默认按“全部语言文件键集合一致”校验，适用于英文源文模型。
+# XCode/Cube 等同时维护中文元数据反向 en.yml 的项目，需另按源语言规则审计。
 param(
     [Switch]$Check,
     [String]$Root = (Split-Path $PSScriptRoot -Parent),
+    [String]$LocaleDir = "",
     [String]$Culture = "",
     [Int32]$Sample = 0
 )
 
 $ErrorActionPreference = "Stop"
 
-$localeDir = Join-Path $Root "NewLife.JT809/Locales"
+if (!$LocaleDir) { $LocaleDir = Join-Path $Root "NewLife.JT809/Locales" }
+$localeDir = $LocaleDir
 if (!(Test-Path -LiteralPath $localeDir)) { throw "未找到词表目录：$localeDir" }
 
 $entryPattern = '^\s*"((?:[^"\\]|\\.)*)"\s*:\s*"((?:[^"\\]|\\.)*)"\s*(?:#.*)?$'
