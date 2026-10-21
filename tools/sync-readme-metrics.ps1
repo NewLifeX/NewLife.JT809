@@ -4,11 +4,11 @@
 # 不再散落在多份 README 里手工维护。
 #
 # 用法：
-#   pwsh -File sync-readme-metrics.ps1            # 按配置写入标记块与数字
-#   pwsh -File sync-readme-metrics.ps1 -Check     # 只校验不写入，不一致退出码 1（CI 使用）
+#   pwsh -File tools/sync-readme-metrics.ps1            # 按配置写入标记块与数字
+#   pwsh -File tools/sync-readme-metrics.ps1 -Check     # 只校验不写入，不一致退出码 1（CI 使用）
 param(
     [Switch]$Check,
-    [String]$Root = $PSScriptRoot,
+    [String]$Root = (Split-Path $PSScriptRoot -Parent),
     [String]$Config = "readme-metrics.json"
 )
 
@@ -90,7 +90,7 @@ foreach ($file in $files) {
 
 if ($Check) {
     if ($errors -gt 0) {
-        Write-Host "`nREADME 指标不一致：$errors / $($files.Count) 个文件。请运行 pwsh -File sync-readme-metrics.ps1 后提交。"
+        Write-Host "`nREADME 指标不一致：$errors / $($files.Count) 个文件。请运行 pwsh -File tools/sync-readme-metrics.ps1 后提交。"
         exit 1
     }
     Write-Host "README 指标一致（$($files.Count) 个文件）"

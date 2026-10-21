@@ -8,9 +8,10 @@ on:
       - 'readme-languages.json'
       - 'readme-package.json'
       - 'readme-metrics.json'
-      - 'sync-readme-languages.ps1'
-      - 'sync-readme-package.ps1'
-      - 'sync-readme-metrics.ps1'
+      - 'tools/sync-readme-languages.ps1'
+      - 'tools/sync-readme-package.ps1'
+      - 'tools/sync-readme-metrics.ps1'
+      - 'tools/verify-localization.ps1'
       - '.github/workflows/readme.yml'
       - 'NewLife.JT809/**'
   pull_request:
@@ -20,9 +21,10 @@ on:
       - 'readme-languages.json'
       - 'readme-package.json'
       - 'readme-metrics.json'
-      - 'sync-readme-languages.ps1'
-      - 'sync-readme-package.ps1'
-      - 'sync-readme-metrics.ps1'
+      - 'tools/sync-readme-languages.ps1'
+      - 'tools/sync-readme-package.ps1'
+      - 'tools/sync-readme-metrics.ps1'
+      - 'tools/verify-localization.ps1'
       - '.github/workflows/readme.yml'
       - 'NewLife.JT809/**'
   workflow_dispatch:
@@ -37,7 +39,10 @@ jobs:
     - uses: actions/checkout@v4
     - name: Check README languages
       shell: pwsh
-      run: pwsh -File ./sync-readme-languages.ps1 -Check
+      run: pwsh -File ./tools/sync-readme-languages.ps1 -Check
+    - name: Verify localization tables
+      shell: pwsh
+      run: pwsh -File ./tools/verify-localization.ps1 -Check
 
   metrics:
     name: README metrics
@@ -48,7 +53,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Check README metrics
       shell: pwsh
-      run: pwsh -File ./sync-readme-metrics.ps1 -Check
+      run: pwsh -File ./tools/sync-readme-metrics.ps1 -Check
 
   package:
     name: README package
@@ -59,4 +64,4 @@ jobs:
     - uses: actions/checkout@v4
     - name: Check README package
       shell: pwsh
-      run: pwsh -File ./sync-readme-package.ps1 -Check
+      run: pwsh -File ./tools/sync-readme-package.ps1 -Check
