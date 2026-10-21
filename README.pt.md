@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Versões do protocolo: JT/T 809-2011, 2013 e 2019, detectadas automaticamente no login
 - Cobertura: mais de 30 comandos de nível superior e 50 submensagens, com modelos de posição, alarme e informações estáticas
 - Integração: métodos de manipulador com `[MessageKind]`, pareamento requisição/resposta e reconexão
-- Engenharia: compatível com Native AOT; mensagens em tempo de execução em 11 idiomas (10 tabelas de tradução e o inglês como origem)
+- Engenharia: compatível com Native AOT; exceções, logs e metadados de configuração localizados em 11 idiomas (10 tabelas de tradução e o inglês como origem)
 
 ## Requisitos
 

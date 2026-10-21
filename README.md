@@ -29,7 +29,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Protocol versions: JT/T 809-2011, 2013 and 2019, auto-detected on login
 - Command coverage: 30+ top-level commands and 50+ sub-messages, including vehicle location, alarm and static information models
 - Integration: `[MessageKind]` handler methods, request/response pairing, reconnect support
-- Engineering: Native AOT compatible, runtime messages in 11 languages (10 translation tables plus English source)
+- Engineering: Native AOT compatible; exceptions, logs and configuration metadata localized into 11 languages (10 translation tables plus English source)
 
 ## Requirements
 

@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Protokollversionen: JT/T 809-2011, 2013 und 2019, automatische Erkennung bei der Anmeldung
 - Befehlsabdeckung: über 30 Hauptbefehle und 50 Unternachrichten, inklusive Positions-, Alarm- und Statikmodellen
 - Integration: Handler-Methoden mit `[MessageKind]`, Anfrage-/Antwort-Paarung und Wiederverbindung
-- Engineering: Native-AOT-kompatibel; Laufzeitmeldungen in 11 Sprachen (10 Übersetzungstabellen plus Englisch als Quelle)
+- Engineering: Native-AOT-kompatibel; Ausnahmen, Protokolle und Konfigurationsmetadaten in 11 Sprachen lokalisiert (10 Übersetzungstabellen plus Englisch als Quelle)
 
 ## Voraussetzungen
 
