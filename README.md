@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 JT/T 809 protocol library for platform interconnection in road transport (China). Provides frame codec, 2011/2013/2019 messages and master/slave link client and server sessions.
@@ -29,7 +29,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Protocol versions: JT/T 809-2011, 2013 and 2019, auto-detected on login
 - Command coverage: 30+ top-level commands and 50+ sub-messages, including vehicle location, alarm and static information models
 - Integration: `[MessageKind]` handler methods, request/response pairing, reconnect support
-- Engineering: Native AOT compatible; exceptions, logs and configuration metadata localized into 11 languages (10 translation tables plus English source)
+- Engineering: Native AOT compatible; exceptions, logs and configuration metadata localized through 31 locale tables plus English source
 
 ## Requirements
 

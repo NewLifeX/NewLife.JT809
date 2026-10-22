@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 > この翻訳は遅れている場合があります。最新情報は [English README](README.md) を参照してください。
@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - プロトコルバージョン：JT/T 809-2011／2013／2019 に対応し、ログイン時に自動判別
 - コマンド網羅：30 以上のトップレベル命令と 50 以上のサブメッセージ（車両位置・アラーム・静的情報モデルを含む）
 - 統合：`[MessageKind]` を付けたハンドラーメソッド、要求／応答の対応付け、再接続
-- エンジニアリング：Native AOT 対応、例外・ログ・構成メタデータを 11 言語にローカライズ（翻訳表 10 種 ＋英語原文）
+- エンジニアリング：Native AOT 対応、例外・ログ・構成メタデータを 31 の翻訳表＋英語原文でローカライズ
 
 ## 動作環境
 

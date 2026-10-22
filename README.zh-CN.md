@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 JT809 部标协议。面向道路运输监管的上下级平台互联协议库，提供帧编解码、2011/2013/2019 各版本消息与主从链路客户端服务端。
@@ -29,7 +29,7 @@ NuGet：https://www.nuget.org/packages/NewLife.JT809
 - 协议版本：支持 JT/T 809-2011、2013、2019，登录时自动识别版本
 - 指令覆盖：30+ 顶层业务指令、50+ 子业务消息，含车辆定位、报警与静态信息模型
 - 接入方式：`[MessageKind]` 标注的处理器方法、请求响应配对、断线重连
-- 工程能力：Native AOT 兼容、异常/日志/配置元数据支持 11 种语言（10 份译文 + 英文源文）
+- 工程能力：Native AOT 兼容、异常/日志/配置元数据通过 31 份译文表 + 英文源文本地化
 
 ## 环境要求
 

@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 > 이 번역은 [영문 README](README.md)보다 늦을 수 있습니다.
@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - 프로토콜 버전: JT/T 809-2011, 2013, 2019 지원 및 로그인 시 자동 식별
 - 명령 범위: 30개 이상의 상위 명령과 50개 이상의 서브 메시지(차량 위치, 경보, 정적 정보 모델 포함)
 - 통합: `[MessageKind]` 핸들러 메서드, 요청/응답 매칭, 재연결
-- 엔지니어링: Native AOT 호환, 예외/로그/구성 메타데이터를 11개 언어로 지역화(번역 10종 + 영어 원문)
+- 엔지니어링: Native AOT 호환, 예외/로그/구성 메타데이터를 31개 번역 테이블 + 영어 원문으로 지역화
 
 ## 요구 사항
 

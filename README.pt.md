@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 > Esta tradução pode estar desatualizada; consulte o [README em inglês](README.md).
@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - Versões do protocolo: JT/T 809-2011, 2013 e 2019, detectadas automaticamente no login
 - Cobertura: mais de 30 comandos de nível superior e 50 submensagens, com modelos de posição, alarme e informações estáticas
 - Integração: métodos de manipulador com `[MessageKind]`, pareamento requisição/resposta e reconexão
-- Engenharia: compatível com Native AOT; exceções, logs e metadados de configuração localizados em 11 idiomas (10 tabelas de tradução e o inglês como origem)
+- Engenharia: compatível com Native AOT; exceções, logs e metadados de configuração localizados por meio de 31 tabelas de tradução mais o inglês como origem
 
 ## Requisitos
 

@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 > قد تتأخر هذه الترجمة عن [README بالإنجليزية](README.md).
@@ -31,7 +31,7 @@ NuGet: https://www.nuget.org/packages/NewLife.JT809
 - إصدارات البروتوكول: JT/T 809-2011 و2013 و2019 مع اكتشاف تلقائي عند تسجيل الدخول
 - تغطية الأوامر: أكثر من 30 أمرًا رئيسيًا و50 رسالة فرعية تشمل نماذج الموقع والإنذار والمعلومات الثابتة
 - التكامل: أساليب معالج موسومة بـ`[MessageKind]` ومطابقة الطلب/الرد وإعادة الاتصال
-- هندسيًا: متوافقة مع Native AOT؛ الاستثناءات والسجلات وبيانات تعريف التكوين مترجمة إلى 11 لغة (10 جداول ترجمة والإنجليزية مصدرًا)
+- هندسيًا: متوافقة مع Native AOT؛ الاستثناءات والسجلات وبيانات تعريف التكوين مترجمة عبر 31 جدول ترجمة بالإضافة إلى المصدر الإنجليزي
 
 ## المتطلبات
 

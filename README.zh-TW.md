@@ -15,7 +15,7 @@
 
 <!-- metrics:start -->
 [![TFM](https://img.shields.io/badge/TFM-3%20%28netstandard2.0%20%7C%20net8.0%20%7C%20net10.0%29-512BD4?logo=dotnet)](https://www.nuget.org/packages/NewLife.JT809)
-[![locales](https://img.shields.io/badge/locales-10-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+[![locales](https://img.shields.io/badge/locales-31-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
 
 > 本翻譯可能滯後，以 [English README](README.md) 為準。
@@ -31,7 +31,7 @@ NuGet：https://www.nuget.org/packages/NewLife.JT809
 - 協議版本：支援 JT/T 809-2011、2013、2019，登入時自動識別版本
 - 指令覆蓋：30+ 頂層業務指令、50+ 子業務訊息，含車輛定位、報警與靜態資訊模型
 - 接入方式：以 `[MessageKind]` 標註的處理方法、請求回應配對、斷線重連
-- 工程能力：Native AOT 相容、例外/日誌/設定中繼資料支援 11 種語言（10 份譯文 + 英文原文）
+- 工程能力：Native AOT 相容、例外/日誌/設定中繼資料透過 31 份譯文表 + 英文原文在地化
 
 ## 環境需求
 
