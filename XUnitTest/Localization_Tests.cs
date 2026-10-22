@@ -20,7 +20,7 @@ namespace XUnitTest;
 public class Localization_Tests
 {
     private const String _descriptionKey = "JT/T 809 protocol library for platform interconnection in road transport: frame codec, 2011/2013/2019 messages, sub-messages and client/server sessions.";
-    private static readonly String[] _cultures = ["ar", "de", "es", "fr", "ja", "ko", "pt", "ru", "zh-CN", "zh-TW"];
+    private static readonly String[] _cultures = ["ar", "bn", "cs", "da", "de", "el", "es", "fa", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "ms", "nb", "nl", "pl", "pt", "ro", "ru", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW"];
     private static readonly Regex _entry = new(@"^\s*""((?:[^""\\]|\\.)*)""\s*:\s*""((?:[^""\\]|\\.)*)""\s*(?:#.*)?$", RegexOptions.Compiled);
 
     static Localization_Tests()
@@ -61,6 +61,34 @@ public class Localization_Tests
 
             Assert.Equal("登錄失敗！7", Localization.Translate("Login failed! {0}", 7));
             Assert.Equal("指令訊框解析失敗：boom", Localization.Translate("Command frame parse failed: {0}", "boom"));
+        }
+        finally
+        {
+            Localization.Culture = old;
+        }
+    }
+
+    [Fact]
+    [DisplayName("新增语言命中词表")]
+    public void Translate_NewLanguages()
+    {
+        var samples = new Dictionary<String, String>
+        {
+            ["bn"] = "লগইন ব্যর্থ হয়েছে! 7",
+            ["hi"] = "लॉगिन विफल! 7",
+            ["it"] = "Accesso non riuscito! 7",
+            ["sv"] = "Inloggningen misslyckades! 7",
+            ["vi"] = "Đăng nhập thất bại! 7",
+        };
+
+        var old = Localization.Culture;
+        try
+        {
+            foreach (var item in samples)
+            {
+                Localization.Culture = new CultureInfo(item.Key);
+                Assert.Equal(item.Value, Localization.Translate("Login failed! {0}", 7));
+            }
         }
         finally
         {
@@ -159,7 +187,7 @@ public class Localization_Tests
         Assert.True(Directory.Exists(dir), $"未找到词表目录：{dir}");
 
         var files = Directory.GetFiles(dir, "*.yml");
-        Assert.True(files.Length >= 10, $"语言文件数量不足：{files.Length}");
+        Assert.True(files.Length >= 31, $"语言文件数量不足：{files.Length}");
 
         var tables = new Dictionary<String, Dictionary<String, String>>(StringComparer.Ordinal);
         foreach (var file in files)
