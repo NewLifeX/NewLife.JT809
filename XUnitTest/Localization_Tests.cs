@@ -114,6 +114,26 @@ public class Localization_Tests
     }
 
     [Fact]
+    [DisplayName("程序集标题与描述命中词表")]
+    public void Translate_AssemblyMetadata()
+    {
+        var old = Localization.Culture;
+        try
+        {
+            Localization.Culture = new CultureInfo("zh-CN");
+            Assert.Equal("JT809 协议库", Localization.Translate("JT809 Protocol Library"));
+            Assert.StartsWith("JT/T 809 道路运输平台互联协议库", Localization.Translate(_descriptionKey));
+
+            Localization.Culture = new CultureInfo("vi");
+            Assert.Equal("Thư viện giao thức JT809", Localization.Translate("JT809 Protocol Library"));
+        }
+        finally
+        {
+            Localization.Culture = old;
+        }
+    }
+
+    [Fact]
     [DisplayName("组件词表已注册到本地化中心")]
     public void Locales_Registered()
     {
@@ -214,6 +234,7 @@ public class Localization_Tests
         }
 
         Assert.Contains(_descriptionKey, keys);
+        Assert.Contains("JT809 Protocol Library", keys);
         Assert.Contains("JT809 length-prefixed string cannot exceed 255 bytes.", keys);
         Assert.Contains("Crc16 Error {0:X4}!={1:X4}", keys);
         Assert.Contains("JT809 settings", keys);
