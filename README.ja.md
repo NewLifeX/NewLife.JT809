@@ -95,10 +95,13 @@ class MyController
 }
 ```
 
+`JT809_0x1200_0x1202` は JT/T 809-2019 表 90 のレイアウトに従います。位置情報は `GNSS_DATA`（JT/T 808-2019 の 8.12）内に格納され、`Location` から参照できます。その後に三級プラットフォームコードとアラーム状態が続きます。JT/T 809-2011 のフレームでは `Config.Version` を `JTVersion.JT2011` に設定し、代わりに `Time`／`Longitude`／`Speed` などの固定長プロパティに値を設定してください。
+
 ## ドキュメント
 
 - ランタイムローカライズ：[Doc/多语言本地化.md](Doc/多语言本地化.md)（中国語）
 - エコシステムマップ：[README.zh-CN.md](README.zh-CN.md)（中国語の正本）
+- すべてのコンポーネント：[NewLifeX 組織](https://github.com/NewLifeX)
 
 ## エコシステムマップ
 

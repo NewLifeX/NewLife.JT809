@@ -1,5 +1,8 @@
 name: publish-beta
 
+# 测试版：master/main 有代码变更时自动推送 GitHub Packages 与 NuGet.org。
+# 测试版不创建 GitHub Release，正式 Release 由 tag 触发的 publish.yml 负责。
+
 on:
   push:
     branches:
@@ -17,6 +20,11 @@ concurrency:
 permissions:
   contents: read
   packages: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
   test:

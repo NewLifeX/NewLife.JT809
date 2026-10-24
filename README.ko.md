@@ -95,10 +95,13 @@ class MyController
 }
 ```
 
+`JT809_0x1200_0x1202`는 JT/T 809-2019 표 90 레이아웃을 따릅니다. 위치 데이터는 `GNSS_DATA`(JT/T 808-2019 8.12)에 담기며 `Location`으로 접근하고, 그 뒤에 3단계 플랫폼 코드와 경보 상태가 이어집니다. JT/T 809-2011 프레임을 사용할 때는 `Config.Version`을 `JTVersion.JT2011`로 설정하고 `Time`/`Longitude`/`Speed` 같은 고정 길이 속성에 값을 채우십시오.
+
 ## 문서
 
 - 런타임 지역화: [Doc/多语言本地化.md](Doc/多语言本地化.md) (중국어)
 - 생태계 지도: [README.zh-CN.md](README.zh-CN.md) (중국어 정본)
+- 모든 구성 요소: [NewLifeX 조직](https://github.com/NewLifeX)
 
 ## 생태계 지도
 

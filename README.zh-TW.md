@@ -95,10 +95,13 @@ class MyController
 }
 ```
 
+`JT809_0x1200_0x1202` 依 JT/T 809-2019 表90 佈局：定位資料封裝於 `GNSS_DATA`（JT/T 808-2019 中8.12），透過 `Location` 存取，其後為三級平台編碼與警報狀態。若對端使用 JT/T 809-2011，將 `Config.Version` 設為 `JTVersion.JT2011`，改用 `Time`/`Longitude`/`Speed` 等定長屬性填寫。
+
 ## 文件
 
 - 執行階段多語言：[Doc/多语言本地化.md](Doc/多语言本地化.md)
 - 生態版圖見 [README.zh-CN.md](README.zh-CN.md)
+- 全部元件：[NewLifeX 組織](https://github.com/NewLifeX)
 
 ## 生態版圖
 

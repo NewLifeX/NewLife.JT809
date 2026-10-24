@@ -95,10 +95,13 @@ class MyController
 }
 ```
 
+`JT809_0x1200_0x1202` suit la disposition du tableau 90 de la JT/T 809-2019 : la position est transportée dans `GNSS_DATA` (JT/T 808-2019, 8.12) et exposée via `Location`, suivie des codes de plateforme et des états d'alarme. Pour les trames JT/T 809-2011, définissez `Config.Version = JTVersion.JT2011` et renseignez plutôt les propriétés à longueur fixe `Time`/`Longitude`/`Speed`.
+
 ## Documentation
 
 - Localisation d'exécution : [Doc/多语言本地化.md](Doc/多语言本地化.md) (chinois)
 - Carte de l'écosystème : [README.zh-CN.md](README.zh-CN.md) (texte chinois de référence)
+- Tous les composants : [organisation NewLifeX](https://github.com/NewLifeX)
 
 ## Carte de l'écosystème
 

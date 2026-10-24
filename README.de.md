@@ -95,10 +95,13 @@ class MyController
 }
 ```
 
+`JT809_0x1200_0x1202` folgt dem Layout aus JT/T 809-2019 Tabelle 90: Die Positionsdaten stecken in `GNSS_DATA` (JT/T 808-2019, 8.12) und sind über `Location` erreichbar; danach folgen die Plattformcodes und Alarmzustände. Für Frames nach JT/T 809-2011 setzen Sie `Config.Version = JTVersion.JT2011` und füllen stattdessen die festen Eigenschaften `Time`/`Longitude`/`Speed`.
+
 ## Dokumentation
 
 - Laufzeitlokalisierung: [Doc/多语言本地化.md](Doc/多语言本地化.md) (Chinesisch)
 - Ökosystemkarte: [README.zh-CN.md](README.zh-CN.md) (kanonischer chinesischer Text)
+- Alle Komponenten: [NewLifeX-Organisation](https://github.com/NewLifeX)
 
 ## Ökosystem-Karte
 

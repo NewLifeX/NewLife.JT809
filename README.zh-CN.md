@@ -98,7 +98,8 @@ class MyController
 ## 文档
 
 - 运行时多语言：[Doc/多语言本地化.md](Doc/多语言本地化.md)
-- 生态版图见下方，完整组件见 [NewLifeX 组织](https://github.com/NewLifeX)
+- 生态版图：见下方
+- 全部组件：[NewLifeX 组织](https://github.com/NewLifeX)
 
 ## 生态版图
 
@@ -156,7 +157,7 @@ NewLife 生态按依赖分层，各项目独立版本、独立发版。下面的
 
 新生命团队成立于 2002 年，二十余年专注 .NET 与物联网技术生态，主导开源项目近百个（生态版图收录 34 个主干项目），为电力、物流、医疗、工控、互联网等行业提供软硬件一体化解决方案；以“学无先后达者为师”为信条。
 
-开源组件在 NuGet 累计下载数百万次（全生态口径，截至 2026-10）。
+开源组件在 NuGet 累计下载 <!--nuget-total:start-->6.48M<!--nuget-total:end--> 次（全生态口径，截至 2026-10）。
 
 网站：https://newlifex.com · 开源组织：https://github.com/NewLifeX
 

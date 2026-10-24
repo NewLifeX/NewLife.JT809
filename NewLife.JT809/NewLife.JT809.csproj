@@ -27,7 +27,7 @@
     <RepositoryUrl>https://github.com/NewLifeX/NewLife.JT809</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>物联网;IoT;边缘计算;Edge;新生命团队;NewLife;JT809;JT/T809;$(AssemblyName)</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>v1.1.2026.1024 正式版：JT/T 809 平台互联协议库，支持 2011/2013/2019 帧编解码、主从链路会话、30+ 指令与 50+ 子消息；升级 NewLife.Core 12.0.2026.1024；支持 NativeAOT 与 31 种语言运行时本地化；155 项测试全部通过</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.nuget.md</PackageReadmeFile>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
@@ -58,7 +58,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NewLife.Core" Version="12.0.2026.1021-beta0321" />
+    <PackageReference Include="NewLife.Core" Version="12.0.2026.1024" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.7" />
   </ItemGroup>
 
