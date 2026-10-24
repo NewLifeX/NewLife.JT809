@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using NewLife;
@@ -77,10 +78,9 @@ static JTMessage ParseFrame(JTCodec codec, Byte[] frame)
 }
 
 // 单文件/原生 AOT 下 Assembly.Location 恒为空，正是这里区分运行时的依据；
-// IL3000 针对的是“依赖 Location 定位文件”的场景，此处只做判空，故局部抑制
-#pragma warning disable IL3000
+// IL3000 针对的是“依赖 Location 定位文件”的场景，此处只做判空，用无条件抑制声明意图
+[UnconditionalSuppressMessage("SingleFile", "IL3000", Justification = "仅凭 Location 是否为空判断 JIT/NativeAOT，不用于定位文件")]
 static String DetectRuntime() => String.IsNullOrEmpty(typeof(Object).Assembly.Location) ? "NativeAOT" : "CoreCLR（JIT 基线）";
-#pragma warning restore IL3000
 
 Console.WriteLine("==== NewLife.JT809 NativeAOT 冒烟 ====");
 Console.WriteLine($"运行时 {Environment.Version}，{DetectRuntime()}");
